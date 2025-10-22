@@ -1,0 +1,64 @@
+.stories-wrapper {
+  padding: 0px 42px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.stories-section {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 5px;
+  padding: 15px;
+  /* background: #fff; */
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  height: 80px; /* giữ chiều cao cố định để scrollbar gọn */
+}
+
+
+/* tuỳ chỉnh thanh scroll */
+
+
+.stories-section::-webkit-scrollbar {
+  height: 5px;
+}
+
+.stories-section::-webkit-scrollbar-thumb {
+  background: #1890ff;
+  border-radius: 4px;
+}
+
+.stories-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.arrow-btn {
+  position: absolute;
+  top: 12%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 8px 12px;
+  /* border-radius: 50%; */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+  z-index: 1;
+}
+
+.arrow-btn:hover {
+  background: #1890ff;
+  color: white;
+}
+
+.arrow-btn.left {
+  left: 1px;
+}
+
+.arrow-btn.right {
+  right: 1px;
+}

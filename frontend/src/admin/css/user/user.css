@@ -1,0 +1,83 @@
+
+.admin-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+
+.admin-select {
+  background-color: #1e293b; 
+  color: #f8fafc; 
+  border: 1px solid #334155; 
+  border-radius: 8px; 
+  padding: 8px 12px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+  appearance: none; 
+  cursor: pointer;
+}
+
+
+.admin-select:hover {
+  background-color: #0f172a;
+  border-color: #475569;
+}
+
+.admin-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 4px rgba(59, 130, 246, 0.5);
+}
+
+.admin-select::-ms-expand {
+  display: none;
+}
+ 
+
+
+/* Phân trang */
+
+.admin-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 15px;
+  color: #e2e8f0;
+}
+
+
+.admin-btn {
+  background-color: #1e293b; /* Nền tối */
+  color: #f1f5f9; /* Màu chữ */
+  border: 1px solid #475569; /* Viền nhẹ */
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+/* Khi bị disable (ví dụ trang đầu hoặc cuối) */
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+@media (max-width: 480px) {
+  .admin-pagination {
+    font-size: 14px;
+    gap: 8px;
+  }
+  .admin-btn {
+    padding: 5px 10px;
+  }
+}
+
+
+
+/* Endl phân trang */

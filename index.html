@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bản đồ chỉ đường tới quán ăn 🍜</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+    }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    .search-box {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+    .search-box input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      width: 240px;
+    }
+    .search-box button {
+      background: #007bff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .search-box button:hover {
+      background: #3399ff;
+    }
+    .locate-btn {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      background: #007bff;
+      border: none;
+      padding: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      transition: 0.3s;
+      color: white;
+      font-size: 20px;
+    }
+    .locate-btn:hover {
+      background: #3399ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="search-box">
+    <input id="searchInput" type="text" placeholder="🔍 Nhập tên quán ăn..." />
+    <button id="searchBtn">Tìm</button>
+  </div>
+
+  <button class="locate-btn" id="locateBtn">📍</button>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const map = L.map("map").setView([21.0285, 105.8542], 13);
+
+    // Bản đồ nền sáng (giống Google Maps)
+    L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    const restaurants = [
+      { name: "Phở Bò Gia Truyền", lat: 21.030, lng: 105.852 },
+      { name: "Bún Chả Hàng Mành", lat: 21.031, lng: 105.855 },
+      { name: "Cơm Tấm Sài Gòn", lat: 21.029, lng: 105.857 },
+      { name: "Lẩu Thái Cay Xè", lat: 21.027, lng: 105.851 },
+    ];
+
+    let userMarker, routeLayer;
+
+    // Hiển thị marker quán ăn
+    restaurants.forEach((res) => {
+      const m = L.marker([res.lat, res.lng])
+        .addTo(map)
+        .bindPopup(`<b>${res.name}</b><br><button onclick="showRoute(${res.lat}, ${res.lng})">Chỉ đường</button>`);
+    });
+
+    // Định vị người dùng
+    document.getElementById("locateBtn").addEventListener("click", () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const { latitude, longitude } = pos.coords;
+
+            if (userMarker) map.removeLayer(userMarker);
+            userMarker = L.marker([latitude, longitude])
+              .addTo(map)
+              .bindPopup("📍 Bạn đang ở đây")
+              .openPopup();
+            map.setView([latitude, longitude], 15);
+          },
+          () => alert("Không thể lấy vị trí hiện tại!")
+        );
+      } else alert("Trình duyệt không hỗ trợ định vị!");
+    });
+
+    // Chỉ đường bằng OpenRouteService
+    async function showRoute(destLat, destLng) {
+      if (!userMarker) {
+        alert("Vui lòng định vị vị trí của bạn trước!");
+        return;
+      }
+
+      const [userLat, userLng] = [
+        userMarker.getLatLng().lat,
+        userMarker.getLatLng().lng,
+      ];
+
+      const apiKey = "YOUR_OPENROUTESERVICE_KEY"; // 🔑 thay key của bạn ở đây
+      const url = `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${apiKey}&start=${userLng},${userLat}&end=${destLng},${destLat}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const coords = data.features[0].geometry.coordinates.map((c) => [c[1], c[0]]);
+
+      if (routeLayer) map.removeLayer(routeLayer);
+
+      routeLayer = L.polyline(coords, { color: "blue", weight: 5 }).addTo(map);
+      map.fitBounds(routeLayer.getBounds());
+    }
+
+    // Tìm kiếm quán ăn
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const found = restaurants.find((r) =>
+        r.name.toLowerCase().includes(keyword)
+      );
+
+      if (found) {
+        map.setView([found.lat, found.lng], 16);
+        L.popup()
+          .setLatLng([found.lat, found.lng])
+          .setContent(`<b>${found.name}</b><br>🍜 Đã tìm thấy quán!`)
+          .openOn(map);
+      } else alert("Không tìm thấy quán phù hợp!");
+    });
+  </script>
+</body>
+</html>
+
+/* ================= MAIN ================= */
+.admin-main{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* ================= GRID CARDS ================= */
+.admin-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.admin-card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  padding:16px;
+  border-radius:12px;
+  box-shadow:0 6px 14px rgba(2,6,23,0.45);
+}
+.admin-card h3{
+  margin:0 0 8px 0;
+  color:var(--muted);
+  font-weight:600;
+}
+.admin-stat{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.admin-big{
+  font-size:20px;
+  font-weight:700;
+}
+.admin-trend{
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* ================= TABLE + PANEL ================= */
+.admin-content{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:14px;
+}
+.admin-table{overflow:auto;}
+.admin-table table{
+  width:100%;
+  border-collapse:collapse;
+}
+.admin-table thead th{
+  text-align:left;
+  padding:12px;
+  color:var(--muted);
+  font-size:13px;
+  border-bottom:1px dashed rgba(255,255,255,0.03);
+}
+.admin-table tbody td{
+  padding:12px;
+  border-bottom:1px dashed rgba(255,255,255,0.02);
+  font-size:14px;
+}
+.admin-badge{
+  display:inline-block;
+  padding:6px 8px;
+  border-radius:8px;
+  background:rgba(255,255,255,0.03);
+  font-weight:600;
+}
+.admin-badge.admin-active{
+  color:#05292a;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+
+/* ================= PANEL ================= */
+.admin-panel{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.admin-feed{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.admin-feed-item{
+  background:rgba(255,255,255,0.02);
+  padding:10px;
+  border-radius:10px;
+}
+.admin-form-row{
+  display:flex;
+  gap:8px;
+}
+.admin-input{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.03);
+  background:transparent;
+  color:inherit;
+  width:100%;
+}
+.admin-select{
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.03);
+  background:transparent;
+  color:inherit;
+}
+
+/* ================= KPI GRID ================= */
+.admin-kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+.admin-kpi{
+  padding:12px;
+  border-radius:10px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  text-align:center;
+}
+.admin-kpi h4{
+  margin:0;
+}
+
+/* ================= FOOTER ================= */
+.admin-footer{
+  padding:16px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+/* ================= MISC ================= */
+.admin-btn-group{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.admin-muted{
+  color:var(--muted);
+  font-size:14px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1000px){
+  .admin-container{grid-template-columns: 1fr}
+  .admin-sidebar{position:relative;top:0;min-height:auto}
+  .admin-grid{grid-template-columns:repeat(2,1fr)}
+  .admin-content{grid-template-columns:1fr}
+  .admin-kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:600px){
+  .admin-grid{grid-template-columns:1fr}
+  .admin-kpi-grid{grid-template-columns:1fr}
+  .admin-search{min-width:unset}
+}

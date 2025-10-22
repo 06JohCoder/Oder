@@ -1,0 +1,60 @@
+/* .admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+} */
+
+/* .admin-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+} */
+
+.admin-big {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.admin-trend {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+
+
+
+
+.admin-select {
+
+  text-align: center;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.admin-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, .admin-table td {
+  text-align: left;
+  padding: 0.6rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-bold {
+  font-weight: 600;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+
+
+/* css báo biểu đồ day */
+.admin-card .recharts-responsive-container .recharts-wrapper{
+    height: 250px !important;
+}
+/* endl báo biểu đồ dây */

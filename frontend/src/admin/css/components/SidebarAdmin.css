@@ -1,0 +1,72 @@
+
+/* ================= SIDEBAR ================= */
+.admin-sidebar{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:var(--radius);
+  padding:18px;
+  min-height: calc(100vh - 56px);
+  /* position:sticky; */
+  top:28px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+}
+.admin-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+.admin-logo{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:#062028;
+}
+.admin-menu{
+  margin-top:6px;
+}
+.admin-menu a{
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px;
+  border-radius:10px;
+  color:var(--muted);
+  text-decoration:none;
+  margin-bottom:6px;
+}
+.admin-menu a.active,
+
+.admin-menu a:hover{
+  background:var(--glass);
+  color:var(--accent);
+ 
+}
+.admin-menu a .admin-ico{
+  font-size:18px;
+  width:26px;
+  text-align:center;
+}
+.admin-profile{
+  margin-top:auto;
+  padding-top:12px;
+  border-top:1px dashed rgba(255,255,255,0.03);
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.admin-avatar{
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#334155,#0f1724);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}

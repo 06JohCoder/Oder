@@ -1,0 +1,31 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* chiếm toàn màn hình */
+  /* background: linear-gradient(135deg, #667eea, #764ba2); */
+  color: rgb(229, 23, 23);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(48, 48, 48, 0.3);
+  border-top: 6px solid #7b56ec;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
