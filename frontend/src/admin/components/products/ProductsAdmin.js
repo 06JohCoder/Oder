@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../../css/products/ProductsAdmin.css";
 const ProductsAdmin = ({ query }) => {
-
+  console.log("Query in ProductsAdmin:", query);
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
@@ -25,20 +25,33 @@ const ProductsAdmin = ({ query }) => {
     { id: 11, title: "Đồ ngoại" },
     { id: 12, title: "Combo" },
   ]
-
+ 
   const [filters, setFilters] = useState({
     status: "",
-    category: ""
+    category: "",
+    search: query || "",
   });
 
 
 
-  console.log("Filters:", filters);
+  // let url = "/api/admin/userAdmin";
+  //   const params = [];
+
+
+
   const fetchProducts = (status) => {
     let url = "/api/admin/products";
+    const params = [];
     if (status) {
-      url += `?status=${status}`;
+      params.push(`status=${status}`);
     }
+    if(query){
+      params.push(`keyword=${query}`);
+    }
+    if(params.length > 0) {
+      url += `?${params.join('&')}`;
+    }
+   
 
     fetch(url)
       .then((res) => res.json())
@@ -55,7 +68,7 @@ const ProductsAdmin = ({ query }) => {
     } else if (activeTab === 3) {
       fetchProducts("inactive");
     }
-  }, [activeTab]);
+  }, [activeTab , query]);
 
 
 

@@ -16,13 +16,6 @@ export default function AdminDashboard() {
 
 
   const [query, setQuery] = useState("");
- 
-  // const filtered = users.filter(u =>
-  //   u.name.toLowerCase().includes(query.toLowerCase()) ||
-  //   u.email.toLowerCase().includes(query.toLowerCase())
-  // );
-
-
 
   return (
     <div className="admin-app">

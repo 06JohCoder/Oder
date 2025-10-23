@@ -4,8 +4,8 @@ import { useState } from "react";
 // import "../css/components/HeaderAdmin"
 
 function HeaderAdmin({query,setQuery}) {
-
-
+ 
+ 
   return (
     <>
        <header className="admin-topbar">

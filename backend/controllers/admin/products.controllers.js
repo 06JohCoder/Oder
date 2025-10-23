@@ -10,8 +10,12 @@ module.exports.index = async (req, res) => {
         if (req.query.status){
            final.status = req.query.status; 
         }
+
         if (req.query.keyword) {
-            final.name = req.query.keyword;
+            const keyword = req.query.keyword;
+            console.log(keyword)
+            const regx = new RegExp(`.*${keyword}.*`,"i");
+            final.name = regx;
         }
         if (req.query.category) {
             final.category = req.query.category;
