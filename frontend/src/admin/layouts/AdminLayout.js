@@ -29,7 +29,7 @@ export default function AdminDashboard() {
           <Routes>
             <Route path="/productsAdmin" element={<ProductsAdmin query={query}/>} />
             <Route path="/users" element={<UsersAdmin query={query}/>} />
-            <Route path="/" element={<MainAdmin />} />
+            <Route path="/" element={<MainAdmin query={query} />} />
             <Route path="/reports" element={<ReportsAdmin />} />
             <Route path="/setting" element={<SettingsAdmin />} />
           </Routes>

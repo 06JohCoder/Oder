@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import AutoCloseNotification from "./alerts/AutoCloseNotification";
 
-function MainAdmin() {
+function MainAdmin({ query }) {
+
   const [users, setUsers] = useState([]);
   // const [activeTab, setActiveTab] = useState(1);
   const [selected, setSelected] = useState(null);
@@ -14,7 +15,8 @@ function MainAdmin() {
   // Tìm kiếm nhiều tiêu chí
   const [filters, setFilters] = useState({
     status: "",
-    role: ""
+    role: "",
+   userName_email:""
   });
 
 
@@ -52,9 +54,14 @@ function MainAdmin() {
     if (filters.role) {
       params.push(`role=${filters.role}`);
     }
+    if (query) {
+      params.push(`userName_email=${query}`);
+    }
+   
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
+
 
     fetch(url)
       .then((res) => res.json())
@@ -65,7 +72,7 @@ function MainAdmin() {
 
   useEffect(() => {
     fetchUser();
-  }, [filters]);
+  }, [filters,query]);
 
 
   const fetchAllUsers = () => {
