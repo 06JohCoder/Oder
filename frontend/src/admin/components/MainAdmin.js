@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import AutoCloseNotification from "./alerts/AutoCloseNotification";
+import PaginationHelper from "../helpers/pagination";
 
 function MainAdmin({ query }) {
 
@@ -8,6 +9,10 @@ function MainAdmin({ query }) {
   const [selected, setSelected] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
   const [sumUsers, setSumUsers] = useState(0);
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
+
   const checkBoxSetting = () => {
     setShowNotification(true);
   }
@@ -16,7 +21,7 @@ function MainAdmin({ query }) {
   const [filters, setFilters] = useState({
     status: "",
     role: "",
-   userName_email:""
+    userName_email: "",
   });
 
 
@@ -36,7 +41,7 @@ function MainAdmin({ query }) {
   ];
 
 
- 
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,7 +62,9 @@ function MainAdmin({ query }) {
     if (query) {
       params.push(`userName_email=${query}`);
     }
-   
+    if(page){
+      params.push(`page=${page}`);
+    }
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
@@ -65,20 +72,23 @@ function MainAdmin({ query }) {
 
     fetch(url)
       .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then((res => {
+        setUsers(res.data)
+        setTotalPages(res.objPagination.totalPages)
+      }))
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
 
 
   useEffect(() => {
     fetchUser();
-  }, [filters,query]);
+  }, [filters, query, page]);
 
 
   const fetchAllUsers = () => {
     fetch("/api/admin/userAdmin")
       .then((res) => res.json())
-      .then((data) => setSumUsers(data));
+      .then((res) => setSumUsers(res.data));
   };
 
   useEffect(() => {
@@ -147,8 +157,8 @@ function MainAdmin({ query }) {
         </div>
         <div className="admin-card">
           <h3>
-            
-Reserves & Investments </h3>
+
+            Reserves & Investments </h3>
           <div className="admin-stat">
             <div>
               <div className="admin-big">₫ 26,500,000</div>
@@ -157,10 +167,10 @@ Reserves & Investments </h3>
             </div>
             <div className="admin-right">
               <div className="admin-trend">+1% vs last month</div>
-              <div className="admin-trend">            
-Reserves & Investments = Revenue x 21.3%</div>
-              
-              </div>
+              <div className="admin-trend">
+                Reserves & Investments = Revenue x 21.3%</div>
+
+            </div>
           </div>
         </div>
       </section>
@@ -232,6 +242,8 @@ Reserves & Investments = Revenue x 21.3%</div>
                 ))}
               </tbody>
             </table>
+
+            <PaginationHelper totalPages={totalPages} page={page} setPage={setPage} />
           </div>
 
           <div className="admin-card">
@@ -259,7 +271,7 @@ Reserves & Investments = Revenue x 21.3%</div>
             {selected ? (
               <div className="admin-editor">
                 <input className="admin-input" defaultValue={selected.name} />
-                <input className="admin-input" defaultValue={selected.email} style={{marginTop: "10px"}}/>
+                <input className="admin-input" defaultValue={selected.email} style={{ marginTop: "10px" }} />
                 <div className="admin-form-row">
                   <select className="admin-select" defaultValue={selected.role}>
                     <option>Admin</option>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
+import PaginationHelper from "../../helpers/pagination";
 function UsersAdmin() {
 
     const [activeTab, setActiveTab] = useState(null);
@@ -167,11 +168,7 @@ function UsersAdmin() {
                             </tbody>
                         </table>
 
-                        <div className="admin-pagination">
-                            <button className="admin-btn">Previous</button>
-                            <span>Page 1 of 3</span>
-                            <button className="admin-btn">Next</button>
-                        </div>
+                      <PaginationHelper/>
                     </div>
 
                     <section className="admin-card" style={{ marginTop: "15px" }}>

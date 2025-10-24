@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "../../css/products/ProductsAdmin.css";
 import ButtonTabs from "../../helpers/filterStatus";
 import FilterListFood from "../../helpers/filterListFood";
+import PaginationHelper from "../../helpers/pagination";
 const ProductsAdmin = ({ query }) => {
   console.log("Query in ProductsAdmin:", query);
   const [products, setProducts] = useState([]);
@@ -105,6 +106,7 @@ const ProductsAdmin = ({ query }) => {
           </tbody>
         </table>
       </div>
+      <PaginationHelper/>
     </div>
   );
 };
