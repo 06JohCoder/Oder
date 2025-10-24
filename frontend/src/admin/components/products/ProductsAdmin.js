@@ -87,30 +87,12 @@ const ProductsAdmin = ({ query }) => {
 
         <button className="btn-accent">+ Thêm Sản Phẩm</button>
       </header>
-      
+
       <div className="products-header">
         <FilterListFood
           activeTab={activeName}
           onTabClick={(tab) => setActiveName(tab.id)}
         />
-
-        {/* <div style={{ display: "flex", gap: "10px" }}>
-          {nameList.map((tab) => (
-            <button
-              key={tab.id}
-
-              className={`admin-btn ${activeName === tab.id ? "admin-primary" : ""}`}
-              onClick={() => {
-                setActiveName(tab.id)
-                setFilters({ ...filters, category: tab.id === 1 ? "" : tab.title })
-              }}
-            >
-              {tab.title}
-            </button>
-
-          ))}
-        </div> */}
-
 
       </div>
       <div className="products-table">
