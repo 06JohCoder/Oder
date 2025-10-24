@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import "../../css/products/ProductsAdmin.css";
+import ButtonTabs from "../../helpers/filterStatus";
+
 const ProductsAdmin = ({ query }) => {
   console.log("Query in ProductsAdmin:", query);
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
-  const buttonTabs = [
-    { id: 1, title: "All" },
-    { id: 2, title: "Active" },
-    { id: 3, title: "Inactive" },
-  ];
+  // const buttonTabs = [
+  //   { id: 1, title: "All" },
+  //   { id: 2, title: "Active" },
+  //   { id: 3, title: "Inactive" },
+  // ];
 
   const nameList = [
     { id: 1, title: "All" },
@@ -25,7 +27,7 @@ const ProductsAdmin = ({ query }) => {
     { id: 11, title: "Đồ ngoại" },
     { id: 12, title: "Combo" },
   ]
- 
+
   const [filters, setFilters] = useState({
     status: "",
     category: "",
@@ -45,13 +47,13 @@ const ProductsAdmin = ({ query }) => {
     if (status) {
       params.push(`status=${status}`);
     }
-    if(query){
+    if (query) {
       params.push(`keyword=${query}`);
     }
-    if(params.length > 0) {
+    if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
-   
+
 
     fetch(url)
       .then((res) => res.json())
@@ -68,7 +70,7 @@ const ProductsAdmin = ({ query }) => {
     } else if (activeTab === 3) {
       fetchProducts("inactive");
     }
-  }, [activeTab , query]);
+  }, [activeTab, query]);
 
 
 
@@ -76,8 +78,8 @@ const ProductsAdmin = ({ query }) => {
     <div className="products-page">
       <header className="products-header">
         <h1>Quản Trị Sản Phẩm</h1>
-        <div style={{ display: "flex", gap: "10px" }}>
-          {buttonTabs.map((tab) => (
+        <div >
+          {/* {buttonTabs.map((tab) => (
             <button
               key={tab.id}
               className={`admin-btn ${activeTab === tab.id ? "admin-primary" : ""}`}
@@ -85,7 +87,11 @@ const ProductsAdmin = ({ query }) => {
               {tab.title}
             </button>
 
-          ))}
+          ))} */}
+          <ButtonTabs
+            activeTab={activeTab}
+            onTabClick={(tab) => setActiveTab(tab.id)}
+          />
         </div>
 
         <button className="btn-accent">+ Thêm Sản Phẩm</button>
@@ -100,7 +106,7 @@ const ProductsAdmin = ({ query }) => {
               className={`admin-btn ${activeName === tab.id ? "admin-primary" : ""}`}
               onClick={() => {
                 setActiveName(tab.id)
-                setFilters({ ...filters, category: tab.id === 1 ? "" : tab.title})
+                setFilters({ ...filters, category: tab.id === 1 ? "" : tab.title })
               }}
             >
               {tab.title}
