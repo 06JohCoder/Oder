@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../../css/products/ProductsAdmin.css";
 import ButtonTabs from "../../helpers/filterStatus";
-
+import FilterListFood from "../../helpers/filterListFood";
 const ProductsAdmin = ({ query }) => {
   console.log("Query in ProductsAdmin:", query);
   const [products, setProducts] = useState([]);
@@ -13,20 +13,20 @@ const ProductsAdmin = ({ query }) => {
   //   { id: 3, title: "Inactive" },
   // ];
 
-  const nameList = [
-    { id: 1, title: "All" },
-    { id: 2, title: "Lẩu" },
-    { id: 3, title: "Nướng" },
-    { id: 4, title: "Cơm" },
-    { id: 5, title: "Đồ rán" },
-    { id: 6, title: "Đồ hấp & Luộc" },
-    { id: 7, title: "Phở & Bún ...." },
-    { id: 8, title: "Bánh rán ...." },
-    { id: 9, title: "Ăn vặt" },
-    { id: 10, title: "Đồ uống" },
-    { id: 11, title: "Đồ ngoại" },
-    { id: 12, title: "Combo" },
-  ]
+  // const nameList = [
+  //   { id: 1, title: "All" },
+  //   { id: 2, title: "Lẩu" },
+  //   { id: 3, title: "Nướng" },
+  //   { id: 4, title: "Cơm" },
+  //   { id: 5, title: "Đồ rán" },
+  //   { id: 6, title: "Đồ hấp & Luộc" },
+  //   { id: 7, title: "Phở & Bún ...." },
+  //   { id: 8, title: "Bánh rán ...." },
+  //   { id: 9, title: "Ăn vặt" },
+  //   { id: 10, title: "Đồ uống" },
+  //   { id: 11, title: "Đồ ngoại" },
+  //   { id: 12, title: "Combo" },
+  // ]
 
   const [filters, setFilters] = useState({
     status: "",
@@ -79,15 +79,6 @@ const ProductsAdmin = ({ query }) => {
       <header className="products-header">
         <h1>Quản Trị Sản Phẩm</h1>
         <div >
-          {/* {buttonTabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={`admin-btn ${activeTab === tab.id ? "admin-primary" : ""}`}
-              onClick={() => setActiveTab(tab.id)}>
-              {tab.title}
-            </button>
-
-          ))} */}
           <ButtonTabs
             activeTab={activeTab}
             onTabClick={(tab) => setActiveTab(tab.id)}
@@ -96,9 +87,14 @@ const ProductsAdmin = ({ query }) => {
 
         <button className="btn-accent">+ Thêm Sản Phẩm</button>
       </header>
+      
       <div className="products-header">
+        <FilterListFood
+          activeTab={activeName}
+          onTabClick={(tab) => setActiveName(tab.id)}
+        />
 
-        <div style={{ display: "flex", gap: "10px" }}>
+        {/* <div style={{ display: "flex", gap: "10px" }}>
           {nameList.map((tab) => (
             <button
               key={tab.id}
@@ -113,7 +109,9 @@ const ProductsAdmin = ({ query }) => {
             </button>
 
           ))}
-        </div>
+        </div> */}
+
+
       </div>
       <div className="products-table">
         <table>
