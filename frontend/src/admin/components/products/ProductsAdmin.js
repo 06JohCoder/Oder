@@ -7,38 +7,12 @@ const ProductsAdmin = ({ query }) => {
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
-  // const buttonTabs = [
-  //   { id: 1, title: "All" },
-  //   { id: 2, title: "Active" },
-  //   { id: 3, title: "Inactive" },
-  // ];
-
-  // const nameList = [
-  //   { id: 1, title: "All" },
-  //   { id: 2, title: "Lẩu" },
-  //   { id: 3, title: "Nướng" },
-  //   { id: 4, title: "Cơm" },
-  //   { id: 5, title: "Đồ rán" },
-  //   { id: 6, title: "Đồ hấp & Luộc" },
-  //   { id: 7, title: "Phở & Bún ...." },
-  //   { id: 8, title: "Bánh rán ...." },
-  //   { id: 9, title: "Ăn vặt" },
-  //   { id: 10, title: "Đồ uống" },
-  //   { id: 11, title: "Đồ ngoại" },
-  //   { id: 12, title: "Combo" },
-  // ]
 
   const [filters, setFilters] = useState({
     status: "",
     category: "",
     search: query || "",
   });
-
-
-
-  // let url = "/api/admin/userAdmin";
-  //   const params = [];
-
 
 
   const fetchProducts = (status) => {

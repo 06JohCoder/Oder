@@ -7,6 +7,7 @@ const buttonTabs = [
 ];
 
 function ButtonTabs({ activeTab, onTabClick }) {
+  
   return (
     <div style={{ display: "flex", gap: "10px" }}>
       {buttonTabs.map((tab) => (

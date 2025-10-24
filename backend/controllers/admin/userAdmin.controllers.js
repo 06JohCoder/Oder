@@ -1,14 +1,9 @@
 const userAdmins = require("../../models/UserAdmin.model");
 
 
-
-// if(){
-
-// }
-
 //[GET] /api/admin/usersAdmin
 module.exports.userAdmin = async (req, res) => {
-    // console.log(req.query.status + " " + req.query.role)
+ 
 
     let final = {
 

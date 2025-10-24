@@ -1,25 +1,27 @@
+
+const searchHelper = require("../../helpers/search");
+
 const Product = require("../../models/product.model")
 
 //[GET] /api/admin/products
 module.exports.index = async (req, res) => {
-        // console.log(req.query.keyword)
+        
         let final ={
                 deleted: false,
-            }
-
+        }
         if (req.query.status){
            final.status = req.query.status; 
         }
 
-        if (req.query.keyword) {
-            const keyword = req.query.keyword;
-            console.log(keyword)
-            const regx = new RegExp(`.*${keyword}.*`,"i");
-            final.name = regx;
+
+        const objSearch = searchHelper(req.query);
+        if (objSearch.regex) {
+            final.name = objSearch.regex;
         }
         if (req.query.category) {
             final.category = req.query.category;
         }
+
 
 
         
