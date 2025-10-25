@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const products = require('../../controllers/admin/products.controllers');
+const controllers = require('../../controllers/admin/products.controllers');
 
-router.get('/products',products.index);
+router.get('/products',controllers.index);
+
+router.patch('/products/change-status/:status/:id',controllers.changeStatus)
 
 module.exports = router;
 
