@@ -11,16 +11,13 @@ const ProductsAdmin = ({ query }) => {
   const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
   const [loading, setLoading] = useState(false);
+  const [notifMessage, setNotifMessage] = useState("");
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(null);
   // Xử lý phần frontend về thông báo
 
   const [notifKey, setNotifKey] = useState(0);
-
-  // const handleClick = () => {
-  //   setNotifKey((prev) => prev + 1);
-  //   setLoading(true);
-  // };
-
 
   //Kết thúc Xử lý phần frontend về thông báo
 
@@ -33,7 +30,7 @@ const ProductsAdmin = ({ query }) => {
   });
 
 
-  const fetchProducts = (status) => {
+  const fetchProducts = (status, category) => {
     let url = "/api/admin/products";
     const params = [];
     if (status) {
@@ -42,31 +39,71 @@ const ProductsAdmin = ({ query }) => {
     if (query) {
       params.push(`keyword=${query}`);
     }
+
+    if (page) {
+      params.push(`page=${page}`);
+    }
+    if(category){
+      params.push(`category=${category}`)
+    }
+    
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
 
+    console.log(category)
 
     fetch(url)
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((res) => {
+
+        setProducts(res.data)
+        setTotalPages(res.objPagination.totalPages)
+      })
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
+  console.log("activeName",activeName)
 
   // Gọi API mỗi khi tab thay đổi
-  useEffect(() => {
-    if (activeTab === 1) {
-      fetchProducts();
-    } else if (activeTab === 2) {
-      fetchProducts("active");
-    } else if (activeTab === 3) {
-      fetchProducts("inactive");
-    }
-  }, [activeTab, query]);
+  // useEffect(() => {
+  //   if (activeTab === 1 ) {
+  //     fetchProducts();
+  //   } else if (activeTab === 2) {
+  //     fetchProducts("active");
+  //   } else if (activeTab === 3) {
+  //     fetchProducts("inactive");
+  //   }
+   
+      
+  // }, [activeTab, query,page]);
+ useEffect(() => {
+  let status = "";
+  let category = "";
+
+  // tab → xác định trạng thái
+  if (activeTab === 2) status = "active";
+  else if (activeTab === 3) status = "inactive";
+
+  // activeName → xác định category
+  switch (activeName) {
+    case "1":
+      category = "pho_bun";
+      break;
+    case "2":
+      category = "com";
+      break;
+    default:
+      category = "";
+  }
+ console.log("🟢 fetchProducts params:", { status, category });
+  fetchProducts(status, category);
+}, [activeTab, activeName, query, page]);
+
 
   // Change status
   const handleChangeStatus = async (id, status) => {
     setLoading(true);
+    setNotifMessage("Thay Đổi Trạng Thái Thành Công!")
     setNotifKey((prev) => prev + 1);
 
     const statusChange = status === "active" ? "inactive" : "active";
@@ -104,12 +141,76 @@ const ProductsAdmin = ({ query }) => {
 
   //End Change status
 
+
+
+  // option 
+  const statusOptions = [
+
+    { id: 1, value: "active" },
+    { id: 2, value: "inactive" },
+
+  ];
+
+  // Change-multi
+
+
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [newStatus, setNewStatus] = useState("active");
+
+  // console.log(newStatus)
+  /*-------Check all----- */
+  const handleCheckAll = (e) => {
+    if (e.target.checked) {
+      setSelectedIds(products.map((item) => item._id))
+
+    } else {
+      setSelectedIds([])
+    }
+  }
+
+  /*-------Check one----- */
+
+  const handleCheck = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    )
+  }
+
+  const handleUpdateChangeMulti = async () => {
+    if (!newStatus) {
+      alert("Chọn trạng thái")
+    }
+    if (selectedIds.length === 0) return alert("chưa có sản phẩm nào được chọn")
+
+
+    fetch(`/api/admin/products/change-multi`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ids: selectedIds, newStatus }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        setNotifMessage(data.message)
+        setLoading(true);
+        // alert( );
+        fetchProducts();
+      })
+      .catch(err => {
+        console.error("Lỗi khi cập nhật:", err);
+        alert("Cập nhật thất bại!");
+      })
+  }
+  //Endl change-multi
+
+
   return (
     <div className="products-page">
 
       {loading && (<AutoCloseNotification
         key={notifKey}
-        message="Thay Đổi Trạng Thái Thành Công!"
+        message={notifMessage}
         onClose={() => setLoading(false)}
       />)}
 
@@ -131,11 +232,41 @@ const ProductsAdmin = ({ query }) => {
           onTabClick={(tab) => setActiveName(tab.id)}
         />
 
+        <div style={{ display: "flex", gap: "10px" }}>
+
+          <select
+            name="status"
+            className="admin-select"
+            style={{ width: "130px" }}
+            value={newStatus}
+            onChange={(e) => setNewStatus(e.target.value)}
+          >
+            {statusOptions.map((opt) => (
+              <option key={opt.id} value={opt.value} >
+                {opt.value}
+              </option>
+            ))}
+
+
+          </select>
+
+          <button className="btn-accent" onClick={handleUpdateChangeMulti}>Áp Dụng</button>
+
+        </div>
+
+
       </div>
       <div className="products-table">
         <table>
           <thead>
             <tr>
+              <th><input
+                type="checkbox"
+                name="checkall"
+                onChange={handleCheckAll}
+                checked={selectedIds.length === products.length}
+              /></th>
+
               <th>ID</th>
               <th>Ảnh</th>
               <th>Tên Sản Phẩm</th>
@@ -148,6 +279,13 @@ const ProductsAdmin = ({ query }) => {
           <tbody>
             {products.map((item, index) => (
               <tr key={item._id}>
+                <td><input
+                  type="checkbox"
+                  name="id"
+                  checked={selectedIds.includes(item._id)} //kiểm cha xem trong selecIds có không nếu có thì mới true
+                  onChange={() => handleCheck(item._id)}
+                /></td>
+
                 <td>{index + 1}</td>
                 <td>
                   <img
@@ -162,6 +300,7 @@ const ProductsAdmin = ({ query }) => {
                   data-status={item.status}
                   data-id={item.id}
                   onClick={() => handleChangeStatus(item._id, item.status)}
+
                 >Hoạt Động</a></td> : <td style={{ color: "red" }}> <a
                   style={{ cursor: "pointer" }}
                   data-status={item.status}
@@ -179,7 +318,8 @@ const ProductsAdmin = ({ query }) => {
           </tbody>
         </table>
       </div>
-      <PaginationHelper />
+      <PaginationHelper totalPages={totalPages} page={page} setPage={setPage} />
+
     </div>
   );
 };
