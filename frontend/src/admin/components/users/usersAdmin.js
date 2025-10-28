@@ -2,6 +2,7 @@ import { useState } from "react";
 import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
 import PaginationHelper from "../../helpers/pagination";
+import Delete from "../../helpers/delete";
 function UsersAdmin() {
 
     const [activeTab, setActiveTab] = useState(null);
@@ -32,10 +33,6 @@ function UsersAdmin() {
         setShowAddUser(false);
     };
 
-    // --- Xóa người dùng ---
-    const handleDelete = (id) => {
-        setUsers((prev) => prev.filter((u) => u.id !== id));
-    };
 
     // --- Cập nhật thông tin người dùng ---
     const handleSave = () => {
@@ -158,10 +155,8 @@ function UsersAdmin() {
                                                 setActiveTab(u.id);
                                              }}
                                              ><i className="bi bi-pen" ></i></button>
-                                            <button className="admin-btn" onClick={() => {
-                                                handleDelete(u.id);
-                                                
-                                            }}><i className="bi bi-trash"></i></button>
+                                            <Delete set={setUsers} userId ={u.id}/>
+
                                         </td>
                                     </tr>
                                 ))}

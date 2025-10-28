@@ -4,6 +4,7 @@ import ButtonTabs from "../../helpers/filterStatus";
 import FilterListFood from "../../helpers/filterListFood";
 import PaginationHelper from "../../helpers/pagination";
 import AutoCloseNotification from "../alerts/AutoCloseNotification";
+import Delete from "../../helpers/delete";
 
 const ProductsAdmin = ({ query }) => {
   // console.log("Query in ProductsAdmin:", query);
@@ -12,6 +13,9 @@ const ProductsAdmin = ({ query }) => {
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
   const [loading, setLoading] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
+
+  const [idDelete, setIdDelete] = useState("");
+ 
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
@@ -40,18 +44,18 @@ const ProductsAdmin = ({ query }) => {
       params.push(`keyword=${query}`);
     }
 
-    if (page) {
+    if (page > 1) {
       params.push(`page=${page}`);
     }
     if(category){
       params.push(`category=${category}`)
     }
-    
+  
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
 
-    console.log(category)
+    
 
     fetch(url)
       .then((res) => res.json())
@@ -62,20 +66,8 @@ const ProductsAdmin = ({ query }) => {
       })
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
-  console.log("activeName",activeName)
 
-  // Gọi API mỗi khi tab thay đổi
-  // useEffect(() => {
-  //   if (activeTab === 1 ) {
-  //     fetchProducts();
-  //   } else if (activeTab === 2) {
-  //     fetchProducts("active");
-  //   } else if (activeTab === 3) {
-  //     fetchProducts("inactive");
-  //   }
-   
-      
-  // }, [activeTab, query,page]);
+
  useEffect(() => {
   let status = "";
   let category = "";
@@ -95,9 +87,9 @@ const ProductsAdmin = ({ query }) => {
     default:
       category = "";
   }
- console.log("🟢 fetchProducts params:", { status, category });
+
   fetchProducts(status, category);
-}, [activeTab, activeName, query, page]);
+}, [activeTab, activeName, query, page,idDelete]);
 
 
   // Change status
@@ -139,9 +131,11 @@ const ProductsAdmin = ({ query }) => {
   };
 
 
-  //End Change status
+ 
 
 
+
+  // Endl Delete
 
   // option 
   const statusOptions = [
@@ -311,7 +305,7 @@ const ProductsAdmin = ({ query }) => {
                 <td>{item.stock}</td>
                 <td style={{ display: "flex", gap: "5px" }}>
                   <button className="admin-btn" ><i class="bi bi-pen"></i></button>
-                  <button className="admin-btn" ><i class="bi bi-trash"></i></button>
+                  <Delete set={setProducts} Id={item._id} setId={setIdDelete} setNotifMessage={setNotifMessage} setLoading={setLoading} setNotifKey={setNotifKey}/>
                 </td>
               </tr>
             ))}

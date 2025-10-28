@@ -19,7 +19,7 @@ module.exports.index = async (req, res) => {
     if (req.query.category) {
         final.category = req.query.category;
     }
- 
+
 
 
 
@@ -52,6 +52,7 @@ module.exports.index = async (req, res) => {
 
 //[Patch] /api/admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
+
     try {
         const status = req.params.status;
         const id = req.params.id;
@@ -75,21 +76,6 @@ module.exports.changeStatus = async (req, res) => {
 //[Patch] /api/admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
 
-    // try{
-    //      const { ids, newStatus } = req.body
-    // if (!ids.length || !newStatus)
-    //     return res.status(400).json({ message: "Thiếu dữ liệu" });
-
-    // await Product.updateMany(
-    //         { _id: { $in: ids } },
-    //         { $set: { status: newStatus } }
-    // );
-    //   res.json({ message: "Cập nhật trạng thái hàng loạt thành công!" });
-
-
-    // }catch(error){
-    //        res.status(500).json({ message: "Lỗi server" });
-    // }
 
     try {
         const { ids, newStatus } = req.body;
@@ -131,3 +117,33 @@ module.exports.changeMulti = async (req, res) => {
 
 
 }
+
+//[Delete] /api/admin/products/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deleted = await Product.findByIdAndDelete(id);
+
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy sản phẩm để xóa!",
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Xóa sản phẩm thành công!",
+        });
+    } catch (error) {
+        console.error("Lỗi khi xóa sản phẩm:", error);
+        res.status(500).json({
+            success: false,
+            message: "Lỗi máy chủ khi xóa sản phẩm!",
+        });
+    }
+
+
+}
+
