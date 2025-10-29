@@ -15,7 +15,7 @@ const ProductsAdmin = ({ query }) => {
   const [notifMessage, setNotifMessage] = useState("");
 
   const [idDelete, setIdDelete] = useState("");
- 
+
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
@@ -47,15 +47,15 @@ const ProductsAdmin = ({ query }) => {
     if (page > 1) {
       params.push(`page=${page}`);
     }
-    if(category){
+    if (category) {
       params.push(`category=${category}`)
     }
-  
+
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
 
-    
+
 
     fetch(url)
       .then((res) => res.json())
@@ -68,28 +68,28 @@ const ProductsAdmin = ({ query }) => {
   };
 
 
- useEffect(() => {
-  let status = "";
-  let category = "";
+  useEffect(() => {
+    let status = "";
+    let category = "";
 
-  // tab → xác định trạng thái
-  if (activeTab === 2) status = "active";
-  else if (activeTab === 3) status = "inactive";
+    // tab → xác định trạng thái
+    if (activeTab === 2) status = "active";
+    else if (activeTab === 3) status = "inactive";
 
-  // activeName → xác định category
-  switch (activeName) {
-    case "1":
-      category = "pho_bun";
-      break;
-    case "2":
-      category = "com";
-      break;
-    default:
-      category = "";
-  }
+    // activeName → xác định category
+    switch (activeName) {
+      case "1":
+        category = "pho_bun";
+        break;
+      case "2":
+        category = "com";
+        break;
+      default:
+        category = "";
+    }
 
-  fetchProducts(status, category);
-}, [activeTab, activeName, query, page,idDelete]);
+    fetchProducts(status, category);
+  }, [activeTab, activeName, query, page, idDelete]);
 
 
   // Change status
@@ -131,7 +131,7 @@ const ProductsAdmin = ({ query }) => {
   };
 
 
- 
+
 
 
 
@@ -142,6 +142,7 @@ const ProductsAdmin = ({ query }) => {
 
     { id: 1, value: "active" },
     { id: 2, value: "inactive" },
+    { id: 3, value: "delete-all" }
 
   ];
 
@@ -164,6 +165,10 @@ const ProductsAdmin = ({ query }) => {
 
   /*-------Check one----- */
 
+
+
+
+
   const handleCheck = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
@@ -171,6 +176,20 @@ const ProductsAdmin = ({ query }) => {
   }
 
   const handleUpdateChangeMulti = async () => {
+
+
+    /* Xóa nhiều sản phẩm */
+    if (newStatus === "delete-all") {
+      // eslint-disable-next-line no-restricted-globals
+        const result = confirm("Bạn có chắc chắn");
+        if(!result){
+          return
+        }
+    }
+
+
+
+
     if (!newStatus) {
       alert("Chọn trạng thái")
     }
@@ -305,7 +324,7 @@ const ProductsAdmin = ({ query }) => {
                 <td>{item.stock}</td>
                 <td style={{ display: "flex", gap: "5px" }}>
                   <button className="admin-btn" ><i class="bi bi-pen"></i></button>
-                  <Delete set={setProducts} Id={item._id} setId={setIdDelete} setNotifMessage={setNotifMessage} setLoading={setLoading} setNotifKey={setNotifKey}/>
+                  <Delete set={setProducts} Id={item._id} setId={setIdDelete} setNotifMessage={setNotifMessage} setLoading={setLoading} setNotifKey={setNotifKey} />
                 </td>
               </tr>
             ))}

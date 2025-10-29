@@ -101,7 +101,15 @@ module.exports.changeMulti = async (req, res) => {
                 );
 
                 break;
-
+            case "delete-all":
+                 await Product.updateMany(
+                    { _id: { $in: ids } },
+                    {  
+                        deleted: true,
+                        deletedAt: new Date(),
+                      }
+                );
+                break
             default:
                 return res.status(400).json({ message: "Trạng thái không hợp lệ" });
         }
@@ -120,11 +128,13 @@ module.exports.changeMulti = async (req, res) => {
 
 //[Delete] /api/admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
-    const { id } = req.params;
+    
 
     try {
-        const deleted = await Product.findByIdAndDelete(id);
-
+        const { id } = req.params;
+        // const deleted = await Product.findByIdAndDelete(id); xóa vĩnh viễn
+        const deleted = await Product.updateOne({ _id: id }, { deleted: true ,deletedAt: new Date() })
+        
         if (!deleted) {
             return res.status(404).json({
                 success: false,
