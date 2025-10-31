@@ -1,0 +1,43 @@
+.createProducts-offcanvas {
+  width: 35% !important;
+  background: linear-gradient(180deg, #071029 0%, #081428 100%);
+  color: white;
+}
+
+.createProducts-header {
+  border-bottom: 1px solid #2c3b64;
+}
+.offcanvas .offcanvas-header h5{
+    color: aliceblue;
+}
+
+.createProducts-body {
+  color: white;
+}
+
+
+
+.createProducts-input {
+  background-color: #0e1a3a !important;
+  border: 1px solid #2c3b64 !important;
+  color: #fff !important;
+}
+
+.createProducts-input::placeholder {
+  color: #b0b7d0 !important;
+}
+
+.createProducts-btn {
+  background-color: #1e3a8a !important;
+  border: none !important;
+  width: 100%;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.createProducts-btn:hover {
+  background-color: #2a4ebf !important;
+}

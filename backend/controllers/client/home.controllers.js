@@ -6,10 +6,12 @@ const Product = require("../../models/product.model")
 
 module.exports.index = async (req, res) => {
         try {
-            const data = await Product.find({
+            const data = await Product
+            .find({
                 status:"active",
                 deleted : false
-            });
+            })
+            .sort({position:"desc"});
             res.json(data);
         } catch (err) {
             console.error(err);

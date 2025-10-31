@@ -37,7 +37,11 @@ module.exports.index = async (req, res) => {
     //Endl Pagination
 
     try {
-        const data = await Product.find(final).limit(objPagination.limitItems).skip(objPagination.skip);
+        const data = await Product.find(final)
+            .sort({ position: "desc" })
+            //  desc giảm dần asc tăng dần
+            .limit(objPagination.limitItems)
+            .skip(objPagination.skip);
         // console.log({data})
         res.json({
             data,
@@ -78,8 +82,8 @@ module.exports.changeMulti = async (req, res) => {
 
 
     try {
-        const { ids, newStatus } = req.body;
-
+        const { ids, idPosition, newStatus } = req.body;
+        console.log(idPosition)
         if (!ids?.length || !newStatus) {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
@@ -102,13 +106,22 @@ module.exports.changeMulti = async (req, res) => {
 
                 break;
             case "delete-all":
-                 await Product.updateMany(
+                await Product.updateMany(
                     { _id: { $in: ids } },
-                    {  
+                    {
                         deleted: true,
                         deletedAt: new Date(),
-                      }
+                    }
                 );
+                break
+            case "change-position":
+                for (const item of idPosition) {
+                    await Product.updateOne(
+                        { _id: item.id },
+                        { $set: { position: item.position } }
+                    );
+                }
+
                 break
             default:
                 return res.status(400).json({ message: "Trạng thái không hợp lệ" });
@@ -128,13 +141,13 @@ module.exports.changeMulti = async (req, res) => {
 
 //[Delete] /api/admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
-    
+
 
     try {
         const { id } = req.params;
         // const deleted = await Product.findByIdAndDelete(id); xóa vĩnh viễn
-        const deleted = await Product.updateOne({ _id: id }, { deleted: true ,deletedAt: new Date() })
-        
+        const deleted = await Product.updateOne({ _id: id }, { deleted: true, deletedAt: new Date() })
+
         if (!deleted) {
             return res.status(404).json({
                 success: false,
@@ -153,6 +166,31 @@ module.exports.deleteItem = async (req, res) => {
             message: "Lỗi máy chủ khi xóa sản phẩm!",
         });
     }
+
+
+}
+//[POST] /api/admin/products/create
+module.exports.create = async (req, res) => {
+
+    req.body.price = parseInt(req.body.price)
+    req.body.discountPercentage = parseInt(req.body.discountPercentage)
+    req.body.stock = parseInt(req.body.stock)
+
+    
+    if (!req.body.position) {
+        const count = await Product.countDocuments();
+        req.body.position = count + 1;
+    } else {
+        req.body.position = parseInt(req.body.position)
+    }
+
+    const product = new Product(req.body);
+    await product.save();
+
+    res.json({
+        message: "Tạo sản phẩm thành công",
+        product,
+    });
 
 
 }

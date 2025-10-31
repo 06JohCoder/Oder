@@ -5,6 +5,7 @@ import FilterListFood from "../../helpers/filterListFood";
 import PaginationHelper from "../../helpers/pagination";
 import AutoCloseNotification from "../alerts/AutoCloseNotification";
 import Delete from "../../helpers/delete";
+import CreatProducts from "../creatProduct/creatProducts";
 
 const ProductsAdmin = ({ query }) => {
   // console.log("Query in ProductsAdmin:", query);
@@ -135,14 +136,15 @@ const ProductsAdmin = ({ query }) => {
 
 
 
-  // Endl Delete
+
 
   // option 
   const statusOptions = [
 
     { id: 1, value: "active" },
     { id: 2, value: "inactive" },
-    { id: 3, value: "delete-all" }
+    { id: 3, value: "delete-all" },
+    { id: 4, value: "change-position" }
 
   ];
 
@@ -163,6 +165,41 @@ const ProductsAdmin = ({ query }) => {
     }
   }
 
+  /* Change position */
+  const [idPosition, setIdPosition] = useState([])
+
+  const handleChangePosition = (index, e) => {
+    const value = e.target.value
+    const updatePosition = [...products]
+
+    updatePosition[index].position = value
+
+
+    setProducts(updatePosition)
+
+
+
+    // lấy ra item vừa thay đổi
+    const changedItem = updatePosition[index]
+    // console.log(changedItem)
+
+
+    setIdPosition((prev) => {
+      const filtered = prev.filter(p => p.id !== changedItem._id);
+
+      return [...filtered, { id: changedItem._id, position: value }];
+    })
+
+
+  }
+  console.log(idPosition)
+
+  /*Endl Change position */
+
+
+
+
+
   /*-------Check one----- */
 
 
@@ -181,10 +218,18 @@ const ProductsAdmin = ({ query }) => {
     /* Xóa nhiều sản phẩm */
     if (newStatus === "delete-all") {
       // eslint-disable-next-line no-restricted-globals
-        const result = confirm("Bạn có chắc chắn");
-        if(!result){
-          return
-        }
+      const result = confirm("Bạn có chắc chắn");
+      if (!result) {
+        return
+      }
+    }
+
+    if (newStatus === "change-position") {
+      // eslint-disable-next-line no-restricted-globals
+      const result = confirm("Bạn có chắc chắn");
+      if (!result) {
+        return
+      }
     }
 
 
@@ -201,13 +246,12 @@ const ProductsAdmin = ({ query }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ids: selectedIds, newStatus }),
+      body: JSON.stringify({ ids: selectedIds, idPosition, newStatus }),
     })
       .then(res => res.json())
       .then(data => {
         setNotifMessage(data.message)
         setLoading(true);
-        // alert( );
         fetchProducts();
       })
       .catch(err => {
@@ -220,7 +264,8 @@ const ProductsAdmin = ({ query }) => {
 
   return (
     <div className="products-page">
-
+        <CreatProducts setProducts={setProducts} setNotifMessage={setNotifMessage}
+        setLoading={setLoading}/>
       {loading && (<AutoCloseNotification
         key={notifKey}
         message={notifMessage}
@@ -236,7 +281,7 @@ const ProductsAdmin = ({ query }) => {
           />
         </div>
 
-        <button className="btn-accent">+ Thêm Sản Phẩm</button>
+        <button className="btn-accent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">+ Thêm Sản Phẩm</button>
       </header>
 
       <div className="products-header">
@@ -285,6 +330,7 @@ const ProductsAdmin = ({ query }) => {
               <th>Tên Sản Phẩm</th>
               <th>Giá (VNĐ)</th>
               <th>Trạng Thái</th>
+              <th>Vị Trí</th>
               <th>Tồn Kho</th>
               <th>Hành Động</th>
             </tr>
@@ -295,7 +341,7 @@ const ProductsAdmin = ({ query }) => {
                 <td><input
                   type="checkbox"
                   name="id"
-                  checked={selectedIds.includes(item._id)} //kiểm cha xem trong selecIds có không nếu có thì mới true
+                  checked={selectedIds.includes(item._id)}
                   onChange={() => handleCheck(item._id)}
                 /></td>
 
@@ -321,6 +367,19 @@ const ProductsAdmin = ({ query }) => {
                   onClick={() => handleChangeStatus(item._id, item.status)}
 
                 >Ngừng Bán</a></td>}
+                <td>
+                  <input
+                    type="number"
+                    value={item.position}
+                    style={{ width: "60px" }}
+                    min="1"
+                    name="position"
+                    onChange={(e) => handleChangePosition(index, e)}
+
+
+
+                  />
+                </td>
                 <td>{item.stock}</td>
                 <td style={{ display: "flex", gap: "5px" }}>
                   <button className="admin-btn" ><i class="bi bi-pen"></i></button>

@@ -1,43 +1,37 @@
 restaurant-reservation-app
 ├── backend
-│   ├── src
-│   │   ├── config
-│   │   │   └── db.js                // Cấu hình kết nối cơ sở dữ liệu
-│   │   ├── controllers
-│   │   │   ├── adminController.js   // Xử lý logic cho admin
-│   │   │   └── userController.js    // Xử lý logic cho user
-│   │   ├── models
-│   │   │   ├── reservationModel.js  // Định nghĩa model đặt bàn
-│   │   │   └── userModel.js         // Định nghĩa model người dùng
-│   │   ├── routes
-│   │   │   ├── adminRoutes.js       // Định tuyến cho admin
-│   │   │   └── userRoutes.js        // Định tuyến cho user
-│   │   ├── views
-│   │   │   ├── admin
-│   │   │   │   └── dashboard.ejs    // Giao diện dashboard cho admin
-│   │   │   └── user
-│   │   │       └── home.ejs         // Giao diện trang chủ cho user
-│   │   └── app.js                   // Khởi tạo ứng dụng backend
-│   └── package.json                 // Quản lý thư viện backend
+│     ├── config
+│     │   ├──database.js            // Cấu hình kết nối cơ sở dữ liệu
+│     │   └──system.js             // cấu hình hệ thống 
+│     ├── controllers
+│     │   ├── admin               // Xử lý logic cho admin
+│     │   └── client              // Xử lý logic cho user
+│     ├── helpers                 // Tái sử dụng
+│     │   
+│     │  
+│     ├── models
+│     │   ├── reservationModel.js  // Định nghĩa model đặt bàn
+│     │   └── userModel.js         // Định nghĩa model người dùng
+│     ├── routes
+│     │       ├── admin            // Định tuyến cho admin
+│     │       └── client           // Định tuyến cho user
+│     │
+│     └── index.js                 // File chung cho phần backend
+│   
 ├── frontend
+│   │
+│   ├── public                      // chứa các file hình ảnh ... public ra giao diện
+│   │
+│   │
 │   ├── src
 │   │   ├── admin
-│   │   │   ├── components
-│   │   │   │   └── AdminDashboard.jsx // Component dashboard cho admin
-│   │   │   ├── layouts
-│   │   │   │   └── default.js         // Layout mặc định cho admin
-│   │   │   └── routes
-│   │   │       └── AdminRoutes.jsx    // Định tuyến cho admin
-│   │   ├── user
-│   │   │   ├── components
-│   │   │   │   └── ReservationForm.jsx // Component đặt bàn cho user
-│   │   │   ├── layouts
-│   │   │   │   └── default.js          // Layout mặc định cho user
-│   │   │   └── routes
-│   │   │       └── UserRoutes.jsx      // Định tuyến cho user
-│   │   ├── config
-│   │   │   └── api.js                  // Cấu hình gọi API
-│   │   ├── App.jsx                     // Khởi tạo ứng dụng frontend
-│   │   └── index.js                    // Điểm bắt đầu frontend
-│   └── package.json                    // Quản lý thư viện frontend
+│   │   │   ├── components          // Các Component cho admin
+│   │   │   │  
+│   │   │   ├── css                 // Layout mặc định cho admin
+│   │   │   │           
+│   │   │   └── helpers              // Tái sử dụng
+│   │   │   │  
+│   │   │   ├── layouts             // bố cục chung cho cả máy tính
+│   │   │     
+│   │   │           
 └── README.md                           // Tài liệu dự án
