@@ -172,6 +172,7 @@ module.exports.deleteItem = async (req, res) => {
 //[POST] /api/admin/products/create
 module.exports.create = async (req, res) => {
 
+
     req.body.price = parseInt(req.body.price)
     req.body.discountPercentage = parseInt(req.body.discountPercentage)
     req.body.stock = parseInt(req.body.stock)
