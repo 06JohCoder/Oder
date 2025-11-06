@@ -9,7 +9,7 @@ import UsersAdmin from "../components/users/usersAdmin";
 import "../css/effects.css"
 import ReportsAdmin from "../components/Reports/ReportsAdmin";
 import SettingsAdmin from "../components/setting/SettingAdmin";
-
+import Could from "../components/could/Could";
 
 export default function AdminDashboard() {
 
@@ -26,11 +26,12 @@ export default function AdminDashboard() {
 
         <main className="admin-main">
           <HeaderAdmin query={query} setQuery={setQuery} />
-          <Routes>
+          <Routes> 
+            <Route path="/" element={<MainAdmin query={query} />} />
             <Route path="/productsAdmin" element={<ProductsAdmin query={query}/>} />
             <Route path="/users" element={<UsersAdmin query={query}/>} />
-            <Route path="/" element={<MainAdmin query={query} />} />
             <Route path="/reports" element={<ReportsAdmin />} />
+            <Route path="/deailCloud" element={<Could/>}/>
             <Route path="/setting" element={<SettingsAdmin />} />
           </Routes>
        

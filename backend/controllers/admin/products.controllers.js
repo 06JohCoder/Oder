@@ -83,7 +83,7 @@ module.exports.changeMulti = async (req, res) => {
 
     try {
         const { ids, idPosition, newStatus } = req.body;
-        console.log(idPosition)
+        
         if (!ids?.length || !newStatus) {
             return res.status(400).json({ message: "Thiếu dữ liệu" });
         }
@@ -193,6 +193,49 @@ module.exports.create = async (req, res) => {
         product,
     });
 
+
+}
+
+
+//[Get] /api/admin/products/edit/:id
+module.exports.edit = async (req, res) => {
+    const find ={
+        deleted: false,
+        _id: req.params.id
+    }
+    const product = await Product.findOne(find);
+
+    res.json({
+        product,
+    });
+
+}
+
+
+//[Get] /api/admin/products/edit/:id
+module.exports.editPatch = async (req, res) => {
+   
+
+    req.body.price = parseInt(req.body.price)
+    req.body.discountPercentage = parseInt(req.body.discountPercentage)
+    req.body.stock = parseInt(req.body.stock)
+    req.body.position = parseInt(req.body.position)
+    
+  
+    try{
+        await Product.updateOne({ _id: req.params.id }, req.body);
+        res.json({
+            message: "Cập nhật sản phẩm thành công",
+        });
+
+    }catch(error){
+        console.error("Lỗi khi cập nhật sản phẩm:", error);
+        res.status(500).json({
+            message: "Lỗi máy chủ khi cập nhật sản phẩm!",
+        });
+    }
+
+    
 
 }
 

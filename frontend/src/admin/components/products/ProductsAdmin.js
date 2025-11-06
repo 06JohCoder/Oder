@@ -6,6 +6,7 @@ import PaginationHelper from "../../helpers/pagination";
 import AutoCloseNotification from "../alerts/AutoCloseNotification";
 import Delete from "../../helpers/delete";
 import CreatProducts from "../creatProduct/creatProducts";
+import EditProducts from "../creatProduct/editPtoducts";
 
 const ProductsAdmin = ({ query }) => {
   // console.log("Query in ProductsAdmin:", query);
@@ -14,13 +15,14 @@ const ProductsAdmin = ({ query }) => {
   const [activeName, setActiveName] = useState(1); // mặc định là "All"
   const [loading, setLoading] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
-
   const [idDelete, setIdDelete] = useState("");
-
-
+  const [idEdit,setIdEdit] = useState("");
+  const [newStatusListFood, setNewStatusListFood] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
   // Xử lý phần frontend về thông báo
+
+  // console.log("activeName và newStatusListFood ",activeName, newStatusListFood)
 
   const [notifKey, setNotifKey] = useState(0);
 
@@ -36,6 +38,7 @@ const ProductsAdmin = ({ query }) => {
 
 
   const fetchProducts = (status, category) => {
+  
     let url = "/api/admin/products";
     const params = [];
     if (status) {
@@ -77,17 +80,15 @@ const ProductsAdmin = ({ query }) => {
     if (activeTab === 2) status = "active";
     else if (activeTab === 3) status = "inactive";
 
-    // activeName → xác định category
-    switch (activeName) {
-      case "1":
-        category = "pho_bun";
-        break;
-      case "2":
-        category = "com";
-        break;
-      default:
-        category = "";
+    if(newStatusListFood === ""){
+      category = "";
+
+    }else{
+      category = newStatusListFood;
     }
+
+  
+
 
     fetchProducts(status, category);
   }, [activeTab, activeName, query, page, idDelete]);
@@ -134,10 +135,6 @@ const ProductsAdmin = ({ query }) => {
 
 
 
-
-
-
-
   // option 
   const statusOptions = [
 
@@ -153,6 +150,8 @@ const ProductsAdmin = ({ query }) => {
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [newStatus, setNewStatus] = useState("active");
+
+
 
   // console.log(newStatus)
   /*-------Check all----- */
@@ -192,7 +191,7 @@ const ProductsAdmin = ({ query }) => {
 
 
   }
-  console.log(idPosition)
+
 
   /*Endl Change position */
 
@@ -233,8 +232,6 @@ const ProductsAdmin = ({ query }) => {
     }
 
 
-
-
     if (!newStatus) {
       alert("Chọn trạng thái")
     }
@@ -264,8 +261,10 @@ const ProductsAdmin = ({ query }) => {
 
   return (
     <div className="products-page">
-        <CreatProducts setProducts={setProducts} setNotifMessage={setNotifMessage}
-        setLoading={setLoading}/>
+      <CreatProducts setProducts={setProducts} setNotifMessage={setNotifMessage}
+        setLoading={setLoading} />
+
+      <EditProducts idEdit={idEdit} setProducts={setProducts}/>
       {loading && (<AutoCloseNotification
         key={notifKey}
         message={notifMessage}
@@ -275,19 +274,24 @@ const ProductsAdmin = ({ query }) => {
       <header className="products-header">
         <h1>Quản Trị Sản Phẩm</h1>
         <div >
+          
           <ButtonTabs
             activeTab={activeTab}
             onTabClick={(tab) => setActiveTab(tab.id)}
           />
         </div>
 
-        <button className="btn-accent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">+ Thêm Sản Phẩm</button>
+        <button className="btn-accent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+          + Thêm Sản Phẩm
+        </button>
       </header>
 
       <div className="products-header">
         <FilterListFood
           activeTab={activeName}
-          onTabClick={(tab) => setActiveName(tab.id)}
+          onTabClick={(category,tab) => {
+            setNewStatusListFood(category)
+            setActiveName(tab)}}
         />
 
         <div style={{ display: "flex", gap: "10px" }}>
@@ -382,7 +386,14 @@ const ProductsAdmin = ({ query }) => {
                 </td>
                 <td>{item.stock}</td>
                 <td style={{ display: "flex", gap: "5px" }}>
-                  <button className="admin-btn" ><i class="bi bi-pen"></i></button>
+                  <button className="admin-btn" class="admin-btn"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasEditProduct"
+                    aria-controls="offcanvasEditProduct"
+                    onClick={() => setIdEdit(item._id)}
+
+                  ><i class="bi bi-pen"></i></button>
                   <Delete set={setProducts} Id={item._id} setId={setIdDelete} setNotifMessage={setNotifMessage} setLoading={setLoading} setNotifKey={setNotifKey} />
                 </td>
               </tr>

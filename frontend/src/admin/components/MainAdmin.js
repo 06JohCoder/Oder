@@ -264,6 +264,7 @@ function MainAdmin({ query }) {
             </div>
           </div>
         </div>
+        
 
         <aside className="admin-panel">
           <div className="admin-card">

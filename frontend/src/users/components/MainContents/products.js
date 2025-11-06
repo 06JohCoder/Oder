@@ -87,7 +87,7 @@ function Products() {
 
 
 
-    const [isMinimized, setIsMinimized] = useState(false);
+    const [isMinimized, setIsMinimized] = useState(true);
     // code phần di chuyển giỏ hàng
     useEffect(() => {
         const draggableDiv = document.getElementById("draggable-div");

@@ -12,7 +12,8 @@ function SidebarAdmin() {
         <>
             <aside className="admin-sidebar">
                 <div className="admin-brand">
-                    <div className="admin-logo">AD</div>
+                    {/* <div className="admin-logo">AD</div> */}
+                       <img className="admin-logo" src="/logo.jpg" alt="Admin Logo" /> 
                     <div>
                         <div className="admin-brand-title">Admin</div>
                         <div className="admin-brand-sub">Order Shop</div>

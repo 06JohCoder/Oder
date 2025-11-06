@@ -1,5 +1,8 @@
 
 import { useState } from "react";
+import ButtonNotifi from "../helpers/buttonNotifi";
+import {Link} from "react-router-dom";
+import {prefixAdmin} from "../../config/system";
 
 // import "../css/components/HeaderAdmin"
 
@@ -20,8 +23,14 @@ function HeaderAdmin({query,setQuery}) {
                 <input placeholder="Tìm người dùng, email, sản phẩm..." value={query} onChange={e => setQuery(e.target.value)} />
               </div>
               <div className="admin-actions">
-                <button className="admin-btn"> <i class="bi bi-bell" > </i></button>
-                <button className="admin-btn"> <i class="bi bi-cloud"> </i></button>
+             
+                <ButtonNotifi/>
+               
+               <Link to={`${prefixAdmin}admin/deailCloud`}> <button className="admin-btn"> <i class="bi bi-cloud"> </i></button></Link>
+
+               
+                
+                
                 <button className="admin-btn admin-primary">New</button>
               </div>
             </div>
