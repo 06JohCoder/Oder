@@ -13,6 +13,7 @@ function EditProducts({ idEdit,setProducts }) {
         status: "inactive",
     });
 
+    
     useEffect(() => {
         if (!idEdit) return;
         fetch(`/api/admin/products/edit/${idEdit}`)

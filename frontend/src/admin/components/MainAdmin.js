@@ -12,6 +12,43 @@ function MainAdmin({ query }) {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
+  const [emailUser, setEmailUser] = useState(null);
+
+
+  const handleChangeUser = (e) =>{
+    const { value } = e.target;
+    setSelected((prev) => ({
+      ...prev,
+      name: value,
+    }));
+  }
+  const handleChangeEmail = (e) =>{
+    const { value } = e.target;
+    setSelected((prev) => ({
+      ...prev,
+      email: value,
+    }));
+  }
+
+  const handleChangeRole = (e) =>{
+    const { value } = e.target;
+    setSelected((prev) => ({  
+      ...prev,
+      role: value,
+    }));
+  }
+
+  const handleChangeAction = (e) =>{
+    const {value} = e.target;
+    setSelected((prev)=>({
+      ...prev,
+      status: value,
+    }))
+  }
+
+  console.log("selected",selected)
+
+
 
   const checkBoxSetting = () => {
     setShowNotification(true);
@@ -264,22 +301,22 @@ function MainAdmin({ query }) {
             </div>
           </div>
         </div>
-        
+
 
         <aside className="admin-panel">
           <div className="admin-card">
             <h3>User editor</h3>
             {selected ? (
               <div className="admin-editor">
-                <input className="admin-input" defaultValue={selected.name} />
-                <input className="admin-input" defaultValue={selected.email} style={{ marginTop: "10px" }} />
+                <input className="admin-input" defaultValue={selected.name} onChange={handleChangeUser} />
+                <input className="admin-input" defaultValue={selected.email} style={{ marginTop: "10px" }}  onChange={handleChangeEmail}/>
                 <div className="admin-form-row">
-                  <select className="admin-select" defaultValue={selected.role}>
+                  <select className="admin-select" defaultValue={selected.role} onChange={handleChangeRole}>
                     <option>Admin</option>
                     <option>Moderator</option>
                     <option>User</option>
                   </select>
-                  <select className="admin-select" defaultValue={selected.status}>
+                  <select className="admin-select" defaultValue={selected.status} onChange={handleChangeAction}>
                     <option>Active</option>
                     <option>Pending</option>
                     <option>Suspended</option>

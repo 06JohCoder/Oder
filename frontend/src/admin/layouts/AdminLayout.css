@@ -10,6 +10,8 @@
   min-height:100vh;
   gap:24px;
   padding:28px;
+  
+
 
 }
 .admin-app button{
@@ -17,7 +19,7 @@
 }
 .admin-container{
   width:100%;
-
+  /* display: flex; */
   display:grid;
   grid-template-columns: var(--sidebar-w) 1fr;
   gap:24px;
@@ -215,6 +217,7 @@
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 1000px){
+
   .admin-container{grid-template-columns: 1fr}
   .admin-sidebar{position:relative;top:0;min-height:auto}
   .admin-grid{grid-template-columns:repeat(2,1fr)}

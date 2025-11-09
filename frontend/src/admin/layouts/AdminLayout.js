@@ -10,7 +10,7 @@ import "../css/effects.css"
 import ReportsAdmin from "../components/Reports/ReportsAdmin";
 import SettingsAdmin from "../components/setting/SettingAdmin";
 import Could from "../components/could/Could";
-
+import ChatUI from "../components/chatting/Chatting";
 export default function AdminDashboard() {
 
 
@@ -33,6 +33,7 @@ export default function AdminDashboard() {
             <Route path="/reports" element={<ReportsAdmin />} />
             <Route path="/deailCloud" element={<Could/>}/>
             <Route path="/setting" element={<SettingsAdmin />} />
+            <Route path="/chatting" element={<ChatUI />} />
           </Routes>
        
 

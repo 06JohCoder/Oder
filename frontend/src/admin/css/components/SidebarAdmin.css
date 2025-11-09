@@ -1,14 +1,46 @@
 
 /* ================= SIDEBAR ================= */
 .admin-sidebar{
+  
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-radius:var(--radius);
   padding:18px;
   min-height: calc(100vh - 56px);
   /* position:sticky; */
-  top:28px;
+  position: relative;
+  /* top:28px; */
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+  transform: right 0.3s ease;
+}
+
+.close-admin-menu{
+  width: 80px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:var(--radius);
+  padding:18px;
+  min-height: calc(100vh - 56px);
+  position: relative;
   box-shadow: 0 6px 18px rgba(2,6,23,0.6);
 }
+.admin-sidebar .admin-brand .admin-menu-toggle-wrapper{
+  position: absolute;
+  font-size: 40px;
+  width: 40px;
+ 
+  cursor: pointer;
+  right: -5px;
+  transition: right 0.3s ease;
+}
+
+.admin-sidebar .admin-brand .admin-menu-toggle-wrapper:hover{
+  position: absolute;
+  font-size: 40px;
+  cursor: pointer;
+  color: aquamarine;
+  right: 0px;
+}
+
+
 .admin-brand{
   display:flex;
   align-items:center;
