@@ -156,7 +156,7 @@
 .chat-input:focus {
   border-color: #0078ff;
   outline: none;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 
 /* Nút gửi */

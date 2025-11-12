@@ -28,6 +28,7 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
                 body: JSON.stringify(formData),
             });
 
+        
             // Chuyển response sang JSON
             const data = await res.json();
 

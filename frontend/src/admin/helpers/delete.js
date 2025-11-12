@@ -3,6 +3,7 @@
 function Delete({ set, Id, setId, setNotifMessage, setLoading, setNotifKey }) {
 
 
+
     const deleteItem = () => {
         // eslint-disable-next-line no-restricted-globals
         const result = confirm("Bạn có chắc chắn");
@@ -28,7 +29,7 @@ function Delete({ set, Id, setId, setNotifMessage, setLoading, setNotifKey }) {
                 .then((data) => {
                     if (data && data.message)
                         setNotifMessage(data.message);
-                    setId(Id)
+                        setId(Id)
                 })
                 .catch((err) => {
                     console.error("Lỗi khi xóa sản phẩm:", err);

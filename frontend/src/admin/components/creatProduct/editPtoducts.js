@@ -35,8 +35,6 @@ function EditProducts({ idEdit,setProducts }) {
 
 
 
-
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDataEdit((prev) => ({

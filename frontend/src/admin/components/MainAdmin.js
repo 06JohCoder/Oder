@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import AutoCloseNotification from "./alerts/AutoCloseNotification";
 import PaginationHelper from "../helpers/pagination";
-
+import Delete from "../helpers/delete";
+import Loading from "../helpers/loading";
 function MainAdmin({ query }) {
 
   const [users, setUsers] = useState([]);
@@ -9,20 +10,20 @@ function MainAdmin({ query }) {
   const [selected, setSelected] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
   const [sumUsers, setSumUsers] = useState(0);
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
-  const [emailUser, setEmailUser] = useState(null);
+  const [idUser, setIdUser] = useState(null);
 
 
-  const handleChangeUser = (e) =>{
+
+  const handleChangeUser = (e) => {
     const { value } = e.target;
     setSelected((prev) => ({
       ...prev,
       name: value,
     }));
   }
-  const handleChangeEmail = (e) =>{
+  const handleChangeEmail = (e) => {
     const { value } = e.target;
     setSelected((prev) => ({
       ...prev,
@@ -30,23 +31,27 @@ function MainAdmin({ query }) {
     }));
   }
 
-  const handleChangeRole = (e) =>{
+  const handleChangeRole = (e) => {
     const { value } = e.target;
-    setSelected((prev) => ({  
+    setSelected((prev) => ({
       ...prev,
       role: value,
     }));
   }
 
-  const handleChangeAction = (e) =>{
-    const {value} = e.target;
-    setSelected((prev)=>({
+  const handleChangeAction = (e) => {
+    const { value } = e.target;
+    setSelected((prev) => ({
       ...prev,
       status: value,
     }))
   }
 
-  console.log("selected",selected)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
 
 
 
@@ -80,10 +85,6 @@ function MainAdmin({ query }) {
 
 
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
-  };
 
   const fetchUser = () => {
     let url = "/api/admin/userAdmin";
@@ -99,7 +100,7 @@ function MainAdmin({ query }) {
     if (query) {
       params.push(`userName_email=${query}`);
     }
-    if(page){
+    if (page) {
       params.push(`page=${page}`);
     }
     if (params.length > 0) {
@@ -112,247 +113,305 @@ function MainAdmin({ query }) {
       .then((res => {
         setUsers(res.data)
         setTotalPages(res.objPagination.totalPages)
+        setSumUsers(res.data)
       }))
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
 
 
+
+
+
+  const editUser = async () => {
+    try {
+      const res = await fetch(`/api/admin/userAdmin/edit/${selected._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(selected),
+      });
+
+      if (res.ok) {
+        fetchUser();
+        setShowNotification("Cập nhật thành công!");
+        setSelected(null);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    fetchUser();
+    const delayDebounce = setTimeout(() => {
+      fetchUser();
+    }, 500);
+    return () => clearTimeout(delayDebounce);
+
   }, [filters, query, page]);
 
 
-  const fetchAllUsers = () => {
-    fetch("/api/admin/userAdmin")
-      .then((res) => res.json())
-      .then((res) => setSumUsers(res.data));
-  };
 
-  useEffect(() => {
-    fetchAllUsers();
-  }, []);
+
+
+  const idDeleteUser = (Id) => {
+
+    // eslint-disable-next-line no-restricted-globals
+    const result = confirm("Bạn có chắc chắn muốn xóa user này?");
+    if (result) {
+      if (Id) {
+        const url = `/api/admin/userAdmin/delete/${Id}`;
+
+        fetch(url, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            setIdUser(Id);
+            setShowNotification(res.message);
+            fetchUser();
+          })
+          .catch((err) => {
+
+          });
+
+      }
+
+    }
+  }
+
 
 
 
 
   return (
     <>
-      {showNotification && <AutoCloseNotification
-        message="Xác nhận thành công!"
-        onClose={() => setShowNotification(false)} />}
-      <section className="admin-grid">
-        <div className="admin-card">
-          <h3>Users</h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">{sumUsers.length}</div>
-              <div className="admin-trend">Active users</div>
-            </div>
-            <div className="admin-right"><div className="admin-trend">+6% vs last week</div></div>
-          </div>
-        </div>
-        <div className="admin-card">
-          <h3>Users Suspended</h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
-              <div className="admin-trend">Active Suspended</div>
-            </div>
-            <div className="admin-right"><div className="admin-trend">+2% vs last week</div></div>
-          </div>
-        </div>
-        <div className="admin-card">
-          <h3>Users Pending</h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
-              <div className="admin-trend">Active Pending</div>
-            </div>
-            <div className="admin-right"><div className="admin-trend">+1% vs last week</div></div>
-          </div>
-        </div>
-        <div className="admin-card">
-          <h3>Revenue</h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">₫ 124,500,000</div>
-              <div className="admin-trend">This month</div>
-            </div>
-            <div className="admin-right"><div className="admin-trend">+12% vs last month</div></div>
-          </div>
-        </div>
-        <div className="admin-card">
-          <h3>
-            Spending</h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">₫ - 24,500,000</div>
-              <div className="admin-trend">This month</div>
-            </div>
-            <div className="admin-right"><div className="admin-trend">+1% vs last month</div></div>
-          </div>
-        </div>
-        <div className="admin-card">
-          <h3>
-
-            Reserves & Investments </h3>
-          <div className="admin-stat">
-            <div>
-              <div className="admin-big">₫ 26,500,000</div>
-              <div className="admin-trend">This month</div>
-
-            </div>
-            <div className="admin-right">
-              <div className="admin-trend">+1% vs last month</div>
-              <div className="admin-trend">
-                Reserves & Investments = Revenue x 21.3%</div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="admin-content">
-        <div>
-          <div className="admin-card admin-table">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-
-              <h3>Users overview</h3>
-
-
-              <div style={{ display: "flex", gap: "10px" }}>
-
-
-
-                <select
-                  name="status"
-                  className="admin-btn"
-                  onChange={handleChange}
-                >
-                  {statusOptions.map((opt) => (
-                    <option key={opt.id} value={opt.value} >
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Dropdown vai trò */}
-                <select
-                  name="role"
-                  className="admin-btn"
-                  onChange={handleChange}
-                >
-                  {roleOptions.map((opt) => (
-                    <option key={opt.id} value={opt.value} >
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-
-              </div>
-            </div>
-
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((u, index) => (
-                  <tr key={u.id}>
-                    <td>{index + 1}</td>
-                    <td className="admin-bold">{u.name}</td>
-                    <td>{u.email}</td>
-                    <td>{u.role}</td>
-                    <td><span className={`admin-badge ${u.status === "Active" ? "admin-active" : ""}`}>{u.status}</span></td>
-                    <td style={{ display: "flex", gap: "5px" }}>
-                      <button className="admin-btn" onClick={() => setSelected(u)}><i class="bi bi-pen"></i></button>
-                      <button className="admin-btn" onClick={() => setUsers(prev => prev.filter(x => x.id !== u.id))}><i class="bi bi-trash"></i></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <PaginationHelper totalPages={totalPages} page={page} setPage={setPage} />
-          </div>
-
-          <div className="admin-card">
-            <h3>Quick actions</h3>
-            <div className="admin-btn-group">
-              <button className="admin-btn">Invite user</button>
-              <button className="admin-btn">Export CSV</button>
-              <button className="admin-btn admin-primary">Create product</button>
-            </div>
-          </div>
-
-          <div className="admin-card">
-            <h3>Activity</h3>
-            <div className="admin-feed">
-              <div className="admin-feed-item">User <strong>Nguyễn Văn A</strong> đăng nhập từ IP 110.234.45.1</div>
-              <div className="admin-feed-item">Order <strong>#1209</strong> đã thanh toán — ₫1,200,000</div>
-              <div className="admin-feed-item">Backup database hoàn tất (2:14 AM)</div>
-            </div>
-          </div>
-        </div>
-
-
-        <aside className="admin-panel">
-          <div className="admin-card">
-            <h3>User editor</h3>
-            {selected ? (
-              <div className="admin-editor">
-                <input className="admin-input" defaultValue={selected.name} onChange={handleChangeUser} />
-                <input className="admin-input" defaultValue={selected.email} style={{ marginTop: "10px" }}  onChange={handleChangeEmail}/>
-                <div className="admin-form-row">
-                  <select className="admin-select" defaultValue={selected.role} onChange={handleChangeRole}>
-                    <option>Admin</option>
-                    <option>Moderator</option>
-                    <option>User</option>
-                  </select>
-                  <select className="admin-select" defaultValue={selected.status} onChange={handleChangeAction}>
-                    <option>Active</option>
-                    <option>Pending</option>
-                    <option>Suspended</option>
-                  </select>
-                </div>
-                <div className="admin-form-row">
-                  <button className="admin-btn admin-primary" onClick={() => setSelected(null)}>Save</button>
-                  <button className="admin-btn" onClick={() => setSelected(null)}>Cancel</button>
+      {
+        (users.length === 0) ?
+          <div className="admin-page-title">
+            <Loading message="Đang Thống Kê..." />
+          </div> : <div>
+            {showNotification && <AutoCloseNotification
+              message={showNotification}
+              onClose={() => setShowNotification(false)} />}
+            <section className="admin-grid">
+              <div className="admin-card">
+                <h3>Users</h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">{sumUsers.length}</div>
+                    <div className="admin-trend">Active users</div>
+                  </div>
+                  <div className="admin-right"><div className="admin-trend">+6% vs last week</div></div>
                 </div>
               </div>
-            ) : (
-              <div className="admin-muted">Chọn một user từ bảng để chỉnh sửa.</div>
-            )}
-          </div>
-          <div className="admin-card">
-            <h3>Quick stats</h3>
-            <div className="admin-kpi-grid">
-              <div className="admin-kpi"><h4>Orders</h4><div className="admin-kpi-value">1,240</div></div>
-              <div className="admin-kpi"><h4>Visitors</h4><div className="admin-kpi-value">24,230</div></div>
-              <div className="admin-kpi"><h4>Conversion</h4><div className="admin-kpi-value">3.6%</div></div>
-              <div className="admin-kpi"><h4>Refunds</h4><div className="admin-kpi-value">12</div></div>
-            </div>
+              <div className="admin-card">
+                <h3>Users Suspended</h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
+                    <div className="admin-trend">Active Suspended</div>
+                  </div>
+                  <div className="admin-right"><div className="admin-trend">+2% vs last week</div></div>
+                </div>
+              </div>
+              <div className="admin-card">
+                <h3>Users Pending</h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
+                    <div className="admin-trend">Active Pending</div>
+                  </div>
+                  <div className="admin-right"><div className="admin-trend">+1% vs last week</div></div>
+                </div>
+              </div>
+              <div className="admin-card">
+                <h3>Revenue</h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">₫ 124,500,000</div>
+                    <div className="admin-trend">This month</div>
+                  </div>
+                  <div className="admin-right"><div className="admin-trend">+12% vs last month</div></div>
+                </div>
+              </div>
+              <div className="admin-card">
+                <h3>
+                  Spending</h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">₫ - 24,500,000</div>
+                    <div className="admin-trend">This month</div>
+                  </div>
+                  <div className="admin-right"><div className="admin-trend">+1% vs last month</div></div>
+                </div>
+              </div>
+              <div className="admin-card">
+                <h3>
+
+                  Reserves & Investments </h3>
+                <div className="admin-stat">
+                  <div>
+                    <div className="admin-big">₫ 26,500,000</div>
+                    <div className="admin-trend">This month</div>
+
+                  </div>
+                  <div className="admin-right">
+                    <div className="admin-trend">+1% vs last month</div>
+                    <div className="admin-trend">
+                      Reserves & Investments = Revenue x 21.3%</div>
+
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="admin-content">
+              <div>
+                <div className="admin-card admin-table">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+
+                    <h3>Users overview</h3>
+
+
+                    <div style={{ display: "flex", gap: "10px" }}>
+
+
+
+                      <select
+                        name="status"
+                        className="admin-btn"
+                        onChange={handleChange}
+                      >
+                        {statusOptions.map((opt) => (
+                          <option key={opt.id} value={opt.value} >
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Dropdown vai trò */}
+                      <select
+                        name="role"
+                        className="admin-btn"
+                        onChange={handleChange}
+                      >
+                        {roleOptions.map((opt) => (
+                          <option key={opt.id} value={opt.value} >
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+
+                    </div>
+                  </div>
+
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {users.map((u, index) => (
+                        <tr key={u.id}>
+                          <td>{index + 1}</td>
+                          <td className="admin-bold">{u.name}</td>
+                          <td>{u.email}</td>
+                          <td>{u.role}</td>
+                          <td><span className={`admin-badge ${u.status === "Active" ? "admin-active" : ""}`}>{u.status}</span></td>
+                          <td style={{ display: "flex", gap: "5px" }}>
+                            <button className="admin-btn" onClick={() => setSelected(u)}><i class="bi bi-pen"></i></button>
+                            <button className="admin-btn" onClick={() => idDeleteUser(u._id)}><i class="bi bi-trash"></i></button>
+
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  <PaginationHelper totalPages={totalPages} page={page} setPage={setPage} />
+                </div>
+
+                <div className="admin-card">
+                  <h3>Quick actions</h3>
+                  <div className="admin-btn-group">
+                    <button className="admin-btn">Invite user</button>
+                    <button className="admin-btn">Export CSV</button>
+                    <button className="admin-btn admin-primary">Create product</button>
+                  </div>
+                </div>
+
+                <div className="admin-card">
+                  <h3>Activity</h3>
+                  <div className="admin-feed">
+                    <div className="admin-feed-item">User <strong>Nguyễn Văn A</strong> đăng nhập từ IP 110.234.45.1</div>
+                    <div className="admin-feed-item">Order <strong>#1209</strong> đã thanh toán — ₫1,200,000</div>
+                    <div className="admin-feed-item">Backup database hoàn tất (2:14 AM)</div>
+                  </div>
+                </div>
+              </div>
+
+
+              <aside className="admin-panel">
+                <div className="admin-card">
+                  <h3>User editor</h3>
+                  {selected ? (
+                    <div className="admin-editor">
+                      <input className="admin-input" defaultValue={selected.name} onChange={handleChangeUser} />
+                      <input className="admin-input" defaultValue={selected.email} style={{ marginTop: "10px" }} onChange={handleChangeEmail} />
+                      <div className="admin-form-row">
+                        <select className="admin-select" defaultValue={selected.role} onChange={handleChangeRole}>
+                          <option>Admin</option>
+                          <option>Moderator</option>
+                          <option>User</option>
+                        </select>
+                        <select className="admin-select" defaultValue={selected.status} onChange={handleChangeAction}>
+                          <option>Active</option>
+                          <option>Pending</option>
+                          <option>Suspended</option>
+                        </select>
+                      </div>
+                      <div className="admin-form-row">
+                        <button className="admin-btn admin-primary" onClick={editUser} >Save</button>
+                        <button className="admin-btn" onClick={() => setSelected(null)}>Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="admin-muted">Chọn một user từ bảng để chỉnh sửa.</div>
+                  )}
+                </div>
+                <div className="admin-card">
+                  <h3>Quick stats</h3>
+                  <div className="admin-kpi-grid">
+                    <div className="admin-kpi"><h4>Orders</h4><div className="admin-kpi-value">1,240</div></div>
+                    <div className="admin-kpi"><h4>Visitors</h4><div className="admin-kpi-value">24,230</div></div>
+                    <div className="admin-kpi"><h4>Conversion</h4><div className="admin-kpi-value">3.6%</div></div>
+                    <div className="admin-kpi"><h4>Refunds</h4><div className="admin-kpi-value">12</div></div>
+                  </div>
+                </div>
+
+                <div className="admin-card">
+                  <h3>Settings</h3>
+                  <div className="admin-settings" style={{ display: "flex", gap: "5px" }}>
+                    <label><input type="checkbox" defaultChecked onClick={checkBoxSetting} /> Enable maintenance mode</label>
+                    <label><input type="checkbox" onClick={checkBoxSetting} /> Send weekly reports</label>
+                    <small>Timezone: Asia/Bangkok</small>
+                  </div>
+                </div>
+              </aside>
+            </section>
+
+
+
           </div>
 
-          <div className="admin-card">
-            <h3>Settings</h3>
-            <div className="admin-settings" style={{ display: "flex", gap: "5px" }}>
-              <label><input type="checkbox" defaultChecked onClick={checkBoxSetting} /> Enable maintenance mode</label>
-              <label><input type="checkbox" onClick={checkBoxSetting} /> Send weekly reports</label>
-              <small>Timezone: Asia/Bangkok</small>
-            </div>
-          </div>
-        </aside>
-      </section>
-
-
+      }
 
     </>
   )

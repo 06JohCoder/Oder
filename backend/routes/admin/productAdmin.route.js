@@ -16,6 +16,7 @@ router.post('/products/create',
 router.get('/products/edit/:id',
     controllers.edit)
 
+    
 router.patch('/products/edit/:id',
     validate.create,
     controllers.editPatch)

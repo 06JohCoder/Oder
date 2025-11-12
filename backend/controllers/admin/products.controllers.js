@@ -213,10 +213,11 @@ module.exports.edit = async (req, res) => {
 }
 
 
-//[Get] /api/admin/products/edit/:id
+
+//[Patch] /api/admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
    
-
+    // console.log("req.body",req.body)
     req.body.price = parseInt(req.body.price)
     req.body.discountPercentage = parseInt(req.body.discountPercentage)
     req.body.stock = parseInt(req.body.stock)
@@ -228,7 +229,6 @@ module.exports.editPatch = async (req, res) => {
         res.json({
             message: "Cập nhật sản phẩm thành công",
         });
-
     }catch(error){
         console.error("Lỗi khi cập nhật sản phẩm:", error);
         res.status(500).json({

@@ -5,6 +5,8 @@ const userAdminSchema = new mongoose.Schema({
   email: String,
   status: String,
   role: String,
+  deleted:Boolean,
+  deletedAt: Date,
 });
 
 const userAdmin = mongoose.model('userAdmin', userAdminSchema, "userAdmins")

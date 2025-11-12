@@ -25,7 +25,7 @@ function SidebarAdmin() {
                        )}
                     
                     </div>
-                    <div className="admin-menu-toggle-wrapper" onClick={() => setMenuOpen(!menuOpen)}>
+                    <div className="admin-menu-toggle-wrapper" style={{right: menuOpen ? "" : "-15px"}} onClick={() => setMenuOpen(!menuOpen)}>
                         {/* <span className="admin-ico"> <i class="bi bi-list admin-menu-toggle"></i></span> */}
                         <span className="admin-ico">{menuOpen ? <i class="bi bi-arrow-bar-left"></i> : <i class="bi bi-arrow-bar-right"></i>}</span>
 
@@ -66,6 +66,15 @@ function SidebarAdmin() {
                         {menuOpen && <span className="admin-ico">Reports</span>}
                     </Link>
 
+
+                    <Link
+                     to={`${prefixAdmin}admin/chatting`}
+                        className={pathname === 'admin/chatting' ? 'active' : ''}>
+                
+                        <i className="admin-ico bi bi-chat-dots"></i>
+                        {menuOpen && <span className="admin-ico">Chatting</span>}
+                    </Link>
+                       
                     <Link
                         to={`${prefixAdmin}admin/setting`}
                         className={pathname === 'admin/setting' ? 'active' : ''}

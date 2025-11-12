@@ -1,7 +1,7 @@
 
 /* ================= SIDEBAR ================= */
 .admin-sidebar{
-  
+  width: 360px;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
   border-radius:var(--radius);
   padding:18px;
@@ -10,17 +10,12 @@
   position: relative;
   /* top:28px; */
   box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-  transform: right 0.3s ease;
+  transition: width 0.3s ease;
 }
 
 .close-admin-menu{
   width: 80px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:var(--radius);
-  padding:18px;
-  min-height: calc(100vh - 56px);
-  position: relative;
-  box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+ 
 }
 .admin-sidebar .admin-brand .admin-menu-toggle-wrapper{
   position: absolute;
@@ -28,7 +23,7 @@
   width: 40px;
  
   cursor: pointer;
-  right: -5px;
+  right: 0px;
   transition: right 0.3s ease;
 }
 

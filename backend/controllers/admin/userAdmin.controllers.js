@@ -1,12 +1,12 @@
 const userAdmins = require("../../models/UserAdmin.model");
 const paginationHelper = require("../../helpers/pagination")
-
+const userAdmin = require("../../models/UserAdmin.model")
 //[GET] /api/admin/usersAdmin
 module.exports.userAdmin = async (req, res) => {
 
 
     let final = {
-
+        deleted: false,
     }
     if (req.query.status) {
         final.status = req.query.status;
@@ -45,4 +45,49 @@ module.exports.userAdmin = async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
     }
+}
+
+//[DELETE] /api/admin/usersAdmin/:id
+module.exports.deleteUserAdmin = async (req, res) => {
+
+
+
+    try {
+        const { id } = req.params
+        console.log(id)
+        const deleted = await userAdmin.updateOne({ _id: id }, { deleted: true})
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy user để xóa!",
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Xóa user thành công!",
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Lỗi khi xóa người dùng' });
+    }
+
+}
+
+//[Patch] /api/admin/usersAdmin/edit/:id
+
+module.exports.editUserAdmin = async (req,res) =>{  
+  
+    try {
+        const userEdit = await userAdmin.updateOne({ _id: req.params.id }, req.body);
+        res.json({
+            userEdit,
+            message: "Cập nhật người dùng thành công",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Lỗi khi cập nhật người dùng" });
+    }
+     
+
 }
