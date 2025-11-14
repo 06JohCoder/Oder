@@ -17,15 +17,15 @@ function SidebarAdmin() {
                     {/* <div className="admin-logo">AD</div> */}
                     <img className="admin-logo" src="/logo.jpg" alt="Admin Logo" />
                     <div>
-                       {menuOpen && (
-                        <>
-                          <div className="admin-brand-title">Admin</div>
-                          <div className="admin-brand-sub">Order Shop</div>
-                        </>
-                       )}
-                    
+                        {menuOpen && (
+                            <>
+                                <div className="admin-brand-title">Admin</div>
+                                <div className="admin-brand-sub">Order Shop</div>
+                            </>
+                        )}
+
                     </div>
-                    <div className="admin-menu-toggle-wrapper" style={{right: menuOpen ? "" : "-15px"}} onClick={() => setMenuOpen(!menuOpen)}>
+                    <div className="admin-menu-toggle-wrapper" style={{ right: menuOpen ? "" : "-15px" }} onClick={() => setMenuOpen(!menuOpen)}>
                         {/* <span className="admin-ico"> <i class="bi bi-list admin-menu-toggle"></i></span> */}
                         <span className="admin-ico">{menuOpen ? <i class="bi bi-arrow-bar-left"></i> : <i class="bi bi-arrow-bar-right"></i>}</span>
 
@@ -68,13 +68,20 @@ function SidebarAdmin() {
 
 
                     <Link
-                     to={`${prefixAdmin}admin/chatting`}
+                        to={`${prefixAdmin}admin/chatting`}
                         className={pathname === 'admin/chatting' ? 'active' : ''}>
-                
+
                         <i className="admin-ico bi bi-chat-dots"></i>
                         {menuOpen && <span className="admin-ico">Chatting</span>}
                     </Link>
-                       
+                    <Link to={`${prefixAdmin}admin/deletedItems`}
+                        className={pathname === 'admin/deletedItems' ? 'active' : ''}>
+                            <i className="admin-ico bi bi-trash3"></i>
+
+                        {menuOpen && <span className="admin-ico">Delete</span>}
+
+                    </Link>
+
                     <Link
                         to={`${prefixAdmin}admin/setting`}
                         className={pathname === 'admin/setting' ? 'active' : ''}
@@ -88,13 +95,13 @@ function SidebarAdmin() {
                 <div className="admin-profile">
                     <div className="admin-avatar">N</div>
                     <div>
-                       {menuOpen && (
-                        <>
-                          <div className="admin-name">Nguyen Van A</div>
-                          
-                          <div className="admin-role">Administrator</div>
-                        </>
-                       )}
+                        {menuOpen && (
+                            <>
+                                <div className="admin-name">Nguyen Van A</div>
+
+                                <div className="admin-role">Administrator</div>
+                            </>
+                        )}
                     </div>
                 </div>
             </aside>

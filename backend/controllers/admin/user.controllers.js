@@ -6,7 +6,7 @@ module.exports.index = async (req, res) => {
 
     try {
         const data = await userAccount.find(final);
-        res.json({ data });
+        res.json( {data} );
         
     } catch (error) {
         console.error(error);

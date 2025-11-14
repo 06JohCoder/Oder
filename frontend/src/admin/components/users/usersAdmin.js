@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
 import PaginationHelper from "../../helpers/pagination";
 import Delete from "../../helpers/delete";
 function UsersAdmin() {
+
 
     const [activeTab, setActiveTab] = useState(null);
     const [showNotification, setShowNotification] = useState(false);
@@ -11,11 +12,10 @@ function UsersAdmin() {
     const [selected, setSelected] = useState(null);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
-    const [users, setUsers] = useState([
-        { id: 1, name: "Nguyễn Văn A", email: "a@gmail.com", users: "a1234", password: "123", role: "Admin", status: "Active" },
-        { id: 2, name: "Nguyễn Văn B", email: "b@gmail.com", users: "b1234", password: "123", role: "User", status: "Pending" },
-        { id: 3, name: "Nguyễn Văn C", email: "c@gmail.com", users: "c1234", password: "123", role: "Moderator", status: "Suspended" },
-    ]);
+    const [users, setUsers] = useState([]);
+    // { id: 1, name: "Nguyễn Văn A", email: "a@gmail.com", users: "a1234", password: "123", role: "Admin", status: "Active" },
+    // { id: 2, name: "Nguyễn Văn B", email: "b@gmail.com", users: "b1234", password: "123", role: "User", status: "Pending" },
+    // { id: 3, name: "Nguyễn Văn C", email: "c@gmail.com", users: "c1234", password: "123", role: "Moderator", status: "Suspended" },
     const [newUser, setNewUser] = useState({
         name: "",
         email: "",
@@ -41,7 +41,7 @@ function UsersAdmin() {
                 prev.map((u) => (u.id === selected.id ? selected : u))
             );
             // alert("Đã lưu thay đổi!");
-             setShowNotification(true); 
+            setShowNotification(true);
         }
     };
 
@@ -63,15 +63,34 @@ function UsersAdmin() {
         alert("Đã thêm người dùng mới!");
     };
 
+
+    // --- lấy dử liệu (list account) từ backend ---
+
+    const fetchUsersAccounts = () => {
+        let url = '/api/admin/user-accounts';
+        fetch(url)
+            .then(res => res.json())
+            .then(res => setUsers(res.data))
+    }
+
+    useEffect(() => {
+        fetchUsersAccounts();
+    }, []);
+
+
+
+
+
+
     return (
         <>
-        
-        {showNotification && (
-        <AutoCloseNotification
-            message="Xác nhận thành công!"
-            onClose={() => setShowNotification(false)}
-        />
-    )}
+
+            {showNotification && (
+                <AutoCloseNotification
+                    message="Xác nhận thành công!"
+                    onClose={() => setShowNotification(false)}
+                />
+            )}
 
             <section className="admin-grid">
                 <div className="admin-card">
@@ -96,15 +115,20 @@ function UsersAdmin() {
                 </div>
 
                 <div className="admin-card">
-                    <h3>Revenue</h3>
+                    <h3>History</h3>
+
                     <div className="admin-stat">
-                        <div>
-                            <div className="admin-big">₫ 124,500,000</div>
-                            <div className="admin-trend">This month</div>
-                        </div>
-                        <div className="admin-right"><div className="admin-trend">+12% vs last month</div></div>
+                         <ul className="admin-log">
+                        <li>[10:30] Admin Nhật đã chỉnh sửa tài khoản Nguyễn Văn A</li>
+                        <li>[09:45] Nguyễn Văn C bị khóa tài khoản</li>
+                        <li>[08:10] Thêm tài khoản mới “Trần Văn D”</li>
+                    </ul>
                     </div>
                 </div>
+
+                {/* <section className="admin-card" style={{ marginTop: "15px" }}>
+                  
+                </section> */}
 
 
             </section>
@@ -147,15 +171,15 @@ function UsersAdmin() {
                                         <td className="admin-bold">{u.password}</td>
                                         <td>{u.email}</td>
                                         <td>{u.role}</td>
-                                        <td><span className={`admin-badge ${u.status === "Active" ? "admin-active" : ""}`}>{u.status}</span></td>
+                                        <td><span className={`admin-badge ${u.status === "active" ? "admin-active" : ""}`}>{u.status}</span></td>
                                         <td style={{ display: "flex", gap: "5px" }} >
                                             <button className={`admin-btn ${activeTab === u.id ? "admin-primary" : ""}`}
-                                             onClick={() => {
-                                                handleSelect(u);
-                                                setActiveTab(u.id);
-                                             }}
-                                             ><i className="bi bi-pen" ></i></button>
-                                            <Delete set={setUsers} userId ={u.id}/>
+                                                onClick={() => {
+                                                    handleSelect(u);
+                                                    setActiveTab(u.id);
+                                                }}
+                                            ><i className="bi bi-pen" ></i></button>
+                                            <Delete set={setUsers} userId={u.id} />
 
                                         </td>
                                     </tr>
@@ -163,17 +187,10 @@ function UsersAdmin() {
                             </tbody>
                         </table>
 
-                      <PaginationHelper/>
+                        <PaginationHelper />
                     </div>
 
-                    <section className="admin-card" style={{ marginTop: "15px" }}>
-                        <h3>History</h3>
-                        <ul className="admin-log">
-                            <li>[10:30] Admin Nhật đã chỉnh sửa tài khoản Nguyễn Văn A</li>
-                            <li>[09:45] Nguyễn Văn C bị khóa tài khoản</li>
-                            <li>[08:10] Thêm tài khoản mới “Trần Văn D”</li>
-                        </ul>
-                    </section>
+
 
                 </div>
 
@@ -282,7 +299,7 @@ function UsersAdmin() {
                                 </div>
                                 <div className="admin-form-row">
                                     <button className="admin-btn admin-primary" onClick={handleSave}>Save</button>
-                                    <button className="admin-btn" onClick={() =>{ 
+                                    <button className="admin-btn" onClick={() => {
                                         setSelected(null)
                                         setActiveTab(null)
                                     }}>Cancel</button>

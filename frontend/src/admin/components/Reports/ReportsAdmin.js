@@ -19,9 +19,9 @@ import {
 
 function ReportsAdmin() {
     const [activeIndex, setActiveIndex] = useState(-1);
-
+    const [year, setYear] = useState([2026, 2025, 2024]);
     const [selectedMonth, setSelectedMonth] = useState("October 2025");
-
+    const [selectedReportType, setSelectedReportType] = useState(1); // 1: Thông tin tổng quan đơn hàng, 2: Thống kê sản phẩm
     // 🔹 Dữ liệu doanh thu theo tháng
     const revenueData = [
         { month: "Jan", revenue: 104500000 },
@@ -70,33 +70,125 @@ function ReportsAdmin() {
         },
     ];
 
+    const reportProducts = [
+        {
+            id: 1,
+            orderId: "ORD001",
+            productName: "Bò lúc lắc",
+            quantity: 2,
+            unitPrice: 120000,
+            shippingFee: 0,
+            total: 2 * 120000, // 240000
+        },
+        {
+            id: 2,
+            orderId: "ORD001",
+            productName: "Nước ép cam",
+            quantity: 2,
+            unitPrice: 55000,
+            shippingFee: 0,
+            total: 2 * 55000, // 110000
+        },
+        {
+            id: 3,
+            orderId: "ORD002",
+            productName: "Phở bò tái",
+            quantity: 3,
+            unitPrice: 120000,
+            shippingFee: 0,
+            total: 3 * 120000, // 360000
+        },
+        {
+            id: 4,
+            orderId: "ORD002",
+            productName: "Trà sữa trân châu",
+            quantity: 2,
+            unitPrice: 45000,
+            shippingFee: 0,
+            total: 2 * 45000, // 90000
+        },
+    ];
 
     // 🔹 Xuất dữ liệu bảng ra CSV
     const handleExportExcel = () => {
-        // Tạo worksheet từ dữ liệu bảng
-        const worksheet = XLSX.utils.json_to_sheet(
+
+        // ===== SHEET 1: ORDER SUMMARY =====
+        const summarySheet = XLSX.utils.json_to_sheet(
             reportTable.map((r, index) => ({
                 "#": index + 1,
-                Date: r.date,
-                "Report Type": r.reportType,
-                Value: r.value,
-                Trend: r.trend,
+                "Order ID": r.orderId,
+                "Ngày đặt": r.date,
+                "Khách hàng": r.customerName,
+                "SĐT": r.phone,
+                "Phí ship": r.shippingFee,
+                "Giảm giá": r.discount,
+                "Tổng": r.total,
+                "Trạng thái": r.status,
+                "Vận đơn": r.trackingCode,
+                "Đơn vị VC": r.shippingUnit,
+                "Ghi chú": r.note,
             }))
         );
 
-        // Tạo workbook (file Excel)
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Reports");
+        // Set chiều rộng cột
+        summarySheet["!cols"] = [
+            { wch: 5 },
+            { wch: 15 },
+            { wch: 20 },
+            { wch: 15 },
+            { wch: 15 },
+            { wch: 12 },
+            { wch: 12 },
+            { wch: 14 },
+            { wch: 15 },
+            { wch: 20 },
+            { wch: 18 },
+            { wch: 25 },
+        ];
 
-        // Xuất ra dạng binary
+
+        // ===== SHEET 2: ORDER PRODUCTS =====
+        const productSheet = XLSX.utils.json_to_sheet(
+            reportProducts.map((p, index) => ({
+                "#": index + 1,
+                "Order ID": p.orderId,
+                "Sản phẩm": p.productName,
+                "SL": p.quantity,
+                "Đơn giá": p.unitPrice,
+                "Chi phí ship": p.shippingFee,
+                "Thành tiền": p.total,
+            }))
+        );
+
+        // Set chiều rộng cột
+        productSheet["!cols"] = [
+            { wch: 5 },
+            { wch: 15 },
+            { wch: 30 },
+            { wch: 10 },
+            { wch: 12 },
+            { wch: 12 },
+            { wch: 14 },
+        ];
+
+
+        // ===== CREATE WORKBOOK =====
+        const workbook = XLSX.utils.book_new();
+
+        // Thêm 2 sheet:
+        XLSX.utils.book_append_sheet(workbook, summarySheet, "Order Summary");
+        XLSX.utils.book_append_sheet(workbook, productSheet, "Order Products");
+
+        // Xuất file
         const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
-        // Tạo file và tải xuống
         const blob = new Blob([excelBuffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
-        saveAs(blob, "DetailedReports.xlsx");
+
+        saveAs(blob, "WebOrders.xlsx");
     };
+
 
     // End Xuất dữ liệu bảng ra CSV
 
@@ -149,17 +241,41 @@ function ReportsAdmin() {
                     <div className="flex justify-between items-center mb-2">
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <h3>Revenue Reports</h3>
-                            <select
-                           
-                                className="admin-select"
-                                value={selectedMonth}
-                                onChange={(e) => setSelectedMonth(e.target.value)}
-                                style={{ width:"150px"}}
-                            >
-                                <option>October 2025</option>
-                                <option>September 2025</option>
-                                <option>August 2025</option>
-                            </select>
+
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <select
+
+                                    className="admin-select"
+                                    value={selectedMonth}
+                                    onChange={(e) => setSelectedMonth(e.target.value)}
+                                    style={{ width: "150px" }}
+                                >
+                                    <option>January 2025</option>
+                                    <option>February 2025</option>
+                                    <option>March 2025</option>
+                                    <option>April 2025</option>
+                                    <option>May 2025</option>
+                                    <option>June 2025</option>
+                                    <option>July 2025</option>
+                                    <option>August 2025</option>
+                                    <option>September 2025</option>
+                                    <option>October 2025</option>
+                                </select>
+
+                                <select
+
+                                    className="admin-select"
+                                    style={{ width: "150px" }}
+                                >
+                                    {year
+                                        .slice()
+                                        .sort((a, b) => b - a)
+                                        .map((yr) => (
+                                            <option key={yr} value={yr}>{yr}</option>
+                                        ))}
+
+                                </select>
+                            </div>
                         </div>
 
                     </div>
@@ -167,16 +283,36 @@ function ReportsAdmin() {
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart data={revenueData}>
                             <XAxis dataKey="month" />
-                            <YAxis />
-                            <Tooltip contentStyle={{
-                                backgroundColor: "#1e293b",
-                                border: "1px solid #475569",
-                                color: "#ffff",
-                                borderRadius: "8px",
-                            }} />
-                            <Line type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={3} />
+
+                            <YAxis
+                                tickFormatter={(value) =>
+                                    `${value.toLocaleString("vi-VN")}đ`
+
+                                }
+                            />
+
+                            <Tooltip
+                                contentStyle={{
+                                    backgroundColor: "#1e293b",
+                                    border: "1px solid #475569",
+                                    color: "#fff",
+                                    borderRadius: "8px",
+                                }}
+                                formatter={(value) =>
+                                    value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
+                                }
+                                labelFormatter={(label) => `Tháng ${label}`}
+                            />
+
+                            <Line
+                                type="monotone"
+                                dataKey="revenue"
+                                stroke="#2563eb"
+                                strokeWidth={3}
+                            />
                         </LineChart>
                     </ResponsiveContainer>
+
                 </div>
 
                 {/* 🔸 Biểu đồ tròn trạng thái người dùng */}
@@ -241,9 +377,25 @@ function ReportsAdmin() {
             <section className="admin-card admin-table mt-4">
                 <div className="flex justify-between items-center mb-3">
                     <h3>Detailed Reports</h3>
-                    <button className="admin-btn admin-primary"  onClick={handleExportExcel}>Export CSV</button>
-                </div>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button className="admin-btn admin-primary" onClick={handleExportExcel}>Export CSV</button>
+                        <select
 
+                            className="admin-select"
+                            style={{ width: "250px" }}
+                            value={selectedReportType}
+                            onChange={(e) => setSelectedReportType(Number(e.target.value))}
+                        >
+                            <option value={1}>Thông tin tổng quan đơn hàng</option>
+                            <option value={2}>Thống kê sản phẩm </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+                {/* 
                 <table>
                     <thead>
                         <tr>
@@ -265,7 +417,74 @@ function ReportsAdmin() {
                             </tr>
                         ))}
                     </tbody>
+                </table> */}
+
+                {selectedReportType === 1 ? (<table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Order ID</th>
+                            <th>Ngày đặt</th>
+                            <th>Khách hàng</th>
+                            <th>SĐT</th>
+                            <th>Phí ship</th>
+                            <th>Giảm giá</th>
+                            <th>Tổng</th>
+                            <th>Trạng thái</th>
+                            <th>Vận đơn</th>
+                            <th>Đơn vị VC</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {reportTable.map((r, index) => (
+                            <tr key={r.id}>
+                                <td>{index + 1}</td>
+                                <td>{r.orderId}</td>
+                                <td>{r.date}</td>
+                                <td>{r.customerName}</td>
+                                <td>{r.phone}</td>
+                                <td>{r.shippingFee}</td>
+                                <td>{r.discount}</td>
+                                <td>{r.total}</td>
+                                <td>{r.status}</td>
+                                <td>{r.trackingCode}</td>
+                                <td>{r.shippingUnit}</td>
+                                <td>{r.note}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>) : (<table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Order ID</th>
+                            <th>Sản phẩm</th>
+                            <th>SL</th>
+                            <th>Đơn giá</th>
+                            <th>Chi phí ship</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {reportProducts.map((p, index) => (
+                            <tr key={p.id}>
+                                <td>{index + 1}</td>
+                                <td>{p.orderId}</td>
+                                <td>{p.productName}</td>
+                                <td>{p.quantity}</td>
+                                <td>{p.unitPrice.toLocaleString()}₫</td>
+                                <td>{p.shippingFee.toLocaleString()}₫</td>
+                                <td>{p.total.toLocaleString()}₫</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
+                )}
+
+
             </section>
         </>
     );
