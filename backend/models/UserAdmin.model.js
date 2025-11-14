@@ -9,6 +9,7 @@ const userAdminSchema = new mongoose.Schema({
   deletedAt: Date,
 });
 
+
 const userAdmin = mongoose.model('userAdmin', userAdminSchema, "userAdmins")
 
 module.exports = userAdmin;
