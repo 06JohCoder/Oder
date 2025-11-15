@@ -43,10 +43,10 @@ const ProductsAdmin = ({ query }) => {
     if (page) {
       params.push(`page=${page}`);
     }
-    if(category){
+    if (category) {
       params.push(`category=${category}`)
     }
-    
+
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
@@ -62,7 +62,7 @@ const ProductsAdmin = ({ query }) => {
       })
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
-  console.log("activeName",activeName)
+  console.log("activeName", activeName)
 
   // Gọi API mỗi khi tab thay đổi
   // useEffect(() => {
@@ -73,31 +73,31 @@ const ProductsAdmin = ({ query }) => {
   //   } else if (activeTab === 3) {
   //     fetchProducts("inactive");
   //   }
-   
-      
+
+
   // }, [activeTab, query,page]);
- useEffect(() => {
-  let status = "";
-  let category = "";
+  useEffect(() => {
+    let status = "";
+    let category = "";
 
-  // tab → xác định trạng thái
-  if (activeTab === 2) status = "active";
-  else if (activeTab === 3) status = "inactive";
+    // tab → xác định trạng thái
+    if (activeTab === 2) status = "active";
+    else if (activeTab === 3) status = "inactive";
 
-  // activeName → xác định category
-  switch (activeName) {
-    case "1":
-      category = "pho_bun";
-      break;
-    case "2":
-      category = "com";
-      break;
-    default:
-      category = "";
-  }
- console.log("🟢 fetchProducts params:", { status, category });
-  fetchProducts(status, category);
-}, [activeTab, activeName, query, page]);
+    // activeName → xác định category
+    switch (activeName) {
+      case "1":
+        category = "pho_bun";
+        break;
+      case "2":
+        category = "com";
+        break;
+      default:
+        category = "";
+    }
+    console.log("🟢 fetchProducts params:", { status, category });
+    fetchProducts(status, category);
+  }, [activeTab, activeName, query, page]);
 
 
   // Change status
@@ -151,6 +151,12 @@ const ProductsAdmin = ({ query }) => {
 
   ];
 
+  const sortAim = [
+    { id: 1, value: "price_dsec",title :"Giá Cao Đến Thấp" },
+    { id: 2, value: "price_asc",title :"Giá Thấp Đến Cao" },
+    { id: 3, value: "position_desc",title :"Vị Trí Cao Tới Thấp " },
+    { id: 4, value: "position_asc",title :"Vị Trí Thấp Tới Cao" },
+  ]
   // Change-multi
 
 
@@ -223,7 +229,27 @@ const ProductsAdmin = ({ query }) => {
           />
         </div>
 
-        <button className="btn-accent">+ Thêm Sản Phẩm</button>
+
+        <div style={{ display: "flex", gap: "10px" }}>
+          <select
+            name="status"
+            className="admin-select"
+            style={{ width: "250px" }}
+            value={newStatus}
+            onChange={(e) => setNewStatus(e.target.value)}
+          >
+            {sortAim.map((opt) => (
+              <option key={opt.id} value={opt.value} >
+                {opt.title}
+              </option>
+            ))}
+
+
+          </select>
+
+          <button className="btn-accent">+ Thêm Sản Phẩm</button>
+        </div>
+
       </header>
 
       <div className="products-header">
