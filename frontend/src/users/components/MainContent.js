@@ -33,7 +33,7 @@ function MainContent() {
 
 
   return (
-    <main className="main-content col-xl-7 col-lg-9 col-md-9 col-sm-12 col-12">
+    <main className="main-content col-xl-9 col-lg-9 col-md-9 col-sm-12 col-12">
       {/* Search Bar */}
 
       <div className="search-bar-container">

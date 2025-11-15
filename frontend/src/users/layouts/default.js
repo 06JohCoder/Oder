@@ -24,17 +24,17 @@ function DefaultLayout() {
         <LeftSidebar />
 
         <Routes>
-          <Route path="/" element={<HomeInfo />} />
+          {/* <Route path="/" element={<HomeInfo />} /> */}
           <Route path="/maincontent" element={<MainContent />} />
-          <Route path="/video" element={<VideoPage />} />
+          {/* <Route path="/video" element={<VideoPage />} /> */}
           <Route path="/cart" element={<Cart />} />
           <Route path="/cart/pay" element={<Pays />} />
           <Route path="/doneOrder" element={<DoneOrder />} />
-          <Route path="/location" element={<Location />} />
+          {/* <Route path="/location" element={<Location />} /> */}
           <Route path="*" element={<MainContent />} />
         </Routes>
 
-        <RightSidebar />
+        {/* <RightSidebar /> */}
       </div>
     </>
   );

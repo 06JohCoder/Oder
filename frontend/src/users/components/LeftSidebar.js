@@ -70,16 +70,16 @@ function LeftSidebar() {
       <nav className="sidebar-nav">
         {/* <a to="#" className="active">Quán Gần Đây</a>
         <a href="#">Video</a> */}
-            <Link to={`${prefixAdmin}`} className={pathname === '' ? 'active' : ''}>
+            {/* <Link to={`${prefixAdmin}`} className={pathname === '' ? 'active' : ''}>
               <i className="bi bi-house-door food-icon-sidebar-left"></i> Trang chủ
-            </Link>
+            </Link> */}
             <Link to={`${prefixAdmin}maincontent`} className={pathname === 'maincontent' ? 'active' : ''}>
-              <i className="bi bi-geo-alt food-icon-sidebar-left"></i> Quán Gần Đây
+              <i className="bi bi-geo-alt food-icon-sidebar-left"></i> Quán Của Tôi
             </Link>
-            <Link to={`${prefixAdmin}video`} className={pathname === 'video' ? 'active' : ''}>  
+            {/* <Link to={`${prefixAdmin}video`} className={pathname === 'video' ? 'active' : ''}>  
               <i className="bi bi-play-btn food-icon-sidebar-left"></i> 
               <span>Video</span>
-            </Link>
+            </Link> */}
             <Link to={`${prefixAdmin}cart`} className={(pathname === 'cart' || pathname === 'cart/pay') ? 'active' : ' '} >
              
                   <i class="bi bi-basket food-icon-sidebar-left "></i>
@@ -97,9 +97,9 @@ function LeftSidebar() {
             <Link to="#">
               <i className="bi bi-credit-card food-icon-sidebar-left"></i> Thanh toán
             </Link>
-            <Link to="/location" className={pathname ==='location' ? 'active' : ' ' }>
+            {/* <Link to="/location" className={pathname ==='location' ? 'active' : ' ' }>
               <i className="bi bi-geo  food-icon-sidebar-left"></i> Vị trí hiện tại
-            </Link>
+            </Link> */}
       </nav>
 
          <div  class="ad-box" style={{height:"auto",marginTop:"30px",marginRight:"10px"}}>

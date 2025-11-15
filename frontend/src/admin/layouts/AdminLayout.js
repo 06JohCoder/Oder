@@ -11,6 +11,7 @@ import ReportsAdmin from "../components/Reports/ReportsAdmin";
 import SettingsAdmin from "../components/setting/SettingAdmin";
 import Could from "../components/could/Could";
 import ChatUI from "../components/chatting/Chatting";
+import ProductsBackUp from "../components/backUp/ProductsAdmin.backUp";
 export default function AdminDashboard() {
 
 
@@ -34,6 +35,7 @@ export default function AdminDashboard() {
             <Route path="/deailCloud" element={<Could/>}/>
             <Route path="/setting" element={<SettingsAdmin />} />
             <Route path="/chatting" element={<ChatUI />} />
+            <Route path="/deletedItems" element={<ProductsBackUp/>} />
           </Routes>
        
 
