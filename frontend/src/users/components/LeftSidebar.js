@@ -101,12 +101,12 @@ function LeftSidebar() {
               <i className="bi bi-geo  food-icon-sidebar-left"></i> Vị trí hiện tại
             </Link> */}
       </nav>
-
+{/* 
          <div  class="ad-box" style={{height:"auto",marginTop:"30px",marginRight:"10px"}}>
                     <a href={currentAd.link} target="_blank" rel="noopener noreferrer">
                         <img src={currentAd.img} alt="Quảng cáo"  />
                     </a>
-         </div>
+         </div> */}
 
     </aside>
   );

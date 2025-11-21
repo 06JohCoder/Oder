@@ -11,7 +11,8 @@
 }
 
 .cart-items{
-    display: block;
+    /* display:block; */
+    display: none;
     gap: 20px;
 }
 .cart-items h1{
@@ -41,7 +42,7 @@
 
 .card-content{
     display: flex;
-    left: 17%;
+    left: 16%;
     height: 100%;
 }
 
@@ -172,6 +173,76 @@
     font-size: 1.1rem;
     color: var(--text-color);
 }
+
+
+/* Hot food */
+.hot-food-box {
+  margin: 30px 0;
+  padding: 20px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.hot-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #ff5722;
+}
+
+.hot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.hot-item {
+  background: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.25s;
+  cursor: pointer;
+  border: 1px solid #eee;
+}
+
+.hot-item img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
+.hot-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+
+.hot-info {
+  padding: 10px;
+}
+
+.hot-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.hot-info p {
+  color: #ff5722;
+  font-weight: 600;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .hot-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* end hot food */
+
+
+
 
  @media (max-width: 932px) {
     .card-content{

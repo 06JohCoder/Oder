@@ -155,7 +155,7 @@ function UsersAdmin() {
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    <th>Username</th>
+                                    {/* <th>Username</th> */}
                                     <th>Password</th>
                                     <th>Role</th>
                                     <th>Status</th>
@@ -167,7 +167,8 @@ function UsersAdmin() {
                                     <tr key={u.id}>
                                         <td>{index + 1}</td>
                                         <td className="admin-bold">{u.name}</td>
-                                        <td className="admin-bold">{u.users}</td>
+                                        <td className="admin-bold"> {u.email}</td>
+                                        {/* <td className="admin-bold">{u.users}</td> */}
                                         <td className="admin-bold">{u.password}</td>
                                         <td>{u.email}</td>
                                         <td>{u.role}</td>

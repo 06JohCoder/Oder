@@ -16,10 +16,12 @@ const ProductsAdmin = ({ query }) => {
   const [loading, setLoading] = useState(false);
   const [notifMessage, setNotifMessage] = useState("");
   const [idDelete, setIdDelete] = useState("");
-  const [idEdit,setIdEdit] = useState("");
+  const [idEdit, setIdEdit] = useState("");
   const [newStatusListFood, setNewStatusListFood] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
+  const [sortAim, setSortAim] = useState("");
+
   // Xử lý phần frontend về thông báo
 
   // console.log("activeName và newStatusListFood ",activeName, newStatusListFood)
@@ -27,8 +29,6 @@ const ProductsAdmin = ({ query }) => {
   const [notifKey, setNotifKey] = useState(0);
 
   //Kết thúc Xử lý phần frontend về thông báo
-
-
 
   const [filters, setFilters] = useState({
     status: "",
@@ -38,7 +38,7 @@ const ProductsAdmin = ({ query }) => {
 
 
   const fetchProducts = (status, category) => {
-  
+
     let url = "/api/admin/products";
     const params = [];
     if (status) {
@@ -54,10 +54,20 @@ const ProductsAdmin = ({ query }) => {
     if (category) {
       params.push(`category=${category}`)
     }
+    if (sortAim !== "") {
+      let sortValue = sortAim.split("_")[1];
+      let sortKey = sortAim.split("_")[0];
+
+      params.push(`sortKey=${sortKey}`);
+      params.push(`sortValue=${sortValue}`);
+
+    }
+
 
     if (params.length > 0) {
       url += `?${params.join('&')}`;
     }
+
 
 
 
@@ -80,18 +90,18 @@ const ProductsAdmin = ({ query }) => {
     if (activeTab === 2) status = "active";
     else if (activeTab === 3) status = "inactive";
 
-    if(newStatusListFood === ""){
+    if (newStatusListFood === "") {
       category = "";
 
-    }else{
+    } else {
       category = newStatusListFood;
     }
 
-  
+
 
 
     fetchProducts(status, category);
-  }, [activeTab, activeName, query, page, idDelete]);
+  }, [activeTab, activeName, query, page, idDelete, sortAim]);
 
 
   // Change status
@@ -145,9 +155,16 @@ const ProductsAdmin = ({ query }) => {
 
   ];
 
+  const sortAims = [
+    { id: 1, value: "price_asc", title: "Giá Tăng Dần" },
+    { id: 2, value: "price_desc", title: "Giá Giảm Dần" },
+    { id: 3, value: "position_asc", title: "Vị Trí Tăng Dân" },
+    { id: 4, value: "position_desc", title: "Vị Trí Giảm Dần" },
+  ]
+
   // Change-multi
 
-  
+
 
   const [selectedIds, setSelectedIds] = useState([]);
   const [newStatus, setNewStatus] = useState("active");
@@ -265,7 +282,7 @@ const ProductsAdmin = ({ query }) => {
       <CreatProducts setProducts={setProducts} setNotifMessage={setNotifMessage}
         setLoading={setLoading} />
 
-      <EditProducts idEdit={idEdit} setProducts={setProducts}/>
+      <EditProducts idEdit={idEdit} setProducts={setProducts} />
       {loading && (<AutoCloseNotification
         key={notifKey}
         message={notifMessage}
@@ -275,24 +292,47 @@ const ProductsAdmin = ({ query }) => {
       <header className="products-header">
         <h1>Quản Trị Sản Phẩm</h1>
         <div >
-          
+
           <ButtonTabs
             activeTab={activeTab}
             onTabClick={(tab) => setActiveTab(tab.id)}
           />
         </div>
 
-        <button className="btn-accent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
-          + Thêm Sản Phẩm
-        </button>
+        <div div style={{ display: "flex", gap: "10px" }}>
+          <select
+            name="status"
+            className="admin-select"
+            style={{ width: "230px" }}
+            value={sortAim}
+            onChange={(e) => setSortAim(e.target.value)}
+          >
+            {sortAims.map((opt) => (
+              <option key={opt.id} value={opt.value} >
+                {opt.title}
+              </option>
+            ))}
+
+
+          </select>
+          <button className="btn-accent" onClick={() => setSortAim("")}>Xóa Lọc</button>
+
+          <button className="btn-accent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBackdrop" aria-controls="offcanvasWithBackdrop">
+            + Thêm Sản Phẩm
+          </button>
+
+        </div>
+
+
       </header>
 
       <div className="products-header">
         <FilterListFood
           activeTab={activeName}
-          onTabClick={(category,tab) => {
+          onTabClick={(category, tab) => {
             setNewStatusListFood(category)
-            setActiveName(tab)}}
+            setActiveName(tab)
+          }}
         />
 
         <div style={{ display: "flex", gap: "10px" }}>

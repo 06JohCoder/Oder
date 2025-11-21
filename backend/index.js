@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const express = require('express');
+const path = require('path');
 const route = require("./routes/client/index.router")
 const routeAdmin = require("./routes/admin/index.route")
 const cors = require('cors');
@@ -25,6 +26,12 @@ app.use(cors({ origin: "http://localhost:3000" }));
 
 // app.use(cors());
 app.use(express.json());
+
+
+// TinyMCE
+    // app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+// End TinyMCE
+
 
 // Route
 route(app)

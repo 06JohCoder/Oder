@@ -12,9 +12,9 @@ function Cart() {
     
     
     return (
-        <div className="card-content main-content col-xl-8 col-lg-9 col-md-9 col-sm-12 col-12">
-             <div className="cart-items">
-                    <h1>Giỏ hàng của bạn</h1>
+        <div className="card-content main-content col-xl-10">
+             <div className="cart-items" >
+          
                     {cart.map(item => (
                         <div className="cart-item" key={item.id}>
                         <img src={item.image} alt={item.name} className="item-image" />
@@ -64,6 +64,51 @@ function Cart() {
                 </button>
                  </Link>
             </div>
+
+         <div className="hot-food-box">
+
+    <div className="hot-grid" style={{display:"flex"}}>
+
+        <div className="hot-item">
+            <img src="https://picsum.photos/seed/food1/300/200" alt="food" />
+            <div className="hot-info">
+                <h3>Phở Bò Đặc Biệt</h3>
+                <p>Giá: 45.000đ</p>
+            </div>
+             <div className="item-quantity">
+                            <button  className="btn-quantity">-</button>
+                            <input type="number" readOnly />
+                            <button  className="btn-quantity">+</button>
+            </div>
+        </div>
+
+        <div className="hot-item">
+            <img src="https://picsum.photos/seed/food2/300/200" alt="food" />
+            <div className="hot-info">
+                <h3>Bánh Mì Thịt Nướng</h3>
+                <p>Giá: 25.000đ</p>
+            </div>
+        </div>
+
+        <div className="hot-item">
+            <img src="https://picsum.photos/seed/food3/300/200" alt="food" />
+            <div className="hot-info">
+                <h3>Cơm Gà Hải Nam</h3>
+                <p>Giá: 55.000đ</p>
+            </div>
+        </div>
+
+        <div className="hot-item">
+            <img src="https://picsum.photos/seed/food4/300/200" alt="food" />
+            <div className="hot-info">
+                <h3>Bún Chả Hà Nội</h3>
+                <p>Giá: 40.000đ</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
         </div>
     );
 }

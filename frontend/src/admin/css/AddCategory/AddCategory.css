@@ -1,0 +1,49 @@
+.products-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* BÊN TRÁI */
+.products-left {
+    width: 35%;
+    background: var(--bg-main);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #525151;
+}
+
+/* BÊN PHẢI */
+.products-right {
+    width: 65%;
+    background: var(--bg-main);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #616161;
+}
+
+h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* .form-control {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 8px;
+} */
+
+.createProducts-btn {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.createProducts-btn:hover {
+    background: #0056b3;
+}

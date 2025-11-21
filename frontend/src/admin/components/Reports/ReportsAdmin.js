@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../css/reports/reports.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -22,6 +22,30 @@ function ReportsAdmin() {
     const [year, setYear] = useState([2026, 2025, 2024]);
     const [selectedMonth, setSelectedMonth] = useState("October 2025");
     const [selectedReportType, setSelectedReportType] = useState(1); // 1: Thông tin tổng quan đơn hàng, 2: Thống kê sản phẩm
+    const [infoOrder, setInfoOrder] = useState([]);
+
+  
+
+    // Lấy dử liệu từ database
+
+    const fetchExportInfoOrder = () => {
+        let url = '/api/admin/infoOrder';
+        fetch(url)
+            .then(res => res.json())
+            .then(res => setInfoOrder(res));
+    };
+
+    useEffect(() => {
+        fetchExportInfoOrder();
+    }, []);
+
+ 
+
+
+
+    //End Lấy dử liệu từ database
+
+
     // 🔹 Dữ liệu doanh thu theo tháng
     const revenueData = [
         { month: "Jan", revenue: 104500000 },
@@ -114,9 +138,9 @@ function ReportsAdmin() {
 
         // ===== SHEET 1: ORDER SUMMARY =====
         const summarySheet = XLSX.utils.json_to_sheet(
-            reportTable.map((r, index) => ({
+            infoOrder.map((r, index) => ({
                 "#": index + 1,
-                "Order ID": r.orderId,
+                "Order ID": r._id,
                 "Ngày đặt": r.date,
                 "Khách hàng": r.customerName,
                 "SĐT": r.phone,
@@ -438,10 +462,10 @@ function ReportsAdmin() {
                     </thead>
 
                     <tbody>
-                        {reportTable.map((r, index) => (
-                            <tr key={r.id}>
+                        {infoOrder.map((r, index) => (
+                            <tr key={r._id}>
                                 <td>{index + 1}</td>
-                                <td>{r.orderId}</td>
+                                <td>{r._id}</td>
                                 <td>{r.date}</td>
                                 <td>{r.customerName}</td>
                                 <td>{r.phone}</td>
@@ -469,15 +493,15 @@ function ReportsAdmin() {
                     </thead>
 
                     <tbody>
-                        {reportProducts.map((p, index) => (
-                            <tr key={p.id}>
+                        {infoOrder.map((p, index) => (
+                            <tr key={p._id}>
                                 <td>{index + 1}</td>
-                                <td>{p.orderId}</td>
+                                <td>{p._id}</td>
                                 <td>{p.productName}</td>
                                 <td>{p.quantity}</td>
-                                <td>{p.unitPrice.toLocaleString()}₫</td>
-                                <td>{p.shippingFee.toLocaleString()}₫</td>
-                                <td>{p.total.toLocaleString()}₫</td>
+                                <td>{p.unitPrice}₫</td>
+                                <td>{p.shippingFee}₫</td>
+                                <td>{p.total}₫</td>
                             </tr>
                         ))}
                     </tbody>

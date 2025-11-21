@@ -49,7 +49,12 @@ function SidebarAdmin() {
                         <i className="admin-ico bi bi-bag"></i>
                         {menuOpen && <span className="admin-ico">Products</span>}
                     </Link>
-
+                    <Link 
+                        to = {`${prefixAdmin}admin/addCategory`}
+                        className={pathname === 'admin/addCategory' ? 'active' : ''}>
+                            <i class="admin-ico bi bi-tags"></i>
+                              {menuOpen && <span className="admin-ico">Category</span>}
+                    </Link>
                     <Link
                         to={`${prefixAdmin}admin/users`}
                         className={pathname === 'admin/users' ? 'active' : ''}
@@ -66,6 +71,13 @@ function SidebarAdmin() {
                         {menuOpen && <span className="admin-ico">Reports</span>}
                     </Link>
 
+                    <Link
+                        to={`${prefixAdmin}admin/myeditor`}
+                        className={pathname === 'admin/myeditor' ? 'active' : ''}
+                    >
+                        <i className="admin-ico bi bi-cloud-upload"></i>
+                        {menuOpen && <span className="admin-ico">Content</span>}
+                    </Link>
 
                     <Link
                         to={`${prefixAdmin}admin/chatting`}
@@ -76,7 +88,7 @@ function SidebarAdmin() {
                     </Link>
                     <Link to={`${prefixAdmin}admin/deletedItems`}
                         className={pathname === 'admin/deletedItems' ? 'active' : ''}>
-                            <i className="admin-ico bi bi-trash3"></i>
+                        <i className="admin-ico bi bi-trash3"></i>
 
                         {menuOpen && <span className="admin-ico">Delete</span>}
 
