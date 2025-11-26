@@ -31,7 +31,7 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
         
             // Chuyển response sang JSON
             const data = await res.json();
-
+            
             if (res.ok) { 
                 setNotifMessage(data.message);
                 setLoading(true)
