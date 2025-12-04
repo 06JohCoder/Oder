@@ -1,7 +1,7 @@
 
 const ProductCategory = require("../../models/controllerCategory.model")
 
-//[GET] /api/admin/products
+//[GET] /api/admin/category
 module.exports.index = async (req, res) => {
     let final = {
         deleted: false,
