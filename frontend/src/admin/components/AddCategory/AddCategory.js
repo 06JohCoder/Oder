@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../css/AddCategory/AddCategory.css";
-
+import ListCategory from "./list-category"
 const ProductsAdmin = () => {
   const [showAdd, setShowAdd] = useState(true)
   const [data, setData] = useState([])
@@ -67,7 +67,7 @@ const ProductsAdmin = () => {
 
 
 
-
+// console.log("data", data);
   return (
     <>
       <div div style={{ display: "flex", gap: "10px" }}>
@@ -114,21 +114,16 @@ const ProductsAdmin = () => {
               value={formData.father_id}
               onChange={handleChange}
             /> */}
-             <select
+              <select
                 name="father_id"
                 className="admin-select"
                 style={{ width: "500px" }}
                 value={formData.father_id}
                 onChange={handleChange}
               >
-                <option value="" disabled>
-                 --- Lựa chọn của bạn ---
-                </option>
-
-                {data.map((opt) => (
-                  <option key={opt._id} value={opt._id} style={{textAlign:"start"}} >
-                    {opt.name}
-                  </option>
+                <option value="">Lựa chọn của bạn</option>
+                {data.map((item) => (
+                  <ListCategory key={item._id} node={item} />
                 ))}
               </select>
 
