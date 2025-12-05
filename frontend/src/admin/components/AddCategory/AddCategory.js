@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../css/AddCategory/AddCategory.css";
 import ListCategory from "./list-category"
+import ShowCategory from "./show-category"
 const ProductsAdmin = () => {
   const [showAdd, setShowAdd] = useState(true)
   const [data, setData] = useState([])
@@ -67,7 +68,7 @@ const ProductsAdmin = () => {
 
 
 
-// console.log("data", data);
+  // console.log("data", data);
   return (
     <>
       <div div style={{ display: "flex", gap: "10px" }}>
@@ -229,47 +230,11 @@ const ProductsAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
-                <tr key={item._id}>
-                  <td><input
-                    type="checkbox"
-                    name="id"
-                  /></td>
-
-                  <td>{index + 1}</td>
-                  <td>
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      className="storyHome-img"
-                    /></td>
-                  <td>{item.name}</td>
-
-                  <td>
-                    <input
-                      type="number"
-                      value={item.position}
-                      style={{ width: "60px" }}
-                      min="1"
-                      name="position"
-
-                    />
-                  </td>
-                  <td>{item.status}</td>
-                  <td style={{ display: "flex", gap: "5px" }}>
-                    <button className="admin-btn" class="admin-btn"
-                      type="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasEditProduct"
-                      aria-controls="offcanvasEditProduct"
-
-
-                    ><i class="bi bi-pen"></i></button>
-                    <button className="admin-btn btn-danger" type="button"><i class="bi bi-trash3"></i></button>
-                  </td>
-                </tr>
+              {data.map((item) => (
+                <ShowCategory key={item._id} node={item} />
               ))}
             </tbody>
+
           </table>
         </div>
       )}

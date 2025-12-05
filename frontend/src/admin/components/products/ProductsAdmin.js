@@ -21,6 +21,7 @@ const ProductsAdmin = ({ query }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
   const [sortAim, setSortAim] = useState("");
+  const [limitPage,setLimitPage] = useState(null);
 
   // Xử lý phần frontend về thông báo
 
@@ -77,6 +78,7 @@ const ProductsAdmin = ({ query }) => {
 
         setProducts(res.data)
         setTotalPages(res.objPagination.totalPages)
+        setLimitPage(res.objPagination.limitItems)
       })
       .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
   };
@@ -391,7 +393,7 @@ const ProductsAdmin = ({ query }) => {
                   onChange={() => handleCheck(item._id)}
                 /></td>
 
-                <td>{index + 1}</td>
+                <td>{ limitPage * (page-1) +  (index + 1)}</td>
                 <td>
                   <img
                     src={item.img}

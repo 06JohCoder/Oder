@@ -1,7 +1,8 @@
 
 
 function PaginationHelper({totalPages,page,setPage}) {
-
+    console.log("totalPages", totalPages);
+    console.log("page", page);
 
     return (
         <div className="admin-pagination">
