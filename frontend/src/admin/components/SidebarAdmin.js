@@ -9,7 +9,10 @@ function SidebarAdmin() {
     const location = useLocation();
     // console.log(location.pathname.substring(1));
     const pathname = location.pathname.substring(1);
-
+    const pathname2 = pathname.split("/");                
+    pathname2.pop();                                   
+    const result = pathname2.join("/"); 
+    // console.log(result)
     return (
         <>
             <aside className={`admin-sidebar ${menuOpen ? '' : 'close-admin-menu'}`}>
@@ -51,8 +54,8 @@ function SidebarAdmin() {
                     </Link>
                     <Link 
                         to = {`${prefixAdmin}admin/addCategory`}
-                        className={pathname === 'admin/addCategory' ? 'active' : ''}>
-                            <i class="admin-ico bi bi-tags"></i>
+                        className={pathname === 'admin/addCategory' || result === 'admin/editCategory' ? 'active' : ''}>
+                            <i className="admin-ico bi bi-tags"></i>
                               {menuOpen && <span className="admin-ico">Category</span>}
                     </Link>
                     <Link

@@ -31,7 +31,7 @@ module.exports.index = async (req, res) => {
     try {
         const category = await ProductCategory.find(final).lean();
        const newCategory =  createTree(category);
-        console.log("newCategory", newCategory);
+        // console.log("newCategory", newCategory);
         res.json(newCategory)
 
 
@@ -62,6 +62,63 @@ module.exports.create = async (req, res) => {
         category,
     });
 
+}
+
+// [GET] /api/admin/category/edit/:id
+module.exports.edit = async (req,res) =>{
+    const id = req.params.id;
+    
+    const data = await ProductCategory.findOne(
+        {
+            _id: id,
+            deleted: false,
+
+        }
+    )
+
+
+    try {
+        if (data) {
+
+
+           res.json(data);
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Lỗi khi lấy dữ liệu' });
+    }
+    
+
+}
+// [PATCH] /api/admin/category/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    const updateData = req.body;
+
+    // Prevent setting itself as its own parent
+    if (req.body.father_id === req.params.id) {
+        return res.status(400).json({ message: "Không thể chọn chính nó làm danh mục cha!" });
+    }
+
+    try {
+        const category = await ProductCategory.findOneAndUpdate(
+            { _id: id },
+            updateData,
+            { new: true }
+        );
+        if (category) {
+            res.json({
+                message: "Cập nhật danh mục thành công",
+                category,
+            });
+        } else {
+            res.status(404).json({ message: 'Danh mục không tồn tại' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Lỗi khi cập nhật dữ liệu' });
+    }
 }
 
 

@@ -14,6 +14,8 @@ import ChatUI from "../components/chatting/Chatting";
 import ProductsBackUp from "../components/backUp/ProductsAdmin.backUp";
 import MyEditor from "../components/tinyMCE/MyEditor";
 import AddCategory from "../components/AddCategory/AddCategory";
+import EditCategory from "../components/AddCategory/editCAtegory";
+
 export default function AdminDashboard() {
 
 
@@ -34,6 +36,7 @@ export default function AdminDashboard() {
             <Route path="/productsAdmin" element={<ProductsAdmin query={query}/>} />
             <Route path="/users" element={<UsersAdmin query={query}/>} />
             <Route path="/addCategory" element = {<AddCategory/>} />
+            <Route path="/editCategory/:id" element = {<EditCategory/>} />
             <Route path="/reports" element={<ReportsAdmin />} />
             <Route path="/deailCloud" element={<Could/>}/>
             <Route path="/setting" element={<SettingsAdmin />} />

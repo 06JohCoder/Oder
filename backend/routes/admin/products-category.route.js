@@ -8,5 +8,8 @@ router.get('/category',controllerCategory.index );
 router.post('/category/create',
     validate.create,
     controllerCategory.create)
-
+router.get('/category/edit/:id', controllerCategory.edit)
+router.patch('/category/edit/:id',
+    // validate.edit,
+    controllerCategory.editPatch)
 module.exports = router

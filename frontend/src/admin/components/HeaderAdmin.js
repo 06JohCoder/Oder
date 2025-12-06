@@ -26,7 +26,9 @@ function HeaderAdmin({query,setQuery}) {
              
                 <ButtonNotifi/>
                
-               <Link to={`${prefixAdmin}admin/deailCloud`}> <button className="admin-btn"> <i class="bi bi-cloud"> </i></button></Link>
+               <Link to={`${prefixAdmin}admin/deailCloud`}> 
+               <button className="admin-btn"> <i class="bi bi-cloud"> </i></button>
+               </Link>
 
                
                 

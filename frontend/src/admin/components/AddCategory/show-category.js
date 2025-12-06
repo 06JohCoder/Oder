@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { prefixAdmin } from "../../../config/system";
+
 function ShowCategory({ node, level = 0 }) {
     const prefix = "_____ ".repeat(level);
 
@@ -28,9 +31,11 @@ function ShowCategory({ node, level = 0 }) {
                     />
                 </td>
                 <td style={{ display: "flex", gap: "5px" }}>
-                    <button className="admin-btn" type="button">
-                        <i className="bi bi-pen"></i>
-                    </button>
+                    <Link to={`${prefixAdmin}admin/editCategory/${node._id}`}>
+                        <button className="admin-btn" type="button">
+                            <i className="bi bi-pen"></i>
+                        </button>
+                    </Link>
                     <button className="admin-btn btn-danger" type="button">
                         <i className="bi bi-trash3"></i>
                     </button>
