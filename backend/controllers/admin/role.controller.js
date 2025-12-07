@@ -132,3 +132,51 @@ module.exports.delete = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi xóa vai trò' });
     }
 }
+
+// [GET] : admin/role/permissions
+module.exports.permissions = async (req, res) => {
+    let find = {
+        deleted: false
+    }
+    const data = await role.find(find);
+    try {
+        if (data) {
+            res.json(data);
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Lỗi khi lấy quyền' });
+    }
+}
+
+// [PATCH] : admin/role/permissions
+module.exports.missionsPatch = async (req, res) => {
+    const permissionsData = req.body;
+    try {
+        // for (let i = 0; i < permissionsData.length; i++) {
+        //     const roleId = permissionsData[i].roleId;
+        //     const permissions = permissionsData[i].permissions;
+        //     await role.findByIdAndUpdate(
+        //         { _id: roleId },
+        //         { permissions: permissions },
+        //         { new: true }
+        //     );
+        // }
+        for (const item of permissionsData) {
+            const id = item.roleId;
+            const permissions = item.permissions;
+
+            await role.updateOne(
+                { _id:id },
+                {permissions:permissions},
+                { new: true }
+            
+            )
+            
+        }
+        res.json({ message: 'Cập nhật quyền thành công' });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: 'Lỗi khi cập nhật quyền' });
+    }
+}

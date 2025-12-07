@@ -10,6 +10,8 @@ router.post('/role/create', releController.createPost);
 router.get('/role/edit/:id', releController.edit);
 router.patch('/role/edit/:id', releController.editPatch);
 router.delete('/role/delete/:id', releController.delete);
+router.get('/role/permissions', releController.permissions);
+router.patch('/role/permissions', releController.missionsPatch);
 
 
 

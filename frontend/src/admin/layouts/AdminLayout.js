@@ -18,6 +18,7 @@ import EditCategory from "../components/AddCategory/editCAtegory";
 import RoleHome from "../components/role/roleHome";
 import RoleCreate from "../components/role/roleCreate";
 import RoleEdit from "../components/role/roleEdit";
+import PermissionPage from "../components/permission/permission";
 export default function AdminDashboard() {
 
 
@@ -48,7 +49,8 @@ export default function AdminDashboard() {
             <Route path="/role" element={<RoleHome/>} />
             <Route path="/role/create" element={<RoleCreate/>} />
             <Route path="/role/edit/:id" element={<RoleEdit/>} />
-            <Route path="*" element={<MainAdmin />} />
+            <Route path ="/permission" element={<PermissionPage />} />
+            {/* <Route path="*" element={<MainAdmin />} /> */}
           </Routes>
        
 

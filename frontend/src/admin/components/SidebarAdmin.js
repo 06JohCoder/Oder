@@ -70,7 +70,16 @@ function SidebarAdmin() {
                         className={(pathname === 'admin/role' || pathname == 'admin/role/create')? 'active' : ''}
                         >
                         <i className="admin-ico bi bi-shield-lock"></i>
-                        {menuOpen && <span className="admin-ico">Premissions</span>}
+                        {menuOpen && <span className="admin-ico">Roles</span>}
+                        
+                    </Link>
+
+                    <Link to={`${prefixAdmin}admin/permission`}
+                        className={pathname === 'admin/permission' ? 'active' : ''}
+                        >
+                            
+                         <i className="admin-ico bi bi-key"></i>
+                        {menuOpen && <span className="admin-ico">Permission</span>}
                         
                     </Link>
 

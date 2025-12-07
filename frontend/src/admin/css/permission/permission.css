@@ -1,0 +1,82 @@
+/* Nền gradient full page */
+.permission {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #071029 0%, #081428 100%);
+  padding: 30px 0;
+  color: #fff;
+}
+
+/* Container */
+.permission .permission-container {
+  width: 100%;
+  margin: auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  backdrop-filter: blur(6px);
+}
+
+/* Title */
+.permission .permission-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Section title */
+.permission .permission-section-title {
+  margin: 20px 0 10px;
+  font-size: 20px;
+  color: #ffd369;
+  font-weight: bold;
+}
+
+/* Table */
+.permission .permission-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 35px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.permission .permission-table th,
+.permission .permission-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.permission .permission-table thead {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.permission .permission-section-checkbox:hover{
+    background: rgba(59, 201, 226, 0.1);
+
+}
+.permission .permission-table tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Checkbox */
+.permission input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* Button update */
+.permission .permission-btn-update {
+  float: right;
+  background: #4e9eff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.permission .permission-btn-update:hover {
+  background: #70b4ff;
+}
