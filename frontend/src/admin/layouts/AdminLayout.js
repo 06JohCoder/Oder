@@ -15,7 +15,8 @@ import ProductsBackUp from "../components/backUp/ProductsAdmin.backUp";
 import MyEditor from "../components/tinyMCE/MyEditor";
 import AddCategory from "../components/AddCategory/AddCategory";
 import EditCategory from "../components/AddCategory/editCAtegory";
-
+import RoleHome from "../components/role/roleHome";
+import RoleCreate from "../components/role/roleCreate";
 export default function AdminDashboard() {
 
 
@@ -43,6 +44,8 @@ export default function AdminDashboard() {
             <Route path="/chatting" element={<ChatUI />} />
             <Route path="/myeditor" element={<MyEditor />} />
             <Route path="/deletedItems" element={<ProductsBackUp/>} />
+            <Route path="/role" element={<RoleHome/>} />
+            <Route path="/role/create" element={<RoleCreate/>} />
             <Route path="*" element={<MainAdmin />} />
           </Routes>
        

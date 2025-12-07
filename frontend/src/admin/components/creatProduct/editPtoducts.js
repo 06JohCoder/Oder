@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../../css/creatProduct/CreateProducts.css";
-
-function EditProducts({ idEdit,setProducts }) {
+import ListCategory from "../AddCategory/list-category"
+function EditProducts({ idEdit, setProducts }) {
     const [dataEdit, setDataEdit] = useState({
         name: "",
         description: "",
@@ -11,24 +11,33 @@ function EditProducts({ idEdit,setProducts }) {
         img: "",
         position: "",
         status: "inactive",
+        category: ""
     });
 
-    
+     useState(() => {
+        fetch("/api/admin/products/create")
+            .then((res) => res.json())
+            .then((res) => setData(res))
+            .catch((err) => console.error("Lỗi khi lấy danh mục sản phẩm:", err));
+    }, []);
+
+    const [data, setData] = useState([]);
+
     useEffect(() => {
         if (!idEdit) return;
         fetch(`/api/admin/products/edit/${idEdit}`)
             .then((res) => res.json())
             .then((data) => {
-   
-                 setDataEdit({
-                    name: data.product.name ,
-                    description: data.product.description ,
-                    price: data.product.price ,
-                    discountPercentage: data.product.discountPercentage ,
-                    stock: data.product.stock ,
-                    img: data.product.img ,
-                    position: data.product.position ,
-                    status: data.product.status ,
+
+                setDataEdit({
+                    name: data.product.name,
+                    description: data.product.description,
+                    price: data.product.price,
+                    discountPercentage: data.product.discountPercentage,
+                    stock: data.product.stock,
+                    img: data.product.img,
+                    position: data.product.position,
+                    status: data.product.status,
                 });
             });
     }, [idEdit]);
@@ -100,6 +109,20 @@ function EditProducts({ idEdit,setProducts }) {
                             required
                         />
                     </div>
+
+                    <select
+                        name="category"
+                        className="admin-select"
+                        style={{ width: "100%" }}
+                        value={dataEdit.category}
+                        onChange={handleChange}
+                    >
+                        <option value="">Lựa chọn của bạn</option>
+                        {data.map((item) => (
+                            <ListCategory key={item._id} node={item} />
+                        ))}
+                    </select>
+
 
                     {/* Mô tả */}
                     <div className="mb-3">

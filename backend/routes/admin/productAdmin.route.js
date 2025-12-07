@@ -8,6 +8,7 @@ router.get('/products', controllers.index);
 router.patch('/products/change-status/:status/:id', controllers.changeStatus)
 router.patch('/products/change-multi', controllers.changeMulti)
 router.delete('/products/delete/:id', controllers.deleteItem)
+router.get('/products/create', controllers.createGet)
 router.post('/products/create',
     validate.create,
     controllers.create)

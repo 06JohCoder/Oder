@@ -65,6 +65,14 @@ function SidebarAdmin() {
                         <i className="admin-ico bi bi-people"></i>
                         {menuOpen && <span className="admin-ico">Users</span>}
                     </Link>
+                    <Link 
+                        to={`${prefixAdmin}admin/role`}
+                        className={(pathname === 'admin/role' || pathname == 'admin/role/create')? 'active' : ''}
+                        >
+                        <i className="admin-ico bi bi-shield-lock"></i>
+                        {menuOpen && <span className="admin-ico">Premissions</span>}
+                        
+                    </Link>
 
                     <Link
                         to={`${prefixAdmin}admin/reports`}

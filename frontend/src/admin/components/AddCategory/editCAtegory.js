@@ -41,7 +41,7 @@ const EditCategory = () => {
       })
       .catch(err => console.error(err));
 
-    setLoading(true);
+      setLoading(true);
   }
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const EditCategory = () => {
           >
             <option value="">Lựa chọn của bạn</option>
             {data.map((item) => (
-              <ListCategory key={item._id} node={item} excludeId={id} />
+              <ListCategory key={item._id} node={item} />
             ))}
           </select>
 
@@ -176,13 +176,13 @@ const EditCategory = () => {
         </div>
 
         {/* <Link to={`/admin/addCategory`}> */}
-        <button
-          type="button"
-          className="btn createProducts-btn"
-          onClick={editCategory}
-        >
-          Lưu danh mục
-        </button>
+          <button
+            type="button"
+            className="btn createProducts-btn"
+            onClick={editCategory}
+          >
+            Lưu danh mục
+          </button>
         {/* </Link> */}
       </div>
     </div>

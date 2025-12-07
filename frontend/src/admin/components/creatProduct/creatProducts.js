@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "../../css/creatProduct/CreateProducts.css";
-
-function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
+import ListCategory from "../AddCategory/list-category"
+function CreateProducts({ setProducts, setNotifMessage, setLoading }) {
+    const [data, setData] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
         description: "",
@@ -28,14 +29,14 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
                 body: JSON.stringify(formData),
             });
 
-        
+
             // Chuyển response sang JSON
             const data = await res.json();
-            
-            if (res.ok) { 
+
+            if (res.ok) {
                 setNotifMessage(data.message);
                 setLoading(true)
-                setProducts(prev => [...prev, data.product]); 
+                setProducts(prev => [...prev, data.product]);
                 setFormData({
                     name: "",
                     description: "",
@@ -57,6 +58,13 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
 
     };
 
+    useState(() => {
+        fetch("/api/admin/products/create")
+            .then((res) => res.json())
+            .then((res) => setData(res))
+            .catch((err) => console.error("Lỗi khi lấy danh mục sản phẩm:", err));
+    }, []);
+
     return (
         <div
             className="offcanvas offcanvas-start createProducts-offcanvas"
@@ -77,7 +85,7 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
             </div>
 
             <div className="offcanvas-body createProducts-body">
-                <form onSubmit={handleSubmit}  enctype="multipart/form-data">
+                <form onSubmit={handleSubmit} enctype="multipart/form-data">
                     {/* Tên sản phẩm */}
                     <div className="mb-3">
                         <label className="form-label">Tiêu đề</label>
@@ -91,6 +99,21 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
                             required
                         />
                     </div>
+
+
+                        <select
+                            name="category"
+                            className="admin-select"
+                            style={{ width: "100%" }}
+                            value={formData.category}
+                            onChange={handleChange}
+                        >
+                            <option value="">Lựa chọn của bạn</option>
+                            {data.map((item) => (
+                                <ListCategory key={item._id} node={item} />
+                            ))}
+                        </select>
+                        
 
                     {/* Mô tả */}
                     <div className="mb-3">
@@ -160,7 +183,7 @@ function CreateProducts({ setProducts ,setNotifMessage,setLoading }) {
                             placeholder="Dán link ảnh vào đây..."
                             required
                         />
-                         {/* <input type="file" name="avatar" accept="image/*" className="form-control-file" /> */}
+                        {/* <input type="file" name="avatar" accept="image/*" className="form-control-file" /> */}
                     </div>
 
                     {/* Vị trí */}
