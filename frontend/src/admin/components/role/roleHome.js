@@ -1,24 +1,44 @@
 // import { useState, useEffect } from "react";
 import "../../css/products/ProductsAdmin.css";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const RoleHome = () => {
  
     const [data,setDataa] = useState([]);
 
-    useState(() => {
+    const fetchData = () => {
         let url = "/api/admin/role/create";
         fetch(url)
             .then((res) => res.json())
             .then((data) => {
                 setDataa(data);
             })
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
-
-    console.log("data",data)
   
-
+    const handlDelete = (id) => {
+     
+        let url = `/api/admin/role/delete/${id}`;
+        try {
+            fetch(url, {
+                method: "DELETE",
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.message) {
+                        alert(data.message)
+                        fetchData();
+                    }
+                })
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    
+      }
 
     
 
@@ -60,8 +80,11 @@ const RoleHome = () => {
                 <td>{item.name}</td>
                 <td>{item.description}</td>
                 <td style={{ display: "flex", gap: "5px" }}>
+                  <Link to={`/admin/role/edit/${item._id}`}>
                   <button className="admin-btn">Sửa</button>
-                  <button className="admin-btn">Xóa</button>
+                  </Link>
+                 
+                  <button className="admin-btn" onClick={() => handlDelete(item._id)}>Xóa</button>
                 </td>
               </tr>
             ))}

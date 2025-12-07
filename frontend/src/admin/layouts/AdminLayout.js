@@ -17,6 +17,7 @@ import AddCategory from "../components/AddCategory/AddCategory";
 import EditCategory from "../components/AddCategory/editCAtegory";
 import RoleHome from "../components/role/roleHome";
 import RoleCreate from "../components/role/roleCreate";
+import RoleEdit from "../components/role/roleEdit";
 export default function AdminDashboard() {
 
 
@@ -46,6 +47,7 @@ export default function AdminDashboard() {
             <Route path="/deletedItems" element={<ProductsBackUp/>} />
             <Route path="/role" element={<RoleHome/>} />
             <Route path="/role/create" element={<RoleCreate/>} />
+            <Route path="/role/edit/:id" element={<RoleEdit/>} />
             <Route path="*" element={<MainAdmin />} />
           </Routes>
        
