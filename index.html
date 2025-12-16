@@ -1,170 +1,121 @@
-<!doctype html>
-<html lang="vi">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Sơ đồ ER - Ví dụ Many-to-Many</title>
-<style>
-  :root{
-    --bg:#f7f9fc;
-    --card:#ffffff;
-    --stroke:#2b6cb0;
-    --muted:#2d3748;
-    --accent:#3182ce;
-  }
-  body{
-    margin:0;
-    font-family: Inter, system-ui, Arial, sans-serif;
-    background:var(--bg);
-    color:var(--muted);
-    display:flex;
-    min-height:100vh;
-    align-items:center;
-    justify-content:center;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #eaeaed;
+            font-family: Arial, sans-serif;
+        }
 
-  .canvas {
-    width:900px;
-    max-width:95%;
-    background:linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-    border-radius:10px;
-    box-shadow:0 8px 30px rgba(30,60,120,0.08);
-    padding:18px;
-  }
+        #loginForm {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
 
-  h2 { margin:0 0 12px 0; color:var(--stroke); font-size:18px; }
-  p.note { margin:0 0 12px 0; font-size:13px; color:#475569; }
+        #loginForm label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
 
-  /* svg responsive */
-  .diagram {
-    width:100%;
-    height:420px;
-    display:block;
-  }
+        #loginForm input {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
 
-  /* small labels under shapes */
-  .legend {
-    margin-top:12px;
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-  }
-  .legend .item {
-    display:flex;
-    gap:8px;
-    align-items:center;
-    padding:6px 10px;
-    background:#fff;
-    border-radius:8px;
-    border:1px solid rgba(50,90,150,0.06);
-    font-size:13px;
-  }
-  .swatch {
-    width:16px;
-    height:16px;
-    display:inline-block;
-    border-radius:3px;
-    background:var(--accent);
-    box-shadow:0 1px 0 rgba(0,0,0,0.06);
-  }
-  code { background:#eef2ff; padding:2px 6px; border-radius:4px; font-size:12px; color:#0f172a; }
-</style>
+        #loginForm button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        #loginForm button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <div class="canvas">
-    <h2>Sơ đồ ER — Quan hệ N : M (many-to-many)</h2>
-    <p class="note">Hình chữ nhật: thực thể; Hình thoi: quan hệ; Hình tứ giác nghiêng: ví dụ thực thể đặc biệt hoặc associative entity. Quan hệ giữa 2 thực thể là nhiều-nhiều.</p>
+ <!-- ABGR: Wnpx - grzcbenel olcnff: hfr urnqre "K-Qri-Npprff: lrf" -->
+<!-- Remove before pushing to production! -->   
 
-    <!-- SVG diagram -->
-    <svg class="diagram" viewBox="0 0 900 420" xmlns="http://www.w3.org/2000/svg" aria-label="ER diagram many-to-many">
-      <!-- defs for arrowheads / styles -->
-      <defs>
-        <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6">
-          <circle cx="5" cy="5" r="2" fill="#2b6cb0"/>
-        </marker>
-        <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-          <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#0b3b72" flood-opacity="0.08"/>
-        </filter>
-      </defs>
+    <form id="loginForm">
+        <h2 style="font-size: 24px; margin-bottom: 24px;">
+            Login
+        </h2>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
 
-      <!-- Entity A (rectangle) -->
-      <g class="entityA" transform="translate(80,110)">
-        <rect x="0" y="0" width="180" height="70" rx="8" ry="8" fill="#ffffff" stroke="#2b6cb0" stroke-width="2" filter="url(#shadow)"/>
-        <text x="90" y="40" font-size="16" font-weight="600" text-anchor="middle" fill="#1e3a8a">Nhà Cung Cấp</text>
-        <!-- PK underline example -->
-        <text x="14" y="24" font-size="12" fill="#0f172a">Mã_NCC</text>
-      </g>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-      <!-- Entity B (rectangle) -->
-      <g class="entityB" transform="translate(640,110)">
-        <rect x="0" y="0" width="180" height="70" rx="8" ry="8" fill="#fff" stroke="#2b6cb0" stroke-width="2" filter="url(#shadow)"/>
-        <text x="90" y="40" font-size="16" font-weight="600" text-anchor="middle" fill="#1e3a8a">Mặt Hàng</text>
-        <text x="14" y="24" font-size="12" fill="#0f172a">Mã_Hang</text>
-      </g>
+            const formData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
 
-      <!-- Relationship diamond (many-to-many) centered -->
-      <g class="relationship" transform="translate(380,150)">
-        <!-- diamond -->
-        <polygon points="0,-60 80,0 0,60 -80,0" fill="#ffffff" stroke="#2b6cb0" stroke-width="2" />
-        <text x="0" y="6" font-size="14" font-weight="600" text-anchor="middle" fill="#0b3b72">CUNG_CẤP</text>
-      </g>
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: "a", password: "b" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+    prompt('Login successful!\nFlag:', data.flag);
+} else {
+    alert('Invalid credentials');
+}
 
-      <!-- Parallelogram (tứ giác nghiêng) as associative entity example -->
-      <g class="assoc" transform="translate(350,260)">
-        <!-- parallelogram -->
-        <polygon points="-90,0 70,0 90,50 -70,50" fill="#fff" stroke="#3182ce" stroke-width="1.6"/>
-        <text x="0" y="32" font-size="13" font-weight="600" text-anchor="middle" fill="#0b3b72">Chi Tiết Cung Cấp</text>
-      </g>
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 
-      <!-- Lines connecting entities to relationship (many-to-many) -->
-      <!-- From Entity A center-right to diamond left -->
-      <line x1="260" y1="145" x2="300" y2="145" stroke="#2b6cb0" stroke-width="2" marker-end="url(#dot)"/>
-      <line x1="300" y1="145" x2="320" y2="145" stroke="#2b6cb0" stroke-width="2"/>
-      <!-- Label cardinality near entity A side -->
-      <text x="290" y="132" font-size="13" fill="#0b3b72" font-weight="700">N</text>
-
-      <!-- from diamond to entity B left -->
-      <line x1="460" y1="145" x2="580" y2="145" stroke="#2b6cb0" stroke-width="2" marker-end="url(#dot)"/>
-      <text x="560" y="132" font-size="13" fill="#0b3b72" font-weight="700">M</text>
-
-      <!-- lines drawn with precise coords -->
-      <!-- actually connect with diamond -->
-      <!-- left connector (diamond left point at 300,145) -->
-      <line x1="260" y1="145" x2="300" y2="145" stroke="#2b6cb0" stroke-width="2"/>
-      <!-- right connector (diamond right point at 460,145) -->
-      <line x1="460" y1="145" x2="580" y2="145" stroke="#2b6cb0" stroke-width="2"/>
-
-      <!-- Connect associative parallelogram to diamond -->
-      <line x1="380" y1="210" x2="320" y2="235" stroke="#2b6cb0" stroke-width="1.6" stroke-dasharray="6 4"/>
-      <line x1="380" y1="210" x2="440" y2="235" stroke="#2b6cb0" stroke-width="1.6" stroke-dasharray="6 4"/>
-
-      <!-- small labels for cardinality at both ends -->
-      <text x="240" y="160" font-size="13" fill="#0b3b72">N (many)</text>
-      <text x="600" y="160" font-size="13" fill="#0b3b72">M (many)</text>
-
-      <!-- optional attribute ovals -->
-      <ellipse cx="130" cy="60" rx="46" ry="22" fill="#fff" stroke="#94a3b8" />
-      <text x="130" y="65" font-size="12" text-anchor="middle" fill="#344e63">Tên_NCC</text>
-
-      <ellipse cx="740" cy="60" rx="56" ry="22" fill="#fff" stroke="#94a3b8" />
-      <text x="740" y="65" font-size="12" text-anchor="middle" fill="#344e63">Đơn_Giá</text>
-
-      <!-- connectors to attributes -->
-      <line x1="160" y1="80" x2="170" y2="92" stroke="#94a3b8" stroke-width="1.2"/>
-      <line x1="640" y1="80" x2="720" y2="92" stroke="#94a3b8" stroke-width="1.2"/>
-    </svg>
-
-    <div class="legend">
-      <div class="item"><span class="swatch" style="background:#3182ce"></span> <strong>Hình chữ nhật</strong> = Thực thể (Entity)</div>
-      <div class="item"><span class="swatch" style="background:#2b6cb0"></span> <strong>Hình thoi</strong> = Quan hệ (Relationship)</div>
-      <div class="item"><span class="swatch" style="background:#60a5fa"></span> <strong>Hình tứ giác / Parallelogram</strong> = Thực thể phụ / associative entity hoặc biểu diễn luồng dữ liệu</div>
-      <div class="item"><span class="swatch" style="background:#94a3b8"></span> <strong>Hình oval</strong> = Thuộc tính (Attribute)</div>
-    </div>
-
-    <p style="margin-top:12px; font-size:13px; color:#475569;">
-      Ghi chú: đây là ví dụ minh họa quan hệ <code>Nhà Cung Cấp — CUNG_CẤP — Mặt Hàng</code> với quan hệ <strong>N:M</strong>.
-      Nếu triển khai thành mô hình quan hệ (RDBMS), ta thường chuyển quan hệ nhiều-nhiều thành bảng liên kết (junction table) chứa các khóa ngoại từ hai thực thể và các thuộc tính phụ (ví dụ <em>Chi Tiết Cung Cấp</em>).
-    </p>
-  </div>
 </body>
 </html>
+
+fetch('/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Dea-Access': 'yes'
+  },
+  body: JSON.stringify({
+    email: "test",
+    password: "test"
+  })
+})
+.then(res => res.json())
+.then(data => { 
+  if(data.success == false){
+    prompt('Login successful!\nFlag:', data.flag);
+  }
+})

@@ -217,6 +217,87 @@ const PermissionPage = () => {
                     </tbody>
                 </table>
 
+                {/* Nhóm Quyền */}
+                <div className="permission-section-title">Nhóm Quyền</div>
+                <table className="permission-table">
+                    <thead>
+                        <tr>
+                            <th>Chức năng</th>
+                            {data.map((roleItem) => (
+                                <th key={roleItem._id}>{roleItem.name}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr className="permission-section-checkbox" data-name="role-view">
+                            <td>Xem</td>
+
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-view")} />
+                                </td>
+                            ))}
+                        </tr>
+
+                        <tr className="permission-section-checkbox" data-name="role-create">
+                            <td>Thêm mới</td>
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-create")} />
+
+                                </td>
+                            ))}
+                        </tr>
+{/* 
+                        <tr className="permission-section-checkbox" data-name="role-change-status">
+                            <td>Thay đổi trạng thái</td>
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-change-status")} />
+
+                                </td>
+                            ))}
+
+                        </tr> */}
+
+                        <tr className="permission-section-checkbox" data-name="role-update">
+                            <td>Cập nhật</td>
+
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-update")} />
+
+                                </td>
+                            ))}
+                        </tr>
+
+                        <tr className="permission-section-checkbox" data-name="role-delete">
+                            <td style={{ color: "#ff6b6b" }}>Xóa</td>
+
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-delete")} />
+
+                                </td>
+                            ))}
+                        </tr>
+
+                         <tr className="permission-section-checkbox" data-name="role-permission">
+                            <td style={{ color: "rgb(205 255 107)" }}>Phân Quyền</td>
+
+                            {data.map((roleItem) => (
+                                <td key={roleItem._id}>
+                                    <input type="checkbox" defaultChecked={roleItem.permissions.includes("role-permission")} />
+
+                                </td>
+                            ))}
+                        </tr>
+
+
+                    </tbody>
+                </table>
+
             </div>
         </div>
     );
