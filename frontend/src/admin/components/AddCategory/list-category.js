@@ -2,7 +2,7 @@ function ListCategory({ node, level = 0, excludeId }) {
   if (node._id === excludeId) return null; // Loại bỏ chính nó
 
   const prefix = "_____ ".repeat(level);
-  console.log("node",node)
+  // console.log("node",node)
   return (
     <>
       <option value={node._id} style={{ textAlign: "start" }} > 

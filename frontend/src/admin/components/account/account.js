@@ -3,7 +3,7 @@ import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
 import PaginationHelper from "../../helpers/pagination";
 import Delete from "../../helpers/delete";
-function UsersAdmin() {
+function Account() {
 
 
     const [activeTab, setActiveTab] = useState(null);
@@ -13,14 +13,15 @@ function UsersAdmin() {
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [users, setUsers] = useState([]);
-
+    const [role, setRole] = useState([]);
     const [newUser, setNewUser] = useState({
-        name: "",
+        fullname: "",
         email: "",
+        phone: "",
         users: "",
         password: "",
-        role: "User",
-        status: "Pending",
+        role_id: "",
+        status: "inActive",
     });
 
 
@@ -56,29 +57,65 @@ function UsersAdmin() {
     // --- Thêm người dùng mới ---
     const handleAddUser = () => {
         const newId = users.length + 1;
-        setUsers([...users, { ...newUser, id: newId }]);
+        setUsers([...users, { ...newUser, id: newId }]); // -- cập nhập ở giao diện trước rồi gọi lên sever để lưu và database
         setNewUser({ name: "", email: "", users: "", password: "", role: "User", status: "Pending" });
         alert("Đã thêm người dùng mới!");
     };
 
 
+    const fetchApiUser = async (e) => {
+        e.preventDefault();
+
+        if (newUser.users === newUser.password) {
+            alert("Không nhập mật khẩu trùng với tên người dùng")
+        } else {
+            try {
+                const res = await fetch('/api/admin/listAccount/create', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newUser),
+                });
+
+                const data = await res.json();
+                // console.log(data);
+                if (data.message) {
+                    setShowAddUser(false);
+                }
+                alert(data.message);
+            } catch (err) {
+                console.error(err);
+                alert("Lỗi tạo tài khoản");
+            }
+        }
+
+
+    };
+
+
     // --- lấy dử liệu (list account) từ backend ---
 
-    const fetchUsersAccounts = () => {
-        let url = '/api/admin/user-accounts';
+
+    const fetchAccounts = () => {
+        let url = '/api/admin/listAccount';
         fetch(url)
             .then(res => res.json())
-            .then(res => setUsers(res.data))
+            .then(res => setUsers(res.records))
     }
 
+    const fetchRole = () => {
+        let url = '/api/admin/listAccount/create';
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setRole(data))
+    }
+
+       console.log(role)
     useEffect(() => {
-        fetchUsersAccounts();
-    }, []);
-
-
-
-
-
+        fetchRole();
+        fetchAccounts();
+    }, newUser);
+    
+    console.log(users)
 
     return (
         <>
@@ -89,49 +126,6 @@ function UsersAdmin() {
                     onClose={() => setShowNotification(false)}
                 />
             )}
-
-            <section className="admin-grid">
-                <div className="admin-card">
-                    <h3>Visit</h3>
-                    <div className="admin-stat">
-                        <div>
-                            <div className="admin-big">{(10000).toLocaleString()}</div>
-                            <div className="admin-trend">Visit users per month</div>
-                        </div>
-                        <div className="admin-right"><div className="admin-trend">+6% vs last week</div></div>
-                    </div>
-                </div>
-                <div className="admin-card">
-                    <h3>Users Login</h3>
-                    <div className="admin-stat">
-                        <div>
-                            <div className="admin-big">{(5403).toLocaleString()}</div>
-                            <div className="admin-trend">User created account</div>
-                        </div>
-                        <div className="admin-right"><div className="admin-trend">+6% vs last week</div></div>
-                    </div>
-                </div>
-
-                <div className="admin-card">
-                    <h3>History</h3>
-
-                    <div className="admin-stat">
-                         <ul className="admin-log">
-                        <li>[10:30] Admin Nhật đã chỉnh sửa tài khoản Nguyễn Văn A</li>
-                        <li>[09:45] Nguyễn Văn C bị khóa tài khoản</li>
-                        <li>[08:10] Thêm tài khoản mới “Trần Văn D”</li>
-                    </ul>
-                    </div>
-                </div>
-
-                {/* <section className="admin-card" style={{ marginTop: "15px" }}>
-                  
-                </section> */}
-
-
-            </section>
-
-
             <section className="admin-content" style={{ gridTemplateColumns: (selected !== null || showAddUser === true) ? "2fr 1fr" : "1fr" }}>
                 <div>
                     <div className="admin-card admin-table">
@@ -153,7 +147,7 @@ function UsersAdmin() {
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Email</th>
-                                    {/* <th>Username</th> */}
+                                    <th>Phone</th>
                                     <th>Password</th>
                                     <th>Role</th>
                                     <th>Status</th>
@@ -161,16 +155,17 @@ function UsersAdmin() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((u, index) => (
+                                {users && users.map((u, index) => (
+        
                                     <tr key={u.id}>
                                         <td>{index + 1}</td>
-                                        <td className="admin-bold">{u.name}</td>
+                                        <td>{u.fullname}</td>
                                         <td className="admin-bold"> {u.email}</td>
-                                        {/* <td className="admin-bold">{u.users}</td> */}
+                                        <td className="admin-bold">{u.phone}</td>
                                         <td className="admin-bold">{u.password}</td>
-                                        <td>{u.email}</td>
-                                        <td>{u.role}</td>
-                                        <td><span className={`admin-badge ${u.status === "active" ? "admin-active" : ""}`}>{u.status}</span></td>
+                                        <td>{u.role.name}</td>
+                                        {/* <td><span className={`admin-badge ${u.status === "active" ? "admin-active" : ""}`}>{u.status}</span></td> */}
+                                        <td>{u.status}</td>
                                         <td style={{ display: "flex", gap: "5px" }} >
                                             <button className={`admin-btn ${activeTab === u.id ? "admin-primary" : ""}`}
                                                 onClick={() => {
@@ -186,38 +181,50 @@ function UsersAdmin() {
                             </tbody>
                         </table>
 
-                        <PaginationHelper />
+                        {/* <PaginationHelper /> */}
                     </div>
 
-
-
                 </div>
-
                 <aside className="admin-panel" >
 
                     {showAddUser === true ? (
                         <section className="admin-card">
-                            <h3>Add Users</h3>
+                            <h3>Add Account</h3>
                             <div className="admin-editor" style={{ display: "grid", gap: "10px" }}>
-                                <input className="admin-input" placeholder="Tên người dùng" value={newUser.name} onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} />
-                                <input className="admin-input" placeholder="Email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} />
-                                <input className="admin-input" placeholder="Username" value={newUser.users} onChange={(e) => setNewUser({ ...newUser, users: e.target.value })} />
-                                <input className="admin-input" placeholder="Mật khẩu" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} />
-                                <div className="admin-form-row">
-                                    <select className="admin-select" value={newUser.role} onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}>
-                                        <option>Admin</option>
-                                        <option>Moderator</option>
-                                        <option>User</option>
-                                    </select>
-                                    <select className="admin-select" value={newUser.status} onChange={(e) => setNewUser({ ...newUser, status: e.target.value })}>
-                                        <option>Active</option>
-                                        <option>Pending</option>
-                                        <option>Suspended</option>
-                                    </select>
-                                </div>
-                                <button className="admin-btn admin-primary" onClick={handleAddUser}>
-                                    Tạo tài khoản
-                                </button>
+                                <form onSubmit={fetchApiUser}>
+                                    <input className="admin-input" required placeholder="Tên người dùng" type="text" value={newUser.fullname} onChange={(e) => setNewUser({ ...newUser, fullname: e.target.value })} style={{ marginTop: "5px" }} />
+                                    <input className="admin-input" required placeholder="Email" type="email" value={newUser.email} onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} style={{ marginTop: "5px" }} />
+                                    <input className="admin-input" required placeholder="Sđt" type="number" value={newUser.phone} onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })} style={{ marginTop: "5px" }} />
+                                    <input className="admin-input" required placeholder="Username" type="text" value={newUser.users} onChange={(e) => setNewUser({ ...newUser, users: e.target.value })} style={{ marginTop: "5px" }} />
+                                    <input className="admin-input" required placeholder="Mật khẩu" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} style={{ marginTop: "5px" }} />
+                                    <div className="admin-form-row" >
+                                        <select className="admin-select" value={newUser.role_id} onChange={(e) => setNewUser({ ...newUser, role_id: e.target.value })} style={{ width: "100%" }}>
+                                          
+                            
+                                            <option >------------Chọn------------</option>
+
+                                                {role.map((u) => (
+                                                    <option key={u._id} value={u._id}>
+                                                        {u.name}
+                                                    </option>
+                                                ))}
+                                        
+
+                                        </select>
+                                    </div>
+                                    <div className="admin-form-row">
+
+                                        <select className="admin-select" value={newUser.status} onChange={(e) => setNewUser({ ...newUser, status: e.target.value })}>
+                                            <option>Active</option>
+                                            <option>InActive</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" className="admin-btn admin-primary" style={{ marginTop: "5px" }} >
+                                        Tạo tài khoản
+                                    </button>
+
+                                </form>
+
                             </div>
                         </section>
                     ) : ""}
@@ -282,7 +289,6 @@ function UsersAdmin() {
                                             <option>Moderator</option>
                                             <option>User</option>
                                         </select>
-
                                         <select
                                             id="status"
                                             className="admin-select"
@@ -320,4 +326,4 @@ function UsersAdmin() {
     );
 }
 
-export default UsersAdmin;
+export default Account;

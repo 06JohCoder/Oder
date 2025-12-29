@@ -19,6 +19,7 @@ import RoleHome from "../components/role/roleHome";
 import RoleCreate from "../components/role/roleCreate";
 import RoleEdit from "../components/role/roleEdit";
 import PermissionPage from "../components/permission/permission";
+import Account from "../components/account/account";
 export default function AdminDashboard() {
 
 
@@ -40,6 +41,7 @@ export default function AdminDashboard() {
             <Route path="/users" element={<UsersAdmin query={query}/>} />
             <Route path="/addCategory" element = {<AddCategory/>} />
             <Route path="/editCategory/:id" element = {<EditCategory/>} />
+            <Route path="/listAccount" element={<Account/>}></Route>
             <Route path="/reports" element={<ReportsAdmin />} />
             <Route path="/deailCloud" element={<Could/>}/>
             <Route path="/setting" element={<SettingsAdmin />} />

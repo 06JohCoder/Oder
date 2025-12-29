@@ -20,7 +20,7 @@ const ProductsAdmin = () => {
   }
   // console.log(formData)
   const submitCategory = async () => {
-    alert("DDax vaof")
+    
     let url = "/api/admin/category/create";
     try {
       const res = await fetch(url, {

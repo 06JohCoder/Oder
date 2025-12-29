@@ -11,14 +11,15 @@ const ProductsBackUp = ({ query }) => {
     const [products, setProducts] = useState([]);
     const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
     const [activeName, setActiveName] = useState(1); // mặc định là "All"
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState();
     const [notifMessage, setNotifMessage] = useState("");
     const [idDelete, setIdDelete] = useState("");
     const [idEdit, setIdEdit] = useState("");
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(null);
     const [tab, setTab] = useState(1)
-    // Xử lý phần frontend về thông báo
+    const [idCategory, setIdCategory] = useState([])
+    // Xử lý phần frontend về thông báo thì nó ở phần loading và notifi để xư lý
 
 
 
@@ -26,98 +27,83 @@ const ProductsBackUp = ({ query }) => {
 
 
 
-    const fetchProducts = (status, category) => {
-
-        let url = "/api/admin/products";
-        const params = [];
-        if (status) {
-            params.push(`status=${status}`);
-        }
-        if (query) {
-            params.push(`keyword=${query}`);
-        }
-
-        if (page > 1) {
-            params.push(`page=${page}`);
-        }
-        if (category) {
-            params.push(`category=${category}`)
-        }
-
-        if (params.length > 0) {
-            url += `?${params.join('&')}`;
-        }
-
-
-
-        fetch(url)
-            .then((res) => res.json())
-            .then((res) => {
-
-                setProducts(res.data)
-                setTotalPages(res.objPagination.totalPages)
+    const fetchProductsBackUp = () => {
+        fetch("/api/admin/category")
+            .then(res => res.json())
+            .then(data => {
+                setIdCategory(data)
             })
-            .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
+
+
+        fetch("/api/admin/backup/products")
+            .then(res => res.json())
+            .then(data => {
+                setProducts(data.backUpProducts);
+            })
+            .catch(err => console.error(err));
     };
-
-
-    const fetchUsersAdim = () =>{
-            let url = "/api/admin/userAdmin"
-            fetch(url)
-            .then((res) => res.json())
-            .then((res) => {
-
-                setProducts(res.data)
-                setTotalPages(res.objPagination.totalPages)
-            })
-    }
 
     useEffect(() => {
-        let status = "";
-        let category = "";
+        fetchProductsBackUp();
+    }, []);
 
+    // console.log("Idcategory",idCategory)
 
+    const handlBackUp = async (id, status) => {
 
+        const url = `/api/admin/backup/products/${status}/${id}`;
 
-        fetchProducts(status, category);
-    }, [activeTab, activeName, query, page, idDelete]);
+        try {
+            const res = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
 
+            const data = await res.json();
 
-    // Change status
-    const handleChangeStatus = async (id, status) => {
-        setLoading(true);
-        setNotifMessage("Thay Đổi Trạng Thái Thành Công!")
-        setNotifKey((prev) => prev + 1);
+            if (data.success) {
+                fetchProductsBackUp();
+                setLoading(true);
+                setNotifMessage(data.message);
+            } else {
+                alert(data.message || "Cập nhật thất bại!");
+            }
 
-        const statusChange = status === "active" ? "inactive" : "active";
-
-
-        setProducts(prev =>
-            prev.map(p =>
-                p._id === id ? { ...p, status: statusChange } : p
-            )
-        );
-
-        const url = `/api/admin/products/change-status/${statusChange}/${id}`;
-
-        fetch(url, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ status: statusChange }),
-        })
-            .then(res => res.json())
-            .then(result => {
-                console.log("Cập nhật xong:", result);
-                fetchProducts();
-            })
-            .catch(err => {
-                console.error("Lỗi khi cập nhật:", err);
-                alert("Cập nhật thất bại!");
-            })
-
+        } catch (error) {
+            console.error(error);
+            alert("Cập nhật thất bại!");
+        }
     };
+
+    const handlDelete = async (id) =>{
+        
+        const url = `/api/admin/backup/products/delete/${id}`;
+        
+        try {
+            const res = await fetch(url, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                fetchProductsBackUp();
+                setLoading(true);
+                setNotifMessage(data.message);
+            } else {
+                alert(data.message || "Cập nhật thất bại!");
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Cập nhật thất bại!");
+        }
+    }
 
 
 
@@ -192,11 +178,6 @@ const ProductsBackUp = ({ query }) => {
 
 
 
-    /*-------Check one----- */
-
-
-
-
 
     const handleCheck = (id) => {
         setSelectedIds((prev) =>
@@ -242,7 +223,7 @@ const ProductsBackUp = ({ query }) => {
             .then(data => {
                 setNotifMessage(data.message)
                 setLoading(true);
-                fetchProducts();
+
             })
             .catch(err => {
                 console.error("Lỗi khi cập nhật:", err);
@@ -251,6 +232,8 @@ const ProductsBackUp = ({ query }) => {
     }
     //Endl change-multi
 
+
+    console.log("category", idCategory)
 
     return (
         <div className="products-page">
@@ -318,7 +301,7 @@ const ProductsBackUp = ({ query }) => {
                                 type="checkbox"
                                 name="checkall"
                                 onChange={handleCheckAll}
-                                checked={selectedIds.length === products.length}
+                            // checked={selectedIds.length === products.length}
                             /></th>
 
                             <th>ID</th>
@@ -355,6 +338,7 @@ const ProductsBackUp = ({ query }) => {
                                         data-status={item.status}
                                         data-id={item.id}
                                     >
+
                                         {item.category}
                                     </a>
                                 </td>
@@ -363,8 +347,12 @@ const ProductsBackUp = ({ query }) => {
 
                                 <td style={{ display: "flex", gap: "5px" }}>
                                     <button className="admin-btn" class="admin-btn"
+                                        onClick={() => handlBackUp(item._id, 'back')}
                                     ><i class="bi bi-arrow-left-right"></i></button>
-                                    <Delete set={setProducts} Id={item._id} setId={setIdDelete} setNotifMessage={setNotifMessage} setLoading={setLoading} setNotifKey={setNotifKey} />
+
+                                    <button className="admin-btn" class="admin-btn"
+                                      onClick={() => handlDelete(item._id)}
+                                    ><i className="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         ))}

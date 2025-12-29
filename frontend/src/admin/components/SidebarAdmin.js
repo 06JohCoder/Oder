@@ -83,6 +83,12 @@ function SidebarAdmin() {
                         
                     </Link>
 
+                    <Link to={`${prefixAdmin}admin/listAccount`}
+                        className={pathname === 'admin/listAccount' ? 'active' : ''}> 
+                       <i class="bi bi-person-vcard"></i>
+                        {menuOpen && <span className="admin-ico">Account</span>}
+                    </Link>
+
                     <Link
                         to={`${prefixAdmin}admin/reports`}
                         className={pathname === 'admin/reports' ? 'active' : ''}
