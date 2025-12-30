@@ -187,7 +187,7 @@ function MainAdmin({ query }) {
   return (
     <>
       {
-        (users.length === 0) ?
+        (users && users.length === 0) ?
           <div className="admin-page-title">
             <Loading message="Đang Thống Kê..." />
           </div> : <div>
@@ -209,7 +209,7 @@ function MainAdmin({ query }) {
                 <h3>Users Suspended</h3>
                 <div className="admin-stat">
                   <div>
-                    <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
+                    <div className="admin-big">{users?.filter(u => u.status === "Pending").length}</div>
                     <div className="admin-trend">Active Suspended</div>
                   </div>
                   <div className="admin-right"><div className="admin-trend">+2% vs last week</div></div>
@@ -219,7 +219,7 @@ function MainAdmin({ query }) {
                 <h3>Users Pending</h3>
                 <div className="admin-stat">
                   <div>
-                    <div className="admin-big">{users.filter(u => u.status === "Pending").length}</div>
+                    <div className="admin-big">{users?.filter(u => u.status === "Pending").length}</div>
                     <div className="admin-trend">Active Pending</div>
                   </div>
                   <div className="admin-right"><div className="admin-trend">+1% vs last week</div></div>
@@ -283,7 +283,7 @@ function MainAdmin({ query }) {
                         className="admin-btn"
                         onChange={handleChange}
                       >
-                        {statusOptions.map((opt) => (
+                        {statusOptions?.map((opt) => (
                           <option key={opt.id} value={opt.value} >
                             {opt.label}
                           </option>
@@ -296,7 +296,7 @@ function MainAdmin({ query }) {
                         className="admin-btn"
                         onChange={handleChange}
                       >
-                        {roleOptions.map((opt) => (
+                        {roleOptions?.map((opt) => (
                           <option key={opt.id} value={opt.value} >
                             {opt.label}
                           </option>
@@ -318,7 +318,7 @@ function MainAdmin({ query }) {
                       </tr>
                     </thead>
                     <tbody>
-                      {users.map((u, index) => (
+                      {users?.map((u, index) => (
                         <tr key={u.id}>
                           <td>{index + 1}</td>
                           <td className="admin-bold">{u.name}</td>

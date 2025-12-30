@@ -30,6 +30,7 @@ const LoginPage = () => {
         try {
             const res = await fetch(url, {
                 method: "POST",
+                //   credentials: "include",
                 headers: { "Content-type": "application/json" },
                 body: JSON.stringify(formData)
             });

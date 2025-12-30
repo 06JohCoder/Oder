@@ -1,5 +1,6 @@
 
 const userAdmin = require("./userAdmin")
+const authMiddleware = require("../../middlewares/admin/auth.middlewares")
 const productAdmin = require("./productAdmin.route")
 const systemConfig = require("../../config/system");
 const userAccount = require("./userAccount.route");
