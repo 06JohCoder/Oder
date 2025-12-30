@@ -8,6 +8,7 @@ const addcategory = require('./products-category.route')
 const role = require('./role.route')
 const backUp = require('./backUp.route')
 const account = require('./account.route')
+const auth = require ('./auth.route')
 module.exports = (app) => {
     const prefixAdmin = systemConfig.prefixAdmin;
     app.use("/api" + prefixAdmin ,userAdmin)
@@ -18,4 +19,5 @@ module.exports = (app) => {
     app.use("/api" + prefixAdmin ,role)
     app.use("/api" + prefixAdmin ,backUp)
     app.use("/api" + prefixAdmin ,account)
+    app.use("/api" + prefixAdmin ,auth)
 }

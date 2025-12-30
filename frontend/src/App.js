@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DefaultLayout from "./users/layouts/default";
 import AdminLayout from "./admin/layouts/AdminLayout";
 import NotFound from './Error/NotFound';
+import LayoutDefault from './admin/components/auth/layoutAuth';
 function App() {
 
 
@@ -11,6 +12,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/admin/*" element={<AdminLayout />} />
+        <Route path="/admin/auth/*" element={<LayoutDefault />} />
+
         <Route path="/*" element={<DefaultLayout />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

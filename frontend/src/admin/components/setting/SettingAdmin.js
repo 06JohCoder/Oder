@@ -1,8 +1,10 @@
 import "../../css/setting/setting.css"
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function SettingsAdmin() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("profile");
   const [darkMode, setDarkMode] = useState(false);
   const [form, setForm] = useState({
@@ -22,6 +24,31 @@ function SettingsAdmin() {
     alert("Cài đặt đã được lưu!");
   };
 
+
+
+  const handleClickLogOut = async () => {
+    const isConfirm = window.confirm("Bạn có muốn đăng xuất chứ?");
+
+    if (isConfirm) {
+      let url = '/api/admin/auth/logout';
+      try {
+        const res = await fetch(url, {
+                method: "GET", 
+            });
+        const result = await res.json();
+            if (res.ok) {
+                navigate("/admin/auth/login");
+            } 
+      } catch (error) {
+        console.log("Lỗi sever")
+      }
+    } else {
+      alert("Hủy đăng xuất");
+    }
+  };
+
+
+
   return (
     <section >
       <h2 >⚙️ Settings Panel</h2>
@@ -31,30 +58,29 @@ function SettingsAdmin() {
         {["profile", "security", "system", "appearance"].map((tab) => (
           <button
             key={tab}
-            className={`admin-btn  ${
-              activeTab === tab
+            className={`admin-btn  ${activeTab === tab
                 ? "admin-primary"
                 : ""
-            }`}
+              }`}
             onClick={() => setActiveTab(tab)}
           >
             {tab === "profile"
               ? "Profile"
               : tab === "security"
-              ? "Security"
-              : tab === "system"
-              ? "System"
-              : "Appearance"}
+                ? "Security"
+                : tab === "system"
+                  ? "System"
+                  : "Appearance"}
           </button>
         ))}
       </div>
 
       {/* Tab content */}
       {activeTab === "profile" && (
-        <section className="admin-content" style={{gridTemplateColumns: "2fr 1fr", marginTop: "20px"}}>
+        <section className="admin-content" style={{ gridTemplateColumns: "2fr 1fr", marginTop: "20px" }}>
           <form
             onSubmit={handleSubmit}
-           
+
           >
             <div>
               <label className="block mb-1">Full Name</label>
@@ -86,8 +112,10 @@ function SettingsAdmin() {
                 className="admin-input"
               />
             </div>
-            <div style={{marginTop: "20px"}}>
+            <div style={{ marginTop: "20px", display: "flex", gap: "10px" }} >
               <button className="admin-btn admin-primary">Save</button>
+              <button type="button" class="btn btn-danger" onClick={handleClickLogOut}>Log Out</button>
+
             </div>
           </form>
 
@@ -115,7 +143,7 @@ function SettingsAdmin() {
                 className="admin-input"
               />
             </div>
-             <div>
+            <div>
               <label className="block mb-1">Confirm Password</label>
               <input
                 type="password"
@@ -132,7 +160,7 @@ function SettingsAdmin() {
         </section>
       )}
 
-      
+
 
       {activeTab === "system" && (
         <div className="space-y-4">
@@ -171,9 +199,8 @@ function SettingsAdmin() {
               />
               <div className="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:bg-blue-600 transition"></div>
               <span
-                className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${
-                  darkMode ? "translate-x-5" : ""
-                }`}
+                className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${darkMode ? "translate-x-5" : ""
+                  }`}
               ></span>
             </label>
           </div>
