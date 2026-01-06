@@ -3,9 +3,13 @@ import AutoCloseNotification from "./alerts/AutoCloseNotification";
 import PaginationHelper from "../helpers/pagination";
 import Delete from "../helpers/delete";
 import Loading from "../helpers/loading";
+import { apiFetch } from '../../utils/apiFetch';
+import { useNavigate } from "react-router-dom";
 function MainAdmin({ query }) {
 
   const [users, setUsers] = useState([]);
+  console.log(users)
+  const navigate = useNavigate();
   // const [activeTab, setActiveTab] = useState(1);
   const [selected, setSelected] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
@@ -14,7 +18,7 @@ function MainAdmin({ query }) {
   const [totalPages, setTotalPages] = useState(null);
   const [idUser, setIdUser] = useState(null);
 
-
+  console.log("bbb", sumUsers)
 
   const handleChangeUser = (e) => {
     const { value } = e.target;
@@ -87,7 +91,7 @@ function MainAdmin({ query }) {
 
 
   const fetchUser = () => {
-    let url = "/api/admin/userAdmin";
+    let url = '/api/admin/userAdmin';
     const params = [];
 
 
@@ -108,15 +112,23 @@ function MainAdmin({ query }) {
     }
 
 
-    fetch(url)
-      .then((res) => res.json())
+    apiFetch(url)
+      // .then((res) => res.json()) đã trả res.json ở bên apiFetch
       .then((res => {
         setUsers(res.data)
         setTotalPages(res.objPagination.totalPages)
         setSumUsers(res.data)
       }))
-      .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
+      .catch(err => {
+        if (err.status === 401) {
+          navigate('/admin/auth/login');
+        }
+        // if (err.status === 200) {
+        //   navigate('/admin');
+        // }
+      });
   };
+
 
 
 
@@ -159,7 +171,7 @@ function MainAdmin({ query }) {
       if (Id) {
         const url = `/api/admin/userAdmin/delete/${Id}`;
 
-        fetch(url, {
+        apiFetch(url, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

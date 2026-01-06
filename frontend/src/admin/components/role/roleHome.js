@@ -2,17 +2,23 @@
 import "../../css/products/ProductsAdmin.css";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { apiFetch } from '../../../utils/apiFetch';
+import { useNavigate } from "react-router-dom";
 
 const RoleHome = () => {
- 
+    const navigate = useNavigate();
     const [data,setDataa] = useState([]);
 
     const fetchData = () => {
         let url = "/api/admin/role/create";
-        fetch(url)
-            .then((res) => res.json())
+        apiFetch(url)
             .then((data) => {
                 setDataa(data);
+            })
+            .catch(err =>{
+              if(err.status === 401){
+                navigate('/admin/auth/login')
+              }
             })
     };
 
@@ -74,7 +80,7 @@ const RoleHome = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
                 <td>{item.name}</td>

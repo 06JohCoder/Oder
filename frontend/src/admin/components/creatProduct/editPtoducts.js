@@ -14,11 +14,14 @@ function EditProducts({ idEdit, setProducts }) {
         category: ""
     });
 
-     useState(() => {
+    useEffect(() => {
         fetch("/api/admin/products/create")
-            .then((res) => res.json())
-            .then((res) => setData(res))
-            .catch((err) => console.error("Lỗi khi lấy danh mục sản phẩm:", err));
+            .then(res => res.json())
+            .then(res => {
+                // Nếu res là mảng thì set, nếu là object thì lấy res.data hoặc []
+                setData(Array.isArray(res) ? res : (Array.isArray(res.data) ? res.data : []));
+            })
+            .catch(() => setData([]));
     }, []);
 
     const [data, setData] = useState([]);
@@ -118,7 +121,7 @@ function EditProducts({ idEdit, setProducts }) {
                         onChange={handleChange}
                     >
                         <option value="">Lựa chọn của bạn</option>
-                        {data.map((item) => (
+                        {Array.isArray(data) && data.map(item => (
                             <ListCategory key={item._id} node={item} />
                         ))}
                     </select>

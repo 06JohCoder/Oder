@@ -3,8 +3,10 @@ import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
 import PaginationHelper from "../../helpers/pagination";
 import Delete from "../../helpers/delete";
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from '../../../utils/apiFetch';
 function UsersAdmin() {
-
+    const navigate = useNavigate();
 
     const [activeTab, setActiveTab] = useState(null);
     const [showNotification, setShowNotification] = useState(false);
@@ -66,9 +68,15 @@ function UsersAdmin() {
 
     const fetchUsersAccounts = () => {
         let url = '/api/admin/user-accounts';
-        fetch(url)
-            .then(res => res.json())
+        apiFetch(url)
+           
             .then(res => setUsers(res.data))
+            .catch(err => {
+                if (err.status === 401) {
+                    navigate('/admin/auth/login');
+                }
+                
+            });
     }
 
     useEffect(() => {
@@ -116,11 +124,11 @@ function UsersAdmin() {
                     <h3>History</h3>
 
                     <div className="admin-stat">
-                         <ul className="admin-log">
-                        <li>[10:30] Admin Nhật đã chỉnh sửa tài khoản Nguyễn Văn A</li>
-                        <li>[09:45] Nguyễn Văn C bị khóa tài khoản</li>
-                        <li>[08:10] Thêm tài khoản mới “Trần Văn D”</li>
-                    </ul>
+                        <ul className="admin-log">
+                            <li>[10:30] Admin Nhật đã chỉnh sửa tài khoản Nguyễn Văn A</li>
+                            <li>[09:45] Nguyễn Văn C bị khóa tài khoản</li>
+                            <li>[08:10] Thêm tài khoản mới “Trần Văn D”</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -161,7 +169,7 @@ function UsersAdmin() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((u, index) => (
+                                {users?.map((u, index) => (
                                     <tr key={u.id}>
                                         <td>{index + 1}</td>
                                         <td className="admin-bold">{u.name}</td>

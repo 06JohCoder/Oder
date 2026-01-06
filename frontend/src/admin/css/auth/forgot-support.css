@@ -1,0 +1,317 @@
+/* Import font từ Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --admin-primary: #6366f1;
+    --admin-dark: #0f172a;
+    --admin-sidebar: #1e293b;
+    --admin-border: rgba(255, 255, 255, 0.1);
+    --admin-text: #f8fafc;
+    --admin-text-muted: #94a3b8;
+}
+
+/* Reset mặc định */
+.support-admin-viewport {
+    height: 100vh;
+    width: 100vw;
+    background: var(--admin-dark);
+    color: var(--admin-text);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.support-admin-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr 340px;
+    height: 100%;
+    width: 100%;
+}
+
+/* SIDEBAR BÊN TRÁI */
+.support-admin-sidebar {
+    background: var(--admin-sidebar);
+    border-right: 1px solid var(--admin-border);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+}
+
+.support-admin-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 50px;
+    padding-left: 10px;
+}
+
+.support-admin-logo {
+    background: var(--admin-primary);
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.support-admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.support-admin-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--admin-text-muted);
+    transition: 0.3s;
+}
+
+.support-admin-menu-item.active, .support-admin-menu-item:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--admin-primary);
+}
+
+.support-admin-menu-item.logout {
+    margin-top: auto;
+    color: #ef4444;
+}
+
+/* KHU VỰC CHAT CHÍNH */
+.support-admin-chat-area {
+    display: flex;
+    flex-direction: column;
+    background: #0b1120;
+    height: 100%;
+}
+
+.support-admin-header {
+    padding: 20px 40px;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.support-admin-header-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.support-admin-avatar {
+    position: relative;
+}
+
+.support-admin-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--admin-primary);
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 12px;
+    height: 12px;
+    background: #10b981;
+    border-radius: 50%;
+    border: 2px solid #0b1120;
+}
+
+.support-admin-header-tools {
+    display: flex;
+    gap: 12px;
+}
+
+.tool-btn {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* TIN NHẮN - CHỈNH TO RỘNG */
+.support-admin-chat-body {
+    flex: 1;
+    padding: 40px 60px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+    background-size: 40px 40px;
+}
+
+.support-admin-message-row {
+    display: flex;
+    width: 100%;
+}
+
+.support-admin-message-row.user {
+    justify-content: flex-end;
+}
+
+.support-admin-message-bubble {
+    max-width: 65%; /* Tăng độ rộng tin nhắn */
+    padding: 16px 24px;
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.admin .support-admin-message-bubble {
+    background: var(--admin-sidebar);
+    color: var(--admin-text);
+    border: 1px solid var(--admin-border);
+    border-bottom-left-radius: 4px;
+}
+
+.user .support-admin-message-bubble {
+    background: var(--admin-primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message-timestamp {
+    display: block;
+    font-size: 11px;
+    margin-top: 8px;
+    opacity: 0.5;
+    text-align: right;
+}
+
+/* THANH NHẬP LIỆU */
+.support-admin-chat-footer {
+    padding: 30px 60px;
+}
+
+.support-admin-input-box {
+    background: var(--admin-sidebar);
+    border: 1px solid var(--admin-border);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.support-admin-input-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 12px;
+    outline: none;
+    font-size: 15px;
+}
+
+.support-admin-send-btn {
+    background: var(--admin-primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.support-admin-send-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+}
+
+/* THANH THÔNG TIN BÊN PHẢI */
+.support-admin-info-bar {
+    background: var(--admin-sidebar);
+    border-left: 1px solid var(--admin-border);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.support-admin-info-card h5, .support-admin-manager-box h5 {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--admin-text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.info-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+.info-item i {
+    font-size: 22px;
+    color: var(--admin-primary);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.info-item p {
+    font-size: 12px;
+    color: var(--admin-text-muted);
+    margin: 0;
+}
+
+.info-item strong {
+    font-size: 15px;
+    color: var(--admin-text);
+}
+
+.support-admin-manager-box {
+    background: rgba(255,255,255,0.03);
+    padding: 30px;
+    border-radius: 24px;
+    text-align: center;
+    border: 1px solid var(--admin-border);
+}
+
+.manager-avatar-text {
+    width: 64px;
+    height: 64px;
+    background: var(--admin-primary);
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.work-time-badge {
+    margin-top: 20px;
+    color: #10b981;
+    font-size: 13px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }

@@ -1,19 +1,29 @@
 import React, { useState, useEffect } from "react";
 import "../../css/permission/permission.css";
 import AutoCloseNotification from "../alerts/AutoCloseNotification";
+import { apiFetch } from '../../../utils/apiFetch';
+import {useNavigate} from 'react-router-dom';
 const PermissionPage = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
      const [loading, setLoading] = useState(false);
        const [notifMessage, setNotifMessage] = useState("");
     const permissionList = [];
     const fetchData = async () => {
-        try {
-            const response = await fetch('/api/admin/role/permissions');
-            const result = await response.json();
-            setData(result);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+        // try {
+        //     const result = await apiFetch('/api/admin/role/permissions');
+        //     setData(result);
+        // } catch (error) {
+        //     console.error('Error fetching data:', error);
+        // }
+        apiFetch('/api/admin/role/permissions')
+            .then(res => setData(res))
+            .catch(err => {
+                if (err.status === 401) {
+                    navigate('/admin/auth/login');
+                }
+                
+            });
     };
 
     useEffect(() => {

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import "../../css/creatProduct/CreateProducts.css";
 import ListCategory from "../AddCategory/list-category"
 function CreateProducts({ setProducts, setNotifMessage, setLoading }) {
@@ -58,11 +59,14 @@ function CreateProducts({ setProducts, setNotifMessage, setLoading }) {
 
     };
 
-    useState(() => {
+    useEffect(() => {
         fetch("/api/admin/products/create")
-            .then((res) => res.json())
-            .then((res) => setData(res))
-            .catch((err) => console.error("Lỗi khi lấy danh mục sản phẩm:", err));
+            .then(res => res.json())
+            .then(res => {
+                // đảm bảo data luôn là array
+                setData(Array.isArray(res) ? res : res.data || []);
+            })
+            .catch(err => console.error("Lỗi khi lấy danh mục:", err));
     }, []);
 
     return (
@@ -101,19 +105,19 @@ function CreateProducts({ setProducts, setNotifMessage, setLoading }) {
                     </div>
 
 
-                        <select
-                            name="category"
-                            className="admin-select"
-                            style={{ width: "100%" }}
-                            value={formData.category}
-                            onChange={handleChange}
-                        >
-                            <option value="">Lựa chọn của bạn</option>
-                            {data.map((item) => (
-                                <ListCategory key={item._id} node={item} />
-                            ))}
-                        </select>
-                        
+                    <select
+                        name="category"
+                        className="admin-select"
+                        style={{ width: "100%" }}
+                        value={formData.category}
+                        onChange={handleChange}
+                    >
+                        <option value="">Lựa chọn của bạn</option>
+                        {Array.isArray(data) && data.map(item => (
+                            <ListCategory key={item._id} node={item} />
+                        ))}
+                    </select>
+
 
                     {/* Mô tả */}
                     <div className="mb-3">

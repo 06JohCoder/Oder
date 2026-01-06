@@ -1,5 +1,8 @@
 import { useState } from "react";
 import "../../css/auth/login.css";
+
+import {Link} from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -10,7 +13,7 @@ const LoginPage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState("");
     const [messagePassword, setMessagePassword] = useState("");
-    const [alert ,setAlert] = useState("");;
+    const [alert, setAlert] = useState("");;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,8 +43,8 @@ const LoginPage = () => {
             if (res.ok) {
                 navigate("/admin");
             } else {
-                setMessage(result.message );
-                setMessagePassword(result.messagePassword )
+                setMessage(result.message);
+                setMessagePassword(result.messagePassword)
                 setAlert(result.alerts)
             }
         } catch (error) {
@@ -54,75 +57,80 @@ const LoginPage = () => {
 
     return (
         <div className="login-wrapper">
-            <div className="login-box">
-                <header className="login-header">
-                    <div className="icon-login">
-                        <img
-                            className="admin-logo_login"
-                            alt="Admin Logo"
-                            src="/logo.jpg"
-                        />
-                        <h1 className="logo-text">ADMIN</h1>
+            {/* LEFT */}
+            <div className="login-left">
+                <div className="login-box">
+                    <header className="login-header">
+                        <div className="icon-login">
+                            <img
+                                className="admin-logo_login"
+                                alt="Admin Logo"
+                                src="/logo.jpg"
+                            />
+                            <h1 className="logo-text">ADMIN</h1>
+                        </div>
+                        <p className="subtitle">Order - Shop</p>
+                    </header>
+
+                    <form className="login-form" onSubmit={handleSubmit}>
+                        <div className="input-group">
+                            {message && <div className="error-alert">{message}</div>}
+                            <input
+                                type="text"
+                                name="email"
+                                placeholder="Email hoặc số điện thoại"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <div className="input-group">
+                            {messagePassword && <div className="error-alert">{messagePassword}</div>}
+                            <input
+                                type="password"
+                                name="password"
+                                placeholder="Mật khẩu"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+
+                        <button type="submit" className="login-btn" disabled={isLoading}>
+                            {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+                        </button>
+                    </form>
+
+                    <div className="login-footer">
+                        <Link to="/admin/auth/forgot-support" className="forgot-password">Quên mật khẩu?</Link>
+                        {alert && <div className="error-alert">{alert}</div>}
                     </div>
-                    <p className="subtitle">Hệ thống quản trị viên</p>
-                </header>
+                </div>
+            </div>
 
-                <form className="login-form" onSubmit={handleSubmit}>
+            {/* RIGHT */}
+            <div className="login-right">
+                <div className="right-content">
+                    {/* <h1 className="right-logo"><span>LO</span><span>GO</span></h1> */}
+                    <a href="/" class="mb-0 mb-lg-12">
+                        <img alt="Logo" src="/Textlogo.png" class="h-60px h-lg-75px" style={{width:"190px"}}></img>
 
-                    <div className="input-group">
-                        {message && <div className="error-alert" style={{color:"red"}}>{message}</div>}
+                    </a>
 
-                        <input
-                            type="text"
-                            name="email"
-                            placeholder="Email hoặc số điện thoại"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+                    <div className="mockup-area">
+                        <img src="/avata-logo-right.jpg" alt="dashboard" />
                     </div>
 
-                    <div className="input-group">
-                         {messagePassword && <div className="error-alert" style={{color:"red"}}>{messagePassword}</div>}
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Mật khẩu"
-                            value={formData.password}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
 
-                    <button type="submit" className="login-btn" disabled={isLoading}>
-                        {isLoading ?
-                            <>
-                                <div class="spinner-border text-secondary" role="status" style={{
-                                    height: "24px",
-                                    width: "24px"
-                                }}>
-                                    <span class="visually-hidden">Loading...</span>
-
-                                  
-                                </div>
-                                  <span className="loader">Đăng nhập</span>
-                            </>
-
-                            : "Đăng nhập"}
-
-                    </button>
-                </form>
-
-                <div className="login-footer">
-                    <a href="#" className="forgot-password">Quên mật khẩu?</a>
-                    {alert && <div className="error-alert" style={{color:"red"}}>{alert}</div>}
-
-                    <div className="divider"><span>HOẶC</span></div>
-                    <p className="support-text">Hỗ trợ: <strong>0569.847.809</strong></p>
+                    <h2>Fast, Efficient and Productive</h2>
+                    <p>
+                        Fast, efficient, and high-productivity – ideal for system administration posts.                </p>
                 </div>
             </div>
         </div>
     );
+
 };
 
 export default LoginPage;

@@ -7,8 +7,11 @@ import AutoCloseNotification from "../alerts/AutoCloseNotification";
 import Delete from "../../helpers/delete";
 import CreatProducts from "../creatProduct/creatProducts";
 import EditProducts from "../creatProduct/editPtoducts";
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from '../../../utils/apiFetch';
 
 const ProductsAdmin = ({ query }) => {
+  const navigate = useNavigate();
   // console.log("Query in ProductsAdmin:", query);
   const [products, setProducts] = useState([]);
   const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
@@ -21,7 +24,7 @@ const ProductsAdmin = ({ query }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(null);
   const [sortAim, setSortAim] = useState("");
-  const [limitPage,setLimitPage] = useState(null);
+  const [limitPage, setLimitPage] = useState(null);
 
   // Xử lý phần frontend về thông báo
 
@@ -72,15 +75,22 @@ const ProductsAdmin = ({ query }) => {
 
 
 
-    fetch(url)
-      .then((res) => res.json())
+    apiFetch(url)
+      // .then((res) => res.json())
       .then((res) => {
 
-        setProducts(res.data)
+        setProducts(Array.isArray(res.data) ? res.data : []);
         setTotalPages(res.objPagination.totalPages)
         setLimitPage(res.objPagination.limitItems)
       })
-      .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
+      .catch(err => {
+        if (err.status === 401) {
+          navigate('/admin/auth/login');
+        }
+        // if (err.status === 200) {
+        //   navigate('/admin');
+        // }
+      });
   };
 
 
@@ -157,7 +167,7 @@ const ProductsAdmin = ({ query }) => {
 
   ];
 
-  
+
   const sortAims = [
     { id: 1, value: "price_asc", title: "Giá Tăng Dần" },
     { id: 2, value: "price_desc", title: "Giá Giảm Dần" },
@@ -178,7 +188,7 @@ const ProductsAdmin = ({ query }) => {
   /*-------Check all----- */
   const handleCheckAll = (e) => {
     if (e.target.checked) {
-      setSelectedIds(products.map((item) => item._id))
+      setSelectedIds(products?.map((item) => item._id))
 
     } else {
       setSelectedIds([])
@@ -310,7 +320,7 @@ const ProductsAdmin = ({ query }) => {
             value={sortAim}
             onChange={(e) => setSortAim(e.target.value)}
           >
-            {sortAims.map((opt) => (
+            {sortAims?.map((opt) => (
               <option key={opt.id} value={opt.value} >
                 {opt.title}
               </option>
@@ -347,7 +357,7 @@ const ProductsAdmin = ({ query }) => {
             value={newStatus}
             onChange={(e) => setNewStatus(e.target.value)}
           >
-            {statusOptions.map((opt) => (
+            {statusOptions?.map((opt) => (
               <option key={opt.id} value={opt.value} >
                 {opt.value}
               </option>
@@ -384,7 +394,7 @@ const ProductsAdmin = ({ query }) => {
             </tr>
           </thead>
           <tbody>
-            {products.map((item, index) => (
+            {Array.isArray(products) && products.map((item, index) => (
               <tr key={item._id}>
                 <td><input
                   type="checkbox"
@@ -393,7 +403,7 @@ const ProductsAdmin = ({ query }) => {
                   onChange={() => handleCheck(item._id)}
                 /></td>
 
-                <td>{ limitPage * (page-1) +  (index + 1)}</td>
+                <td>{limitPage * (page - 1) + (index + 1)}</td>
                 <td>
                   <img
                     src={item.img}

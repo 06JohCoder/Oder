@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import "../../css/AddCategory/AddCategory.css";
 import ListCategory from "./list-category"
 import ShowCategory from "./show-category"
+import { apiFetch } from '../../../utils/apiFetch';
+import { useNavigate } from "react-router-dom";
 const ProductsAdmin = () => {
-  const [showAdd, setShowAdd] = useState(true)
+  const navigate = useNavigate();
+  const [showAdd, setShowAdd] = useState(false)
   const [data, setData] = useState([])
   const [formData, setFormData] = useState({
     name: "",
@@ -56,10 +59,17 @@ const ProductsAdmin = () => {
   const dataCategory = () => {
     let url = "/api/admin/category"
 
-    fetch(url)
-      .then(res => res.json())
+    apiFetch(url)
+      // .then(res => res.json())
       .then(res => setData(res))
-      .catch((err) => console.error("Lỗi khi lấy sản phẩm:", err));
+       .catch(err => {
+        if (err.status === 401) {
+          navigate('/admin/auth/login');
+        }
+        // if (err.status === 200) {
+        //   navigate('/admin');
+        // }
+      });
   }
 
   useEffect(() => {

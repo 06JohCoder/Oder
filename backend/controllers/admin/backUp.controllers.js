@@ -1,14 +1,25 @@
 const Product = require("../../models/product.model")
 
-
+const paginationHelper = require("../../helpers/pagination")
 
 // [GET]: api/admin/backup/products
 module.exports.indexProducts = async (req, res) => {
     try {
-        const backUpProducts = await Product.find({ deleted: true });
-
-        res.json({
+        const backUpProducts = await Product.countDocuments({ deleted: true });
+        let objPagination = paginationHelper(
+            {
+                pagePage: 1,
+                limitItems: 10,
+            },
+            req.query,
             backUpProducts
+        )
+        const backUpProductsData = await Product.find({ deleted: true })
+            .limit(objPagination.limitItems)
+            .skip(objPagination.skip);
+        res.json({
+            objPagination,
+            backUpProductsData
         });
     } catch (err) {
         console.error(err);
@@ -24,7 +35,7 @@ module.exports.indexProductsBack = async (req, res) => {
 
         if (status === 'back') {
             updateData.deleted = false;
-        }else {
+        } else {
             return res.status(400).json({
                 success: false,
                 message: "Trạng thái không hợp lệ",
@@ -53,7 +64,7 @@ module.exports.indexProductsBack = async (req, res) => {
 
 //[DELETE]: api/admin/backup/products/delete/:id
 module.exports.indexProductsDelete = async (req, res) => {
-  try {
+    try {
         const { id } = req.params;
 
         const deletedProduct = await Product.findByIdAndDelete(id);

@@ -5,8 +5,10 @@ import AutoCloseNotification from "../alerts/AutoCloseNotification";
 import Delete from "../../helpers/delete";
 import CreatProducts from "../creatProduct/creatProducts";
 import EditProducts from "../creatProduct/editPtoducts";
-
+import { apiFetch } from '../../../utils/apiFetch';
+import { useNavigate } from 'react-router-dom';
 const ProductsBackUp = ({ query }) => {
+    const navigate = useNavigate();
     // console.log("Query in ProductsAdmin:", query);
     const [products, setProducts] = useState([]);
     const [activeTab, setActiveTab] = useState(1); // mặc định là "All"
@@ -20,11 +22,10 @@ const ProductsBackUp = ({ query }) => {
     const [tab, setTab] = useState(1)
     const [idCategory, setIdCategory] = useState([])
     // Xử lý phần frontend về thông báo thì nó ở phần loading và notifi để xư lý
-
+    console.log(products)
 
 
     const [notifKey, setNotifKey] = useState(0);
-
 
 
     const fetchProductsBackUp = () => {
@@ -35,12 +36,18 @@ const ProductsBackUp = ({ query }) => {
             })
 
 
-        fetch("/api/admin/backup/products")
-            .then(res => res.json())
+        apiFetch("/api/admin/backup/products")
+            // .then(res => res.json())
             .then(data => {
-                setProducts(data.backUpProducts);
+                setProducts(Array.isArray(data.backUpProductsData) ? data.backUpProductsData : []);
+                setTotalPages(data.objPagination.totalPages);
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+               if (err.status === 401) {
+                   navigate('/admin/auth/login');
+               }
+
+            });
     };
 
     useEffect(() => {
@@ -313,7 +320,7 @@ const ProductsBackUp = ({ query }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((item, index) => (
+                        {products?.map((item, index) => (
                             <tr key={item._id}>
                                 <td><input
                                     type="checkbox"

@@ -7,7 +7,7 @@ const Controller = require('../../controllers/admin/account.controllers');
 router.get('/listAccount',Controller.index);
 router.get('/listAccount/create',Controller.getCreate)
 router.post('/listAccount/create',Controller.create)
-
+router.patch('/listAccount/edit/:id',Controller.edit)
 
     
 module.exports = router;

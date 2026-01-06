@@ -3,23 +3,34 @@ import "../../css/user/user.css"
 import AutoCloseNotification from "../../components/alerts/AutoCloseNotification";
 import PaginationHelper from "../../helpers/pagination";
 import Delete from "../../helpers/delete";
+import { apiFetch } from "../../../utils/apiFetch";
+import { useNavigate } from "react-router-dom";
 function Account() {
+    const navigate = useNavigate();
 
 
     const [activeTab, setActiveTab] = useState(null);
     const [showNotification, setShowNotification] = useState(false);
     const [showAddUser, setShowAddUser] = useState(false);
-    const [selected, setSelected] = useState(null);
+    // const [showEdit, setShowEdit] = useState(false);
+    const [selected, setSelected] = useState({
+        _id: "",
+        fullname: "",
+        email: "",
+        phone: "",
+        role: "",
+        status: ""
+    });
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [users, setUsers] = useState([]);
+    // console.log(users);
     const [role, setRole] = useState([]);
     const [newUser, setNewUser] = useState({
         fullname: "",
         email: "",
         phone: "",
-        users: "",
-        password: "",
+        newpassword: "",
         role_id: "",
         status: "inActive",
     });
@@ -27,20 +38,31 @@ function Account() {
 
     // --- Chọn người dùng để chỉnh sửa ---
     const handleSelect = (user) => {
-        // console.log(user);
+
         setSelected(user);
         setShowAddUser(false);
-    };
 
+    };
+    console.log(selected)
 
     // --- Cập nhật thông tin người dùng ---
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault();
         if (selected) {
-            setUsers((prev) =>
-                prev.map((u) => (u.id === selected.id ? selected : u))
-            );
-            // alert("Đã lưu thay đổi!");
-            setShowNotification(true);
+
+            let url = `/api/admin/listAccount/edit/${selected._id}`;
+            fetch(url, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(selected),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        setShowNotification(true);
+                        setSelected(null);
+                    }
+                });
         }
     };
 
@@ -51,15 +73,6 @@ function Account() {
         setSelected(null);
         setShowAddUser(true);
 
-    };
-
-
-    // --- Thêm người dùng mới ---
-    const handleAddUser = () => {
-        const newId = users.length + 1;
-        setUsers([...users, { ...newUser, id: newId }]); // -- cập nhập ở giao diện trước rồi gọi lên sever để lưu và database
-        setNewUser({ name: "", email: "", users: "", password: "", role: "User", status: "Pending" });
-        alert("Đã thêm người dùng mới!");
     };
 
 
@@ -97,25 +110,34 @@ function Account() {
 
     const fetchAccounts = () => {
         let url = '/api/admin/listAccount';
-        fetch(url)
-            .then(res => res.json())
+        apiFetch(url)
+            // .then(res => res.json())
             .then(res => setUsers(res.records))
+            .catch(err => {
+                if (err.status === 401) {
+                    navigate('/admin/auth/login');
+                }
+            });
     }
 
     const fetchRole = () => {
         let url = '/api/admin/listAccount/create';
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setRole(data))
+        apiFetch(url)
+            .then(res => setRole(res))
+            .catch(err => {
+                if (err.status === 401) {
+                    navigate('/admin/auth/login');
+                }
+            });
     }
 
-       console.log(role)
     useEffect(() => {
         fetchRole();
         fetchAccounts();
     }, newUser);
-    
+
     console.log(users)
+    console.log(activeTab)
 
     return (
         <>
@@ -148,7 +170,6 @@ function Account() {
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Phone</th>
-                                    <th>Password</th>
                                     <th>Role</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -156,24 +177,22 @@ function Account() {
                             </thead>
                             <tbody>
                                 {users && users.map((u, index) => (
-        
-                                    <tr key={u.id}>
+
+                                    <tr key={u._id}>
                                         <td>{index + 1}</td>
                                         <td>{u.fullname}</td>
                                         <td className="admin-bold"> {u.email}</td>
                                         <td className="admin-bold">{u.phone}</td>
-                                        <td className="admin-bold">{u.password}</td>
-                                        <td>{u.role.name}</td>
-                                        {/* <td><span className={`admin-badge ${u.status === "active" ? "admin-active" : ""}`}>{u.status}</span></td> */}
+                                        <td>{u.role?.name}</td>
                                         <td>{u.status}</td>
                                         <td style={{ display: "flex", gap: "5px" }} >
-                                            <button className={`admin-btn ${activeTab === u.id ? "admin-primary" : ""}`}
+                                            <button className={`admin-btn ${activeTab === u._id ? "admin-primary" : ""}`}
                                                 onClick={() => {
                                                     handleSelect(u);
-                                                    setActiveTab(u.id);
+                                                    setActiveTab(u._id);
                                                 }}
                                             ><i className="bi bi-pen" ></i></button>
-                                            <Delete set={setUsers} userId={u.id} />
+                                            <Delete set={setUsers} userId={u._id} />
 
                                         </td>
                                     </tr>
@@ -199,16 +218,16 @@ function Account() {
                                     <input className="admin-input" required placeholder="Mật khẩu" type="password" value={newUser.password} onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} style={{ marginTop: "5px" }} />
                                     <div className="admin-form-row" >
                                         <select className="admin-select" value={newUser.role_id} onChange={(e) => setNewUser({ ...newUser, role_id: e.target.value })} style={{ width: "100%" }}>
-                                          
-                            
+
+
                                             <option >------------Chọn------------</option>
 
-                                                {role.map((u) => (
-                                                    <option key={u._id} value={u._id}>
-                                                        {u.name}
-                                                    </option>
-                                                ))}
-                                        
+                                            {role.map((u) => (
+                                                <option key={u._id} value={u._id}>
+                                                    {u.name}
+                                                </option>
+                                            ))}
+
 
                                         </select>
                                     </div>
@@ -234,83 +253,68 @@ function Account() {
                         <div className="admin-card">
                             <h3>User editor</h3>
 
-                            <div className="admin-editor" style={{ display: "grid", gap: "10px" }}>
-                                <div className="admin-field">
-                                    <label htmlFor="name" className="admin-label">Name</label>
-                                    <input
-                                        id="name"
-                                        className="admin-input"
-                                        value={selected.name}
-                                        onChange={(e) => setSelected({ ...selected, name: e.target.value })}
-                                    />
-                                </div>
+                            <form onSubmit={handleSave}>
 
-                                <div className="admin-field">
-                                    <label htmlFor="email" className="admin-label">Email</label>
-                                    <input
-                                        id="email"
-                                        className="admin-input"
-                                        value={selected.email}
-                                        onChange={(e) => setSelected({ ...selected, email: e.target.value })}
-                                    />
-                                </div>
-
-                                <div className="admin-field">
-                                    <label htmlFor="users" className="admin-label">Username</label>
-                                    <input
-                                        id="users"
-                                        className="admin-input"
-                                        value={selected.users}
-                                        onChange={(e) => setSelected({ ...selected, users: e.target.value })}
-                                    />
-                                </div>
-
-                                <div className="admin-field">
-                                    <label htmlFor="password" className="admin-label">Password</label>
-                                    <input
-                                        id="password"
-                                        className="admin-input"
-                                        value={selected.password}
-                                        onChange={(e) => setSelected({ ...selected, password: e.target.value })}
-                                    />
-                                </div>
-
-
-                                <div className="admin-form-row" style={{ display: "grid", gap: "10px" }}>
-                                    <div className="admin-field" style={{ display: "flex", gap: "5px" }}>
-
-                                        <select
-                                            id="role"
-                                            className="admin-select"
-                                            value={selected.role}
-                                            onChange={(e) => setSelected({ ...selected, role: e.target.value })}
-                                        >
-                                            <option>Admin</option>
-                                            <option>Moderator</option>
-                                            <option>User</option>
-                                        </select>
-                                        <select
-                                            id="status"
-                                            className="admin-select"
-                                            value={selected.status}
-                                            onChange={(e) => setSelected({ ...selected, status: e.target.value })}
-                                        >
-                                            <option>Active</option>
-                                            <option>Pending</option>
-                                            <option>Suspended</option>
-                                        </select>
+                                <div className="admin-editor" style={{ display: "grid", gap: "10px" }}>
+                                    <div className="admin-field">
+                                        <label htmlFor="name" className="admin-label">Name</label>
+                                        <input
+                                            id="name"
+                                            className="admin-input"
+                                            value={selected.fullname}
+                                            onChange={(e) => setSelected({ ...selected, fullname: e.target.value })}
+                                            required
+                                        />
                                     </div>
 
-                                </div>
-                                <div className="admin-form-row">
-                                    <button className="admin-btn admin-primary" onClick={handleSave}>Save</button>
-                                    <button className="admin-btn" onClick={() => {
-                                        setSelected(null)
-                                        setActiveTab(null)
-                                    }}>Cancel</button>
-                                </div>
-                            </div>
+                                    <div className="admin-field">
+                                        <label htmlFor="email" className="admin-label">Email</label>
+                                        <input
+                                            id="email"
+                                            className="admin-input"
+                                            value={selected.email}
+                                            onChange={(e) => setSelected({ ...selected, email: e.target.value })}
+                                            required
+                                        />
+                                    </div>
 
+                                    <div className="admin-field">
+                                        <label htmlFor="password" className="admin-label">Password</label>
+                                        <input
+                                            id="password"
+                                            className="admin-input"
+                                            value={selected.newpassword}
+                                            onChange={(e) => setSelected({ ...selected, password: e.target.value })}
+                                            required
+                                        />
+                                    </div>
+
+
+                                    <div className="admin-form-row" style={{ display: "grid", gap: "10px" }}>
+                                        <div className="admin-field" style={{ display: "flex", gap: "5px" }}>
+
+
+                                            <select
+                                                id="status"
+                                                className="admin-select"
+                                                value={selected.status}
+                                                onChange={(e) => setSelected({ ...selected, status: e.target.value })}
+                                            >
+                                                <option value="active">Active</option>
+                                                <option value="inActive">Inactive</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div className="admin-form-row">
+                                        <button className="admin-btn admin-primary" type="submit">Save</button>
+                                        <button className="admin-btn" type="button" onClick={() => {
+                                            setSelected(null);
+                                            setActiveTab(null);
+                                        }}>Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     ) : ""}
 

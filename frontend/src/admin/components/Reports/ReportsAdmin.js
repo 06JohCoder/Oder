@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../../css/reports/reports.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-
+import {apiFetch} from '../../../utils/apiFetch';
+import {useNavigate} from 'react-router-dom';
 import {
     LineChart,
     Line,
@@ -24,15 +25,20 @@ function ReportsAdmin() {
     const [selectedReportType, setSelectedReportType] = useState(1); // 1: Thông tin tổng quan đơn hàng, 2: Thống kê sản phẩm
     const [infoOrder, setInfoOrder] = useState([]);
 
-  
+    const navigate = useNavigate();
 
     // Lấy dử liệu từ database
 
     const fetchExportInfoOrder = () => {
         let url = '/api/admin/infoOrder';
-        fetch(url)
-            .then(res => res.json())
-            .then(res => setInfoOrder(res));
+        apiFetch(url)
+            .then(res => setInfoOrder(res))
+            .catch(err => {
+                if (err.status === 401) {
+                    navigate('/admin/auth/login');
+                }
+
+            });
     };
 
     useEffect(() => {
@@ -138,7 +144,8 @@ function ReportsAdmin() {
 
         // ===== SHEET 1: ORDER SUMMARY =====
         const summarySheet = XLSX.utils.json_to_sheet(
-            infoOrder.map((r, index) => ({
+            // infoOrder?.map((r, index) => ({
+                Array.isArray(infoOrder) && infoOrder.map((r, index) => ({
                 "#": index + 1,
                 "Order ID": r._id,
                 "Ngày đặt": r.date,
@@ -462,7 +469,7 @@ function ReportsAdmin() {
                     </thead>
 
                     <tbody>
-                        {infoOrder.map((r, index) => (
+                        {Array.isArray(infoOrder) && infoOrder.map((r, index) => (
                             <tr key={r._id}>
                                 <td>{index + 1}</td>
                                 <td>{r._id}</td>
@@ -493,7 +500,7 @@ function ReportsAdmin() {
                     </thead>
 
                     <tbody>
-                        {infoOrder.map((p, index) => (
+                        {Array.isArray(infoOrder) && infoOrder.map((p, index) => (
                             <tr key={p._id}>
                                 <td>{index + 1}</td>
                                 <td>{p._id}</td>

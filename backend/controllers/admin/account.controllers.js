@@ -80,3 +80,17 @@ module.exports.create = async (req, res) => {
 
 
 };
+
+//[PATCH] : api/admin/listAccount/edit/:id
+module.exports.edit = async (req, res) => {
+    const id = req.params.id;
+    const { fullname, email, phone, role_id, status } = req.body;
+    const password = md5(req.body.password) ;
+    console.log(req.body)
+    if(id ){
+            const updatedData = { fullname, email, phone, role_id, status };
+            if (password) updatedData.password = password;
+            await Account.updateOne({ _id: id }, { $set: updatedData });
+            return res.status(200).json({ success: true, message: "Account updated successfully" });
+    }
+};
