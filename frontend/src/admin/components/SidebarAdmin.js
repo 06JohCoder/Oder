@@ -10,7 +10,7 @@ function SidebarAdmin() {
     // console.log(location.pathname.substring(1));
     const pathname = location.pathname.substring(1);
     const pathname2 = pathname.split("/");                
-    pathname2.pop();                                   
+    pathname2.pop();
     const result = pathname2.join("/"); 
     // console.log(result)
     return (

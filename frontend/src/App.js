@@ -10,13 +10,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/admin/*" element={<AdminLayout />} />
-        <Route path="/admin/auth/*" element={<LayoutDefault />} />
-
-        <Route path="/*" element={<DefaultLayout />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
+        <Routes>
+          <Route path="/admin/*" element={<AdminLayout />} />
+          <Route path="/admin/auth/*" element={<LayoutDefault />} />
+          <Route path="/*" element={<DefaultLayout />} />
+        </Routes>
     </BrowserRouter>
   );
 

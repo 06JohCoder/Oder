@@ -35,8 +35,8 @@ export default function AdminDashboard() {
 
         <main className="admin-main">
           <HeaderAdmin query={query} setQuery={setQuery} />
-          <Routes>
-            {/* <Route path="/" element={<MainAdmin query={query} />} />
+          <Routes> 
+            <Route path="/" element={<MainAdmin query={query} />} />
             <Route path="/productsAdmin" element={<ProductsAdmin query={query}/>} />
             <Route path="/users" element={<UsersAdmin query={query}/>} />
             <Route path="/addCategory" element = {<AddCategory/>} />
@@ -51,36 +51,13 @@ export default function AdminDashboard() {
             <Route path="/role" element={<RoleHome/>} />
             <Route path="/role/create" element={<RoleCreate/>} />
             <Route path="/role/edit/:id" element={<RoleEdit/>} />
-            <Route path ="/permission" element={<PermissionPage />} /> */}
+            <Route path ="/permission" element={<PermissionPage />} />
             {/* <Route path="*" element={<MainAdmin />} /> */}
-
-
-              {/* Routes for vercel */}
-
-            <Route index element={<MainAdmin query={query} />} />
-
-            <Route path="productsAdmin" element={<ProductsAdmin query={query} />} />
-            <Route path="users" element={<UsersAdmin query={query} />} />
-            <Route path="addCategory" element={<AddCategory />} />
-            <Route path="editCategory/:id" element={<EditCategory />} />
-            <Route path="listAccount" element={<Account />} />
-            <Route path="reports" element={<ReportsAdmin />} />
-            <Route path="deailCloud" element={<Could />} />
-            <Route path="setting" element={<SettingsAdmin />} />
-            <Route path="chatting" element={<ChatUI />} />
-            <Route path="myeditor" element={<MyEditor />} />
-            <Route path="deletedItems" element={<ProductsBackUp />} />
-
-            <Route path="role" element={<RoleHome />} />
-            <Route path="role/create" element={<RoleCreate />} />
-            <Route path="role/edit/:id" element={<RoleEdit />} />
-
-            <Route path="permission" element={<PermissionPage />} />
           </Routes>
+       
 
 
-
-          <footer className="admin-footer">© {new Date().getFullYear()} Clau Admin — Crafted with care</footer>
+          <footer className="admin-footer">© {new Date().getFullYear()} Order Admin — Made by Việt Nhật</footer>
         </main>
       </div>
     </div>
