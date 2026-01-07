@@ -30,7 +30,7 @@ module.exports.index = async (req, res) => {
 
     try {
         const category = await ProductCategory.find(final).lean();
-       const newCategory =  createTree(category);
+        const newCategory =  createTree(category);
         // console.log("newCategory", newCategory);
         res.json(newCategory)
 
