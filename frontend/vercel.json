@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://oder-rcj3.onrender.com/api/$1"
+    }
+  ]
+}
