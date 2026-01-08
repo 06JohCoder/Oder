@@ -14,12 +14,15 @@ database.connect()
 
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 5000;
 
 
 // app.use(cors({ origin: "http://localhost:3000" }));
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: [
+    "http://localhost:3000",
+    "https://oder-sepia.vercel.app"
+  ],
   credentials: true
 }));
 
