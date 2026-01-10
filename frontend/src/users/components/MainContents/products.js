@@ -19,16 +19,7 @@ function Products() {
 
     const [cart, setCart] = useState([]);
 
-    // console.log("cart ở đây", cart);
-    const [showModal, setShowModal] = useState(false);
-    const [idModal, setIdModal] = useState(null);
 
-    const openModal = (p) => {
-        setShowModal(true)
-        setIdModal(p)
-    };
-    // console.log("idModal", idModal);
-    const closeModal = () => setShowModal(false);
 
     const addToCart = (product) => {
         // console.log("product-cart", product.id);
@@ -161,8 +152,6 @@ function Products() {
                     <div><button>Đồ nướng</button></div>
                     <div><button>Nước uống</button></div>
                     <div><button>Đồ ăn vặt</button></div>
-
-
                 </div>
             </section>
 
@@ -170,8 +159,8 @@ function Products() {
 
                 <div className="products" id="products">
                     {productsData.map((p) => (
-                        <div key={p._id} className="card product-card"  >
-                            <img src={p.img} alt={p.name} onClick={() => openModal(p)} style={{ cursor: "pointer" }} />
+                        <div key={p._id} className="card product-card" style={{ cursor: "pointer" }} >
+                            <img src={p.img} alt={p.name} />
                             <h3>{p.name}</h3>
                             <p>{p.price.toLocaleString()} đ</p>
                             <div style={{ marginTop: "8px", display: "flex", gap: "8px" }}>
@@ -183,136 +172,27 @@ function Products() {
 
                         </div>
 
-
-
-
                     ))}
+                    
                 </div>
 
-                <div
-                    id="myShowModal"
-                    className={` showModal ${showModal ? "is-active" : ""}`}
-                    // onClick={closeModal}
-                >
-                    <div className="showModal-content">
-
-
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            left: '0',
-                            position: 'absolute',
-                            height: '100%',
-                            width: '60%',
-                            background: '#e6cea4'
-                        }}>
-                            {idModal && <img src={idModal.img} alt="Product" />}
-
-                        </div>
-                        <div
-                            style={{
-                                position: "absolute",
-                                bottom: "0",
-                                right: "0",
-                                width: "40%",
-                                height: "100%",
-                                backgroundColor: "#fff",
-                                borderRadius: "0",
-                                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                                overflow: "hidden",
-                                fontFamily: "sans-serif",
-                                display: "flex",
-                                flexDirection: "column",
-                            }}
-                        >
-                            {/* Header */}
-                            <div
-                                style={{
-                                    backgroundColor: "#007bff",
-                                    color: "#fff",
-                                    padding: "10px",
-                                    textAlign: "center",
-                                    fontWeight: "600",
-                                    fontSize: "16px",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                💬 Chat Với Nhà Hàng
-                            </div>
-
-                            {/* Vùng tin nhắn (tự kéo dài) */}
-                            <div
-                                style={{
-                                    flex: 1,
-                                    overflowY: "auto",
-                                    padding: "15px",
-                                    backgroundColor: "#f9f9f9",
-                                }}
-                            >
-                                <div style={{ marginBottom: "10px" }}>
-                                    <strong>Admin:</strong> Xin chào! Bạn cần hỗ trợ món nào ạ?
-                                </div>
-                                <div style={{ textAlign: "right" }}>
-                                    <strong>Bạn:</strong> Cho mình hỏi còn cơm gà không?
-                                </div>
-                            </div>
-
-                            {/* Ô nhập tin nhắn (dính đáy) */}
-                            <div
-                                style={{
-                                    borderTop: "1px solid #ddd",
-                                    padding: "10px",
-                                    backgroundColor: "#fff",
-                                    flexShrink: 0,
-                                    display: "flex",
-                                    gap: "10px",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <textarea
-                                    placeholder="Nhập tin nhắn..."
-                                    style={{
-                                        flex: 1,
-                                        height: "50px",
-                                        resize: "none",
-                                        borderRadius: "8px",
-                                        border: "1px solid #ccc",
-                                        padding: "8px",
-                                        fontSize: "14px",
-                                        outline: "none",
-                                    }}
-                                ></textarea>
-
-                                <button
-                                    style={{
-                                        backgroundColor: "#007bff",
-                                        color: "#fff",
-                                        border: "none",
-                                        padding: "10px 16px",
-                                        borderRadius: "8px",
-                                        cursor: "pointer",
-                                        fontWeight: "500",
-                                        transition: "0.2s",
-                                    }}
-                                    onMouseOver={(e) => (e.target.style.backgroundColor = "#0056b3")}
-                                    onMouseOut={(e) => (e.target.style.backgroundColor = "#007bff")}
-                                >
-                                    Gửi
-                                </button>
-                            </div>
-                        </div>
-
-
-                        <button className="showModal-close" onClick={closeModal}>
-                            <i className="bi bi-x-lg"></i>
-                        </button>
-                    </div>
-                </div>
-
-
-
-
+<nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
             </section >
 
 

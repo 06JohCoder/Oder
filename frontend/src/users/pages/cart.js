@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../css/pages/cart.css";
 import { useState,useEffect } from "react";
-import Pays from "./pay";
+
 import cartControl from "../control/cart.control";
 
 
