@@ -148,6 +148,13 @@ function SidebarAdmin() {
           </Link>
         )}
 
+
+        {/* Advertisement */}
+        <Link to = {`${prefixAdmin}admin/advertisement`}
+          className={pathname === "admin/advertisement" ? "active" : ""}>
+          <i className="admin-ico bi bi-megaphone"></i>
+          {menuOpen && <span className="admin-ico">Advertisement</span>}
+        </Link>
         {/* Reports */}
         {hasPermission("role-permission") && (
           <Link

@@ -20,6 +20,7 @@ import RoleCreate from "../components/role/roleCreate";
 import RoleEdit from "../components/role/roleEdit";
 import PermissionPage from "../components/permission/permission";
 import Account from "../components/account/account";
+import Advertisement from "../components/ads/advertisement"
 // import NotFound from ""
 
 import { apiFetch } from "../../utils/apiFetch";
@@ -69,6 +70,7 @@ export default function AdminDashboard() {
                 <Route path="/deailCloud" element={<Could/>}/>
                 <Route path="/setting" element={<SettingsAdmin />} />
                 <Route path="/chatting" element={<ChatUI />} />
+                <Route path="/advertisement" element={<Advertisement />} />
                 <Route path="/myeditor" element={role?.permissions?.includes("products-category-view") ? <MyEditor /> : ""} />
                 <Route path="/deletedItems" element={role?.permissions?.includes("products-delete") ? <ProductsBackUp/> : ""} />
                 <Route path="/role" element={role?.permissions?.includes("role-view") ? <RoleHome/> : ""} />
